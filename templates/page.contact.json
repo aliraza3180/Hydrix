@@ -1,0 +1,131 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hydrix-hero",
+      "settings": {
+        "layout": "centered",
+        "anchor": "contact-hero",
+        "eyebrow": "we're here to help",
+        "heading": "Get in touch.",
+        "subheading": "Questions about your order, the science, or partnerships? Reach out.",
+        "action_type": "none",
+        "show_counter": false,
+        "microcopy": "",
+        "show_beam": true,
+        "show_arc": true,
+        "padding_top": 150,
+        "padding_bottom": 60
+      }
+    },
+    "form": {
+      "type": "hydrix-form",
+      "settings": {
+        "eyebrow": "Contact",
+        "heading": "Talk to us",
+        "subheading": "Questions about a formula, an order, or a partnership? We usually reply within a day.",
+        "submit_label": "Send message",
+        "success_heading": "Message sent",
+        "success_message": "Thanks for reaching out — we'll be in touch soon.",
+        "two_col": true,
+        "show_beam": false,
+        "show_arc": false
+      },
+      "blocks": {
+        "b1": {
+          "type": "text",
+          "settings": {
+            "label": "Name",
+            "placeholder": "Your name",
+            "required": true,
+            "half_width": true
+          }
+        },
+        "b2": {
+          "type": "email",
+          "settings": {
+            "label": "Email",
+            "placeholder": "you@email.com",
+            "required": true,
+            "half_width": true
+          }
+        },
+        "b3": {
+          "type": "select",
+          "settings": {
+            "label": "Topic",
+            "field_key": "topic",
+            "options": "Order or shipping\nProduct & Science\nPartnerships\nOther",
+            "placeholder": "Choose a topic",
+            "required": false
+          }
+        },
+        "b4": {
+          "type": "textarea",
+          "settings": {
+            "label": "Message",
+            "field_key": "body",
+            "placeholder": "How can we help?",
+            "rows": 5,
+            "required": true
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "support": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "Support",
+        "heading": "Find the right team",
+        "center_cards": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "icon": "shield",
+            "title": "Orders & shipping",
+            "desc": "Track, change, or return an order.",
+            "link_label": "Email orders",
+            "link_url": "mailto:orders@hydrix.com"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "icon": "beaker",
+            "title": "Product & science",
+            "desc": "Ingredients, dosing, and usage.",
+            "link_label": "Ask the team",
+            "link_url": "mailto:hello@hydrix.com"
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "icon": "users",
+            "title": "Partnerships",
+            "desc": "Affiliates, wholesale, and press.",
+            "link_label": "Partner with us",
+            "link_url": "/pages/affiliates"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "form",
+    "support"
+  ]
+}

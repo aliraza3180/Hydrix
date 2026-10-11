@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none" role="img" aria-label="Vault">
+  <defs>
+    <linearGradient id="hxSafeLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#BDE8FF"/>
+      <stop offset=".55" stop-color="#4F96F5"/>
+      <stop offset="1" stop-color="#2D6BFF"/>
+    </linearGradient>
+    <radialGradient id="hxSafeSpill" cx="0" cy=".5" r="1">
+      <stop offset="0" stop-color="#8FD9FF" stop-opacity=".85"/>
+      <stop offset=".6" stop-color="#3B82F6" stop-opacity=".25"/>
+      <stop offset="1" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="hxSafeBlur" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+  </defs>
+
+  <!-- outer safe body -->
+  <rect x="7" y="9" width="50" height="46" rx="7" fill="#0b0f16" stroke="currentColor" stroke-width="2.4"/>
+
+  <!-- glowing interior revealed by the cracked door -->
+  <rect x="34" y="13" width="19" height="38" rx="4" fill="#06121f"/>
+  <rect x="38" y="13" width="15" height="38" rx="4" fill="url(#hxSafeLight)"/>
+  <!-- soft light spilling out of the crack -->
+  <rect x="30" y="11" width="20" height="42" fill="url(#hxSafeSpill)" filter="url(#hxSafeBlur)"/>
+  <!-- bright edge line at the crack -->
+  <rect x="37.4" y="13" width="1.6" height="38" fill="#DCF3FF"/>
+
+  <!-- door: hinged on the left, cracked open (opening edge lifted off the frame) -->
+  <path d="M11 11 L37 14 L37 50 L11 53 Z" fill="#0d1219" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+  <!-- recessed door panel -->
+  <path d="M14.5 16 L34 18 L34 46 L14.5 48 Z" stroke="currentColor" stroke-width="1.3" opacity=".55"/>
+
+  <!-- combination dial -->
+  <circle cx="23" cy="32" r="6.4" stroke="currentColor" stroke-width="2.2"/>
+  <circle cx="23" cy="32" r="2.6" stroke="currentColor" stroke-width="1.3" opacity=".6"/>
+  <circle cx="23" cy="32" r="1.3" fill="currentColor"/>
+  <path d="M23 32 L23 26.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- feet -->
+  <path d="M15 55 L15 59 M49 55 L49 59" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

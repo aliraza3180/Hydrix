@@ -1,0 +1,112 @@
+{%- comment -%} HYDRIX — Two-tier choice (plain card vs highlighted card) {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-tiers" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-tiers__grid scroll-trigger animate--slide-in">
+    {%- for block in section.blocks -%}
+      {%- assign bs = block.settings -%}
+      {%- assign hot = bs.highlight -%}
+      <div class="hx-tiers__card{% if hot %} hx-tiers__card--hot{% endif %}" {{ block.shopify_attributes }}>
+        {%- if hot and bs.ribbon != blank -%}<span class="hx-tiers__ribbon">{{ bs.ribbon }}</span>{%- endif -%}
+        <div class="hx-tiers__name">{{ bs.name }}</div>
+        <div class="hx-tiers__price" style="color:{% if hot %}{{ s.accent_soft }}{% else %}{{ s.body_color }}{% endif %}">{{ bs.price }}</div>
+        <hr class="hx-divider" style="margin:24px 0">
+        <div class="hx-tiers__list">
+          {%- assign rows = bs.features | newline_to_br | split: '<br />' -%}
+          {%- for row in rows -%}
+            {%- assign r = row | strip -%}
+            {%- if r != blank -%}
+              <div class="hx-tiers__feat"><span style="color:{% if hot %}{{ s.accent }}{% else %}{{ s.body_color }}{% endif %}">{% if hot %}✓{% else %}○{% endif %}</span> {{ r }}</div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if bs.pledge_product != blank -%}
+          {%- assign pv = bs.pledge_product.selected_or_first_available_variant -%}
+          <form action="{{ routes.cart_add_url }}" method="post" class="hx-tiers__pledge">
+            <input type="hidden" name="id" value="{{ pv.id }}">
+            <input type="hidden" name="return_to" value="/checkout">
+            <button type="submit" class="hx-btn{% unless hot %} hx-btn--ghost{% endunless %} hx-btn--block"{% unless pv.available %} disabled{% endunless %}>{{ bs.button_label }}</button>
+          </form>
+        {%- else -%}
+          <a href="{{ bs.button_url }}" class="hx-btn{% unless hot %} hx-btn--ghost{% endunless %} hx-btn--block" style="margin-top:26px">{{ bs.button_label }}</a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-tiers__grid {
+    max-width: 980px; margin: 0 auto; display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; align-items: stretch;
+  }
+  #shopify-section-{{ section.id }} .hx-tiers__card {
+    position: relative; border: 1px solid var(--hx-border); border-radius: 18px; padding: 34px;
+    display: flex; flex-direction: column;
+  }
+  #shopify-section-{{ section.id }} .hx-tiers__card--hot {
+    border-color: var(--hx-accent);
+    background: linear-gradient(180deg, rgba(45,107,255,.06), transparent);
+    box-shadow: 0 0 50px rgba(45,107,255,.16);
+  }
+  #shopify-section-{{ section.id }} .hx-tiers__ribbon {
+    position: absolute; top: -12px; right: 24px; background: var(--hx-accent); color: #fff;
+    font-size: 11px; font-weight: 600; letter-spacing: .08em; padding: 6px 14px; border-radius: 100px;
+  }
+  #shopify-section-{{ section.id }} .hx-tiers__name { font-family: var(--hx-font-display); font-weight: 600; font-size: 20px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-tiers__price { margin-top: 6px; font-size: 14px; }
+  #shopify-section-{{ section.id }} .hx-tiers__list { display: flex; flex-direction: column; gap: 13px; flex: 1; }
+  #shopify-section-{{ section.id }} .hx-tiers__feat { display: flex; gap: 10px; font-size: 14.5px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-tiers__pledge { margin-top: 26px; width: 100%; }
+  #shopify-section-{{ section.id }} .hx-tiers__pledge .hx-btn { width: 100%; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Two-Tier",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 30, "max": 100, "step": 2, "unit": "px", "default": 64 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_soft", "label": "Highlight price color", "default": "#8FD9FF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "tier", "name": "Tier", "settings": [
+      { "type": "checkbox", "id": "highlight", "label": "Highlight (most popular)", "default": false },
+      { "type": "text", "id": "ribbon", "label": "Ribbon text", "default": "MOST POPULAR" },
+      { "type": "text", "id": "name", "label": "Name", "default": "Free Waitlist" },
+      { "type": "text", "id": "price", "label": "Price line", "default": "$0 — just your email" },
+      { "type": "textarea", "id": "features", "label": "Features (one per line)", "default": "Launch-day notification\nHydration tips & updates" },
+      { "type": "text", "id": "button_label", "label": "Button label", "default": "Join Free" },
+      { "type": "url", "id": "button_url", "label": "Button link" },
+      { "type": "product", "id": "pledge_product", "label": "Pledge product (real $5 checkout)", "info": "Pick the $5 product → button adds it and sends the customer to checkout. Overrides the link above. Leave empty for the free / email tiers." }
+    ]}
+  ],
+  "max_blocks": 3,
+  "presets": [{ "name": "HYDRIX Two-Tier", "blocks": [
+    { "type": "tier", "settings": { "highlight": false, "name": "Free Waitlist", "price": "$0 — just your email", "features": "Launch-day notification\nHydration tips & updates", "button_label": "Join Free" } },
+    { "type": "tier", "settings": { "highlight": true, "ribbon": "MOST POPULAR", "name": "Founder's Club", "price": "$5 — credited to your first order", "features": "Everything in Waitlist\nLifetime founder's discount\nFirst access at launch\nExclusive founder flavor drop", "button_label": "Become a Founder" } }
+  ]}]
+}
+{% endschema %}

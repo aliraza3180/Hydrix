@@ -1,0 +1,597 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+{%- comment -%} HYDRIX — Product (DAILY) buy box + supporting sections. PDP interactivity lives in hydrix.js (data-hx-pdp). {%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign uid = section.id
+  if s.img_front != blank
+    assign src_front = s.img_front | image_url: width: 1000
+  else
+    assign src_front = 'daily-front.png' | asset_url
+  endif
+  if s.img_back != blank
+    assign src_back = s.img_back | image_url: width: 1000
+  else
+    assign src_back = 'daily-back.png' | asset_url
+  endif
+  if s.img_benefits != blank
+    assign src_benefits = s.img_benefits | image_url: width: 1000
+  else
+    assign src_benefits = 'daily-benefits.png' | asset_url
+  endif
+  if s.img_lid != blank
+    assign src_lid = s.img_lid | image_url: width: 1000
+  else
+    assign src_lid = 'daily-lid.png' | asset_url
+  endif
+-%}
+
+{%- comment -%} Prices are plain decimal text settings (e.g. "41.65"); rendered verbatim with a $ prefix. JS recomputes totals from data-price. {%- endcomment -%}
+{%- assign sub_total_str = s.sub_price -%}
+
+<section class="hx-section hx-pdp" id="{{ s.anchor | default: 'pdp' }}" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  --hx-card-bg: {{ s.card_bg }};
+  --hx-muted: {{ s.muted_color }};
+  --hx-light-text: {{ s.light_text_color }};
+  --hx-facts-bg: {{ s.facts_bg }};
+  --hx-facts-ink: {{ s.facts_ink }};
+  --hx-facts-rule: {{ s.facts_rule }};
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+
+  {%- comment -%} ================= BREADCRUMB ================= {%- endcomment -%}
+  {%- if s.show_breadcrumb -%}
+    <div class="hx-wrap hx-pdp__crumb">
+      <a href="{{ s.crumb_url | default: '#' }}">{{ s.crumb_root }}</a> / <span>{{ s.crumb_current }}</span>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ================= 1. GALLERY + BUY BOX ================= {%- endcomment -%}
+  <div class="hx-wrap hx-pdp__main" data-hx-pdp>
+    {%- comment -%} GALLERY {%- endcomment -%}
+    <div class="hx-pdp__gallery scroll-trigger animate--fade-in">
+      <div class="hx-stage hx-pdp__stage">
+        <div class="hx-glow-radial"></div>
+        <img class="hx-pdp__main-img" data-hx-main src="{{ src_front }}" alt="{{ s.product_title }}">
+      </div>
+      <div class="hx-pdp__thumbs">
+        <button class="hx-pdp__thumb is-active" data-hx-thumb data-src="{{ src_front }}" type="button" aria-label="{{ s.thumb1_alt }}"><img src="{{ src_front }}" alt="{{ s.thumb1_alt }}"></button>
+        <button class="hx-pdp__thumb" data-hx-thumb data-src="{{ src_back }}" type="button" aria-label="{{ s.thumb2_alt }}"><img src="{{ src_back }}" alt="{{ s.thumb2_alt }}"></button>
+        <button class="hx-pdp__thumb" data-hx-thumb data-src="{{ src_benefits }}" type="button" aria-label="{{ s.thumb3_alt }}"><img src="{{ src_benefits }}" alt="{{ s.thumb3_alt }}"></button>
+        <button class="hx-pdp__thumb" data-hx-thumb data-src="{{ src_lid }}" type="button" aria-label="{{ s.thumb4_alt }}"><img src="{{ src_lid }}" alt="{{ s.thumb4_alt }}"></button>
+      </div>
+    </div>
+
+    {%- comment -%} BUY BOX {%- endcomment -%}
+    <div class="hx-pdp__buybox scroll-trigger animate--slide-in">
+      <h1 class="hx-h1 hx-pdp__title">{{ s.product_title }}</h1>
+      {%- if s.tagline != blank -%}<div class="hx-pdp__tagline">{{ s.tagline }}</div>{%- endif -%}
+
+      <div class="hx-pdp__rating">
+        <span class="hx-stars">{{ s.stars }}</span>
+        <span class="hx-pdp__rating-meta">{{ s.rating_text }}</span>
+      </div>
+
+      <div class="hx-pdp__price-row">
+        <span class="hx-pdp__price" data-hx-price>${{ sub_total_str }}</span>
+        <span class="hx-pdp__price-unit">{{ s.price_unit }}</span>
+      </div>
+
+      {%- comment -%} FLAVOR PILLS {%- endcomment -%}
+      <div class="hx-pdp__group">
+        <div class="hx-pdp__label">{{ s.flavor_label }}</div>
+        <div class="hx-pdp__flavors">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'flavor' -%}
+              {%- assign is_first = false -%}
+              {%- if forloop.first -%}{%- assign is_first = true -%}{%- endif -%}
+              <button type="button" class="hx-chip{% if block.settings.default_active %} hx-chip--active{% endif %}{% if block.settings.disabled %} hx-pdp__flavor--soon{% endif %}" data-hx-flavor {{ block.shopify_attributes }}>{{ block.settings.name }}</button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- comment -%} PLAN SELECTOR {%- endcomment -%}
+      <div class="hx-pdp__plans">
+        {%- comment -%} Subscribe & Save (default active) {%- endcomment -%}
+        <button type="button" class="hx-pdp__plan is-active" data-hx-plan data-price="{{ s.sub_price }}">
+          <span class="hx-pdp__radio"><span class="hx-pdp__radio-dot"></span></span>
+          <span class="hx-pdp__plan-body">
+            <span class="hx-pdp__plan-top">
+              <span class="hx-pdp__plan-name">{{ s.sub_name }}</span>
+              <span class="hx-pdp__plan-price hx-pdp__plan-price--save">${{ sub_total_str }}</span>
+            </span>
+            <span class="hx-pdp__plan-sub">{{ s.sub_sub }}</span>
+          </span>
+          {%- if s.sub_badge != blank -%}<span class="hx-pdp__plan-badge">{{ s.sub_badge }}</span>{%- endif -%}
+        </button>
+        {%- comment -%} One-time {%- endcomment -%}
+        <button type="button" class="hx-pdp__plan" data-hx-plan data-price="{{ s.one_price }}">
+          <span class="hx-pdp__radio"><span class="hx-pdp__radio-dot"></span></span>
+          <span class="hx-pdp__plan-body">
+            <span class="hx-pdp__plan-top">
+              <span class="hx-pdp__plan-name">{{ s.one_name }}</span>
+              <span class="hx-pdp__plan-price">${{ s.one_price }}</span>
+            </span>
+            <span class="hx-pdp__plan-sub">{{ s.one_sub }}</span>
+          </span>
+        </button>
+      </div>
+
+      {%- comment -%} QTY + ADD TO CART {%- endcomment -%}
+      <div class="hx-pdp__buy-row">
+        <div class="hx-pdp__qty">
+          <button type="button" class="hx-pdp__qty-btn" data-hx-dec aria-label="Decrease quantity">−</button>
+          <span class="hx-pdp__qty-val" data-hx-qty>1</span>
+          <button type="button" class="hx-pdp__qty-btn" data-hx-inc aria-label="Increase quantity">+</button>
+        </div>
+        <button type="button" class="hx-btn hx-pdp__atc">{{ s.atc_label }} — <span data-hx-btn-total>${{ sub_total_str }}</span></button>
+      </div>
+
+      {%- comment -%} TRUST ROW {%- endcomment -%}
+      <div class="hx-pdp__trust">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'trust' -%}
+            <span class="hx-pdp__trust-item"><span class="hx-pdp__diamond">◆</span> {{ block.settings.text }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ================= 2. BENEFIT ICON ROW ================= {%- endcomment -%}
+  {%- if s.show_benefits -%}
+    <div class="hx-pdp__benefits scroll-trigger animate--slide-in">
+      <div class="hx-wrap hx-pdp__benefits-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'benefit' -%}
+            <div class="hx-pdp__benefit" {{ block.shopify_attributes }}>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="{{ s.accent }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                {%- case block.settings.icon -%}
+                  {%- when 'droplet' -%}<path d="M12 3.5c3 4 5.5 6.7 5.5 10a5.5 5.5 0 0 1-11 0c0-3.3 2.5-6 5.5-10Z"/>
+                  {%- when 'bolt' -%}<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>
+                  {%- when 'brain' -%}<path d="M9 5a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 9 19V5Z"/><path d="M15 5a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 15 19V5Z"/>
+                  {%- when 'hexagon' -%}<path d="m12 3 7 4v8l-7 4-7-4V7l7-4Z"/>
+                  {%- when 'leaf' -%}<path d="M11 20c-5 0-8-3-8-9 6 0 9 1 9 9Z"/><path d="M11 20c0-7 4-12 10-13 0 7-3 13-10 13Z"/>
+                  {%- when 'shield' -%}<path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"/>
+                  {%- when 'check' -%}<path d="M20 6 9 17l-5-5"/>
+                  {%- else -%}<path d="M12 3.5c3 4 5.5 6.7 5.5 10a5.5 5.5 0 0 1-11 0c0-3.3 2.5-6 5.5-10Z"/>
+                {%- endcase -%}
+              </svg>
+              <div class="hx-pdp__benefit-label">{{ block.settings.text }}</div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ================= 3. WHY + SUPPLEMENT FACTS ================= {%- endcomment -%}
+  <div class="hx-pdp__why-wrap">
+    <div class="hx-wrap hx-pdp__why-grid scroll-trigger animate--slide-in">
+      <div class="hx-pdp__why">
+        {%- if s.why_eyebrow != blank -%}<div class="hx-eyebrow">{{ s.why_eyebrow }}</div>{%- endif -%}
+        {%- if s.why_heading != blank -%}<h2 class="hx-h2 hx-pdp__why-h2">{{ s.why_heading }}</h2>{%- endif -%}
+        {%- if s.why_body != blank -%}<p class="hx-lead hx-pdp__why-body">{{ s.why_body }}</p>{%- endif -%}
+        <div class="hx-pdp__stats">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'stat' -%}
+              <div class="hx-pdp__stat" {{ block.shopify_attributes }}>
+                <div class="hx-pdp__stat-num">{{ block.settings.value }}</div>
+                <div class="hx-pdp__stat-label">{{ block.settings.label }}</div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- comment -%} SUPPLEMENT FACTS — Soft White card {%- endcomment -%}
+      <div class="hx-light-card hx-pdp__facts">
+        <div class="hx-pdp__facts-title">{{ s.facts_title }}</div>
+        <div class="hx-pdp__facts-serving">{{ s.facts_serving }}</div>
+        <div class="hx-pdp__facts-dv">{{ s.facts_dv_label }}</div>
+        <div class="hx-pdp__facts-rows">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'fact' -%}
+              <div class="hx-pdp__fact-row{% if block.settings.indent %} hx-pdp__fact-row--indent{% endif %}{% if block.settings.heavy_rule %} hx-pdp__fact-row--heavy{% endif %}" {{ block.shopify_attributes }}>
+                <span>{{ block.settings.name }}</span>
+                <span>{{ block.settings.dv }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        {%- if s.facts_footnote != blank -%}<div class="hx-pdp__facts-foot">{{ s.facts_footnote }}</div>{%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ================= 4. HOW TO USE ================= {%- endcomment -%}
+  {%- if s.show_howto -%}
+    <div class="hx-pdp__howto scroll-trigger animate--slide-in">
+      <div class="hx-wrap hx-pdp__howto-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            <div class="hx-pdp__step" {{ block.shopify_attributes }}>
+              <div class="hx-pdp__step-num">{{ block.settings.number }}</div>
+              <div class="hx-pdp__step-title">{{ block.settings.title }}</div>
+              {%- if block.settings.desc != blank -%}<p class="hx-pdp__step-desc">{{ block.settings.desc }}</p>{%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ================= 6. RECOVER BUNDLE STRIP ================= {%- endcomment -%}
+  {%- if s.show_bundle -%}
+    <div class="hx-pdp__bundle-wrap">
+      <div class="hx-wrap">
+        <div class="hx-pdp__bundle scroll-trigger animate--fade-in">
+          <div class="hx-pdp__bundle-copy">
+            {%- if s.bundle_heading != blank -%}<h3 class="hx-h3 hx-pdp__bundle-h3">{{ s.bundle_heading }}</h3>{%- endif -%}
+            {%- if s.bundle_body != blank -%}<p class="hx-pdp__bundle-body">{{ s.bundle_body }}</p>{%- endif -%}
+          </div>
+          {%- if s.bundle_btn_label != blank -%}<a href="{{ s.bundle_btn_url | default: '#' }}" class="hx-btn hx-pdp__bundle-btn">{{ s.bundle_btn_label }}</a>{%- endif -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ================= 7. PRODUCT FAQ ================= {%- endcomment -%}
+  {%- if s.show_faq -%}
+    <div class="hx-pdp__faq-wrap">
+      <div class="hx-wrap--narrow hx-pdp__faq scroll-trigger animate--slide-in">
+        {%- if s.faq_heading != blank -%}<h2 class="hx-h2 hx-pdp__faq-h2">{{ s.faq_heading }}</h2>{%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'faq' -%}
+            <details class="hx-faq__item"{% if block.settings.open %} open{% endif %} {{ block.shopify_attributes }}>
+              <summary class="hx-faq__q"><span>{{ block.settings.q }}</span><span class="hx-faq__toggle">+</span></summary>
+              <div class="hx-faq__a">{{ block.settings.a }}</div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ================= 8. STICKY MOBILE ADD-TO-CART ================= {%- endcomment -%}
+  {%- if s.show_sticky -%}
+    <div class="hx-pdp__sticky">
+      <div class="hx-pdp__sticky-info">
+        <div class="hx-pdp__sticky-total">${{ sub_total_str }}</div>
+        <div class="hx-pdp__sticky-meta">{{ s.sticky_meta }}</div>
+      </div>
+      <button type="button" class="hx-btn hx-pdp__sticky-btn">{{ s.atc_label }}</button>
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% style %}
+  #shopify-section-{{ uid }} .hx-pdp { padding-bottom: {% if s.show_sticky %}96px{% else %}0{% endif %}; }
+  #shopify-section-{{ uid }} .hx-pdp__crumb { padding-top: 22px; color: var(--hx-muted); font-size: 13px; }
+  #shopify-section-{{ uid }} .hx-pdp__crumb a { color: var(--hx-muted); text-decoration: none; }
+  #shopify-section-{{ uid }} .hx-pdp__crumb a:hover { color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-pdp__crumb span { color: var(--hx-heading); }
+
+  /* ---- Main grid ---- */
+  #shopify-section-{{ uid }} .hx-pdp__main {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 48px; align-items: start; padding-top: 24px; padding-bottom: 60px;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__gallery { position: sticky; top: 90px; }
+  #shopify-section-{{ uid }} .hx-pdp__stage {
+    border-radius: 18px; aspect-ratio: 1 / 1;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(45,107,255,.16), transparent 65%), var(--hx-near-black);
+  }
+  #shopify-section-{{ uid }} .hx-pdp__main-img { position: relative; z-index: 1; width: 86%; height: 86%; object-fit: contain; }
+  #shopify-section-{{ uid }} .hx-pdp__thumbs { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+  #shopify-section-{{ uid }} .hx-pdp__thumb {
+    width: 74px; height: 74px; border-radius: 11px; overflow: hidden; cursor: pointer;
+    background: var(--hx-near-black); padding: 0; border: 1px solid var(--hx-border); transition: border-color .2s;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #shopify-section-{{ uid }} .hx-pdp__thumb.is-active { border-color: var(--hx-accent); }
+  #shopify-section-{{ uid }} .hx-pdp__thumb:hover { border-color: var(--hx-accent); }
+
+  /* ---- Buy box ---- */
+  #shopify-section-{{ uid }} .hx-pdp__title { font-size: clamp(34px, 5vw, 54px); line-height: 1; }
+  #shopify-section-{{ uid }} .hx-pdp__tagline { margin-top: 8px; color: var(--hx-accent); font-size: 15px; font-weight: 500; }
+  #shopify-section-{{ uid }} .hx-pdp__rating { margin-top: 14px; display: flex; align-items: center; gap: 10px; }
+  #shopify-section-{{ uid }} .hx-pdp__rating .hx-stars { font-size: 13px; letter-spacing: 1px; }
+  #shopify-section-{{ uid }} .hx-pdp__rating-meta { color: var(--hx-muted); font-size: 13px; }
+  #shopify-section-{{ uid }} .hx-pdp__price-row { margin-top: 18px; display: flex; align-items: baseline; gap: 8px; }
+  #shopify-section-{{ uid }} .hx-pdp__price { font-family: var(--hx-font-display); font-weight: 700; font-size: 34px; color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-pdp__price-unit { color: var(--hx-muted); font-size: 15px; font-weight: 400; }
+
+  #shopify-section-{{ uid }} .hx-pdp__group { margin-top: 26px; }
+  #shopify-section-{{ uid }} .hx-pdp__label { color: var(--hx-muted); font-size: 13px; margin-bottom: 10px; }
+  #shopify-section-{{ uid }} .hx-pdp__flavors { display: flex; gap: 10px; flex-wrap: wrap; }
+  #shopify-section-{{ uid }} .hx-pdp__flavor--soon { opacity: .6; }
+
+  /* ---- Plans ---- */
+  #shopify-section-{{ uid }} .hx-pdp__plans { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
+  #shopify-section-{{ uid }} .hx-pdp__plan {
+    cursor: pointer; text-align: left; background: transparent;
+    border: 1px solid var(--hx-border); border-radius: 14px; padding: 18px 20px;
+    display: flex; align-items: center; gap: 14px; transition: border-color .2s, background .2s; width: 100%;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__plan.is-active { background: rgba(45,107,255,.07); border-color: var(--hx-accent); }
+  #shopify-section-{{ uid }} .hx-pdp__radio {
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--hx-muted);
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center; transition: border-color .2s;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__plan.is-active .hx-pdp__radio { border-color: var(--hx-accent); }
+  #shopify-section-{{ uid }} .hx-pdp__radio-dot { width: 9px; height: 9px; border-radius: 50%; background: transparent; transition: background .2s; }
+  #shopify-section-{{ uid }} .hx-pdp__plan.is-active .hx-pdp__radio-dot { background: var(--hx-accent); }
+  #shopify-section-{{ uid }} .hx-pdp__plan-body { flex: 1; }
+  #shopify-section-{{ uid }} .hx-pdp__plan-top { display: flex; justify-content: space-between; align-items: center; }
+  #shopify-section-{{ uid }} .hx-pdp__plan-name { font-weight: 600; font-size: 15px; color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-pdp__plan-price { font-family: var(--hx-font-display); font-weight: 700; color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-pdp__plan-price--save { color: var(--hx-glow); }
+  #shopify-section-{{ uid }} .hx-pdp__plan-sub { display: block; color: var(--hx-muted); font-size: 13px; margin-top: 3px; }
+  #shopify-section-{{ uid }} .hx-pdp__plan-badge {
+    background: var(--hx-accent); color: #fff; font-size: 11px; font-weight: 600;
+    padding: 4px 9px; border-radius: 100px; flex: 0 0 auto;
+  }
+
+  /* ---- Qty + ATC ---- */
+  #shopify-section-{{ uid }} .hx-pdp__buy-row { margin-top: 24px; display: flex; gap: 14px; align-items: stretch; }
+  #shopify-section-{{ uid }} .hx-pdp__qty {
+    display: flex; align-items: center; border: 1px solid var(--hx-border); border-radius: 11px; overflow: hidden;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__qty-btn {
+    background: transparent; border: none; color: var(--hx-heading); font-size: 20px;
+    width: 44px; height: 52px; cursor: pointer;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__qty-btn:hover { color: var(--hx-accent); }
+  #shopify-section-{{ uid }} .hx-pdp__qty-val { width: 40px; text-align: center; font-weight: 600; color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-pdp__atc { flex: 1; box-shadow: 0 0 28px rgba(143,217,255,.26); }
+
+  /* ---- Trust ---- */
+  #shopify-section-{{ uid }} .hx-pdp__trust { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 14px 22px; color: var(--hx-slate); font-size: 13px; }
+  #shopify-section-{{ uid }} .hx-pdp__trust-item { display: flex; align-items: center; gap: 7px; }
+  #shopify-section-{{ uid }} .hx-pdp__diamond { color: var(--hx-accent); }
+
+  /* ---- Benefit row ---- */
+  #shopify-section-{{ uid }} .hx-pdp__benefits { border-top: 1px solid var(--hx-border); padding: clamp(48px, 6vw, 80px) 0; }
+  #shopify-section-{{ uid }} .hx-pdp__benefits-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 24px; text-align: center;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__benefit svg { margin: 0 auto; display: block; }
+  #shopify-section-{{ uid }} .hx-pdp__benefit-label { font-size: 13.5px; margin-top: 12px; color: var(--hx-light-text); }
+
+  /* ---- Why + Facts ---- */
+  #shopify-section-{{ uid }} .hx-pdp__why-wrap { padding: clamp(48px, 6vw, 80px) 0; }
+  #shopify-section-{{ uid }} .hx-pdp__why-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 36px; align-items: start;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__why-h2 { margin-top: 14px; font-size: clamp(26px, 3.6vw, 40px); }
+  #shopify-section-{{ uid }} .hx-pdp__why-body { margin-top: 18px; font-size: 16px; line-height: 1.65; }
+  #shopify-section-{{ uid }} .hx-pdp__stats { margin-top: 24px; display: flex; gap: 24px; flex-wrap: wrap; }
+  #shopify-section-{{ uid }} .hx-pdp__stat-num { font-family: var(--hx-font-display); font-weight: 700; font-size: 26px; color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-pdp__stat-label { color: var(--hx-muted); font-size: 13px; }
+
+  /* ---- Supplement Facts (dark text on soft white) ---- */
+  #shopify-section-{{ uid }} .hx-pdp__facts { color: var(--hx-facts-ink); background: var(--hx-facts-bg); padding: 26px 28px; font-family: var(--hx-font-body); }
+  #shopify-section-{{ uid }} .hx-pdp__facts * { color: inherit; }
+  #shopify-section-{{ uid }} .hx-pdp__facts-title { font-family: var(--hx-font-display); font-weight: 800; font-size: 22px; border-bottom: 3px solid var(--hx-facts-ink); padding-bottom: 8px; }
+  #shopify-section-{{ uid }} .hx-pdp__facts-serving { font-size: 12.5px; margin-top: 6px; }
+  #shopify-section-{{ uid }} .hx-pdp__facts-dv { display: flex; justify-content: flex-end; font-size: 11px; font-weight: 700; border-bottom: 1px solid var(--hx-facts-ink); padding: 8px 0 4px; }
+  #shopify-section-{{ uid }} .hx-pdp__fact-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--hx-facts-rule); font-size: 13.5px; }
+  #shopify-section-{{ uid }} .hx-pdp__fact-row--indent { padding-left: 16px; color: var(--hx-gunmetal); }
+  #shopify-section-{{ uid }} .hx-pdp__fact-row--heavy { border-bottom: 3px solid var(--hx-facts-ink); }
+  #shopify-section-{{ uid }} .hx-pdp__fact-row:last-child { border-bottom: none; }
+  #shopify-section-{{ uid }} .hx-pdp__facts-foot { font-size: 10.5px; color: var(--hx-gunmetal); margin-top: 8px; }
+
+  /* ---- How to use ---- */
+  #shopify-section-{{ uid }} .hx-pdp__howto { padding: clamp(40px, 5vw, 70px) 0; border-top: 1px solid var(--hx-border); }
+  #shopify-section-{{ uid }} .hx-pdp__howto-grid {
+    max-width: 900px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;
+  }
+  #shopify-section-{{ uid }} .hx-pdp__step-num { font-family: var(--hx-font-display); font-weight: 800; font-size: 36px; color: var(--hx-accent); }
+  #shopify-section-{{ uid }} .hx-pdp__step-title { font-weight: 600; margin-top: 6px; color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-pdp__step-desc { color: var(--hx-muted); font-size: 13.5px; margin-top: 6px; }
+
+  /* ---- Bundle strip ---- */
+  #shopify-section-{{ uid }} .hx-pdp__bundle-wrap { padding: clamp(40px, 5vw, 70px) 0; }
+  #shopify-section-{{ uid }} .hx-pdp__bundle {
+    border: 1px solid var(--hx-accent); border-radius: 18px; padding: clamp(26px, 4vw, 40px);
+    display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    background: linear-gradient(120deg, rgba(45,107,255,.07), transparent 70%);
+  }
+  #shopify-section-{{ uid }} .hx-pdp__bundle-h3 { font-size: clamp(22px, 3vw, 30px); }
+  #shopify-section-{{ uid }} .hx-pdp__bundle-body { margin-top: 8px; color: var(--hx-muted); font-size: 14.5px; }
+  #shopify-section-{{ uid }} .hx-pdp__bundle-btn { white-space: nowrap; }
+
+  /* ---- FAQ ---- */
+  #shopify-section-{{ uid }} .hx-pdp__faq-wrap { padding: clamp(40px, 5vw, 70px) 0; }
+  #shopify-section-{{ uid }} .hx-pdp__faq-h2 { font-size: clamp(24px, 3.4vw, 36px); text-align: center; margin-bottom: 34px; }
+
+  /* ---- Sticky mobile add-to-cart (< 860px) ---- */
+  #shopify-section-{{ uid }} .hx-pdp__sticky { display: none; }
+  @media (max-width: 860px) {
+    #shopify-section-{{ uid }} .hx-pdp__sticky {
+      display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      align-items: center; gap: 12px; padding: 12px 16px;
+      background: rgba(10,11,15,.95); backdrop-filter: blur(10px); border-top: 1px solid var(--hx-border);
+    }
+    #shopify-section-{{ uid }} .hx-pdp__sticky-info { flex: 0 0 auto; }
+    #shopify-section-{{ uid }} .hx-pdp__sticky-total { font-family: var(--hx-font-display); font-weight: 700; font-size: 16px; color: var(--hx-heading); }
+    #shopify-section-{{ uid }} .hx-pdp__sticky-meta { color: var(--hx-muted); font-size: 11px; }
+    #shopify-section-{{ uid }} .hx-pdp__sticky-btn { flex: 1; box-shadow: none; }
+    #shopify-section-{{ uid }} .hx-pdp__gallery { position: static; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Product (DAILY)",
+  "tag": "section",
+  "class": "hx-pdp-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "anchor", "label": "Section anchor id", "default": "pdp" },
+    { "type": "header", "content": "Breadcrumb" },
+    { "type": "checkbox", "id": "show_breadcrumb", "label": "Show breadcrumb", "default": true },
+    { "type": "text", "id": "crumb_root", "label": "Breadcrumb root", "default": "Shop" },
+    { "type": "url", "id": "crumb_url", "label": "Breadcrumb root link" },
+    { "type": "text", "id": "crumb_current", "label": "Breadcrumb current", "default": "DAILY" },
+    { "type": "header", "content": "Gallery images (fallback to theme defaults)" },
+    { "type": "image_picker", "id": "img_front", "label": "Front image (daily-front.png)" },
+    { "type": "image_picker", "id": "img_back", "label": "Back image (daily-back.png)" },
+    { "type": "image_picker", "id": "img_benefits", "label": "Benefits image (daily-benefits.png)" },
+    { "type": "image_picker", "id": "img_lid", "label": "Lid image (daily-lid.png)" },
+    { "type": "text", "id": "thumb1_alt", "label": "Thumb 1 alt", "default": "DAILY front" },
+    { "type": "text", "id": "thumb2_alt", "label": "Thumb 2 alt", "default": "DAILY back" },
+    { "type": "text", "id": "thumb3_alt", "label": "Thumb 3 alt", "default": "DAILY benefits" },
+    { "type": "text", "id": "thumb4_alt", "label": "Thumb 4 alt", "default": "DAILY lid" },
+    { "type": "header", "content": "Buy box — heading" },
+    { "type": "text", "id": "product_title", "label": "Product title", "default": "DAILY" },
+    { "type": "text", "id": "tagline", "label": "Tagline (blue)", "default": "hydration. reimagined." },
+    { "type": "text", "id": "stars", "label": "Stars", "default": "★★★★★" },
+    { "type": "text", "id": "rating_text", "label": "Rating text", "default": "4.9 · 2,300+ reviews" },
+    { "type": "header", "content": "Buy box — price & labels" },
+    { "type": "text", "id": "price_unit", "label": "Price unit suffix", "default": "/ 30 servings" },
+    { "type": "text", "id": "flavor_label", "label": "Flavor label", "default": "Flavor" },
+    { "type": "header", "content": "Plans" },
+    { "type": "text", "id": "sub_name", "label": "Subscribe plan name", "default": "Subscribe & Save" },
+    { "type": "text", "id": "sub_price", "label": "Subscribe price (number, e.g. 41.65)", "default": "41.65" },
+    { "type": "text", "id": "sub_sub", "label": "Subscribe subtext", "default": "15% off · skip or cancel anytime" },
+    { "type": "text", "id": "sub_badge", "label": "Subscribe badge", "default": "SAVE 15%" },
+    { "type": "text", "id": "one_name", "label": "One-time plan name", "default": "One-time purchase" },
+    { "type": "text", "id": "one_price", "label": "One-time price (number, e.g. 49.00)", "default": "49.00" },
+    { "type": "text", "id": "one_sub", "label": "One-time subtext", "default": "Ships once, no commitment" },
+    { "type": "header", "content": "Add to cart" },
+    { "type": "text", "id": "atc_label", "label": "Add to cart label", "default": "Add to Cart" },
+    { "type": "header", "content": "Benefit icon row" },
+    { "type": "checkbox", "id": "show_benefits", "label": "Show benefit row", "default": true },
+    { "type": "header", "content": "Why DAILY" },
+    { "type": "text", "id": "why_eyebrow", "label": "Eyebrow", "default": "Why DAILY" },
+    { "type": "textarea", "id": "why_heading", "label": "Heading", "default": "Most people spend their day mildly dehydrated without realizing it." },
+    { "type": "textarea", "id": "why_body", "label": "Body", "default": "HYDRIX DAILY replenishes essential electrolytes, minerals, and hydration-support nutrients to help you feel your best every day — clean ingredients, third-party tested, performance you can feel." },
+    { "type": "header", "content": "Supplement facts card" },
+    { "type": "text", "id": "facts_title", "label": "Card title", "default": "Supplement Facts" },
+    { "type": "text", "id": "facts_serving", "label": "Serving line", "default": "Serving Size: 1 Scoop (12.5 g) · 30 servings per container" },
+    { "type": "text", "id": "facts_dv_label", "label": "DV column label", "default": "% DV" },
+    { "type": "textarea", "id": "facts_footnote", "label": "Footnote", "default": "Coconut Water Powder, Taurine, Inositol, AquaMin® Sea Minerals, Ioniplex®. † Daily Value not established." },
+    { "type": "header", "content": "How to use" },
+    { "type": "checkbox", "id": "show_howto", "label": "Show how-to-use", "default": true },
+    { "type": "header", "content": "RECOVER bundle strip" },
+    { "type": "checkbox", "id": "show_bundle", "label": "Show bundle strip", "default": true },
+    { "type": "text", "id": "bundle_heading", "label": "Bundle heading", "default": "Pair DAILY with RECOVER" },
+    { "type": "textarea", "id": "bundle_body", "label": "Bundle body", "default": "Hydrate by day, repair by night. Save 10% on the duo." },
+    { "type": "text", "id": "bundle_btn_label", "label": "Bundle button label", "default": "Build a bundle" },
+    { "type": "url", "id": "bundle_btn_url", "label": "Bundle button link" },
+    { "type": "header", "content": "FAQ" },
+    { "type": "checkbox", "id": "show_faq", "label": "Show FAQ", "default": true },
+    { "type": "text", "id": "faq_heading", "label": "FAQ heading", "default": "Product FAQ" },
+    { "type": "header", "content": "Sticky mobile bar" },
+    { "type": "checkbox", "id": "show_sticky", "label": "Show sticky mobile bar (< 860px)", "default": true },
+    { "type": "text", "id": "sticky_meta", "label": "Sticky meta", "default": "DAILY · Subscribe & Save" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / lead", "default": "#6C7685" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6C7685" },
+    { "type": "color", "id": "light_text_color", "label": "Light text (benefit labels)", "default": "#E6EAF0" },
+    { "type": "color", "id": "accent", "label": "Accent / blue", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#0A0B0F" },
+    { "type": "header", "content": "Supplement facts card colors" },
+    { "type": "color", "id": "facts_bg", "label": "Facts card background (soft white)", "default": "#F5F7FA" },
+    { "type": "color", "id": "facts_ink", "label": "Facts text / heavy rules", "default": "#0A0B0F" },
+    { "type": "color", "id": "facts_rule", "label": "Facts thin rules", "default": "#D7DBE2" }
+  ],
+  "blocks": [
+    { "type": "flavor", "name": "Flavor pill", "settings": [
+      { "type": "text", "id": "name", "label": "Flavor name", "default": "Glacier Citrus" },
+      { "type": "checkbox", "id": "default_active", "label": "Selected by default", "default": false },
+      { "type": "checkbox", "id": "disabled", "label": "Dim (coming soon)", "default": false }
+    ]},
+    { "type": "trust", "name": "Trust item", "settings": [
+      { "type": "text", "id": "text", "label": "Text", "default": "Zero sugar" }
+    ]},
+    { "type": "benefit", "name": "Benefit icon", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [
+        { "value": "droplet", "label": "Droplet" },
+        { "value": "bolt", "label": "Bolt" },
+        { "value": "brain", "label": "Brain" },
+        { "value": "hexagon", "label": "Hexagon" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "shield", "label": "Shield" },
+        { "value": "check", "label": "Check" }
+      ], "default": "droplet" },
+      { "type": "text", "id": "text", "label": "Label", "default": "Daily hydration" }
+    ]},
+    { "type": "stat", "name": "Stat", "settings": [
+      { "type": "text", "id": "value", "label": "Value", "default": "12.5g" },
+      { "type": "text", "id": "label", "label": "Label", "default": "per scoop" }
+    ]},
+    { "type": "fact", "name": "Supplement fact row", "settings": [
+      { "type": "text", "id": "name", "label": "Nutrient", "default": "Sodium 500 mg" },
+      { "type": "text", "id": "dv", "label": "% DV", "default": "22%" },
+      { "type": "checkbox", "id": "indent", "label": "Indent (sub-nutrient)", "default": false },
+      { "type": "checkbox", "id": "heavy_rule", "label": "Heavy bottom rule", "default": false }
+    ]},
+    { "type": "step", "name": "How-to step", "settings": [
+      { "type": "text", "id": "number", "label": "Number", "default": "01" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Scoop" },
+      { "type": "textarea", "id": "desc", "label": "Description", "default": "One level scoop." }
+    ]},
+    { "type": "faq", "name": "FAQ item", "settings": [
+      { "type": "text", "id": "q", "label": "Question", "default": "How many servings per tub?" },
+      { "type": "textarea", "id": "a", "label": "Answer", "default": "30 servings — one scoop (12.5 g) each. About a month of daily hydration." },
+      { "type": "checkbox", "id": "open", "label": "Open by default", "default": false }
+    ]}
+  ],
+  "presets": [
+    { "name": "HYDRIX Product (DAILY)", "blocks": [
+      { "type": "flavor", "settings": { "name": "Glacier Citrus", "default_active": true, "disabled": false } },
+      { "type": "flavor", "settings": { "name": "Coming soon", "default_active": false, "disabled": true } },
+      { "type": "trust", "settings": { "text": "Zero sugar" } },
+      { "type": "trust", "settings": { "text": "Third-party tested" } },
+      { "type": "trust", "settings": { "text": "Made in USA" } },
+      { "type": "benefit", "settings": { "icon": "droplet", "text": "Daily hydration" } },
+      { "type": "benefit", "settings": { "icon": "bolt", "text": "Energy support" } },
+      { "type": "benefit", "settings": { "icon": "brain", "text": "Mental clarity" } },
+      { "type": "benefit", "settings": { "icon": "hexagon", "text": "7 electrolytes" } },
+      { "type": "benefit", "settings": { "icon": "leaf", "text": "Zero sugar" } },
+      { "type": "stat", "settings": { "value": "12.5g", "label": "per scoop" } },
+      { "type": "stat", "settings": { "value": "10", "label": "calories" } },
+      { "type": "stat", "settings": { "value": "0g", "label": "sugar" } },
+      { "type": "fact", "settings": { "name": "Calories", "dv": "", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Total Carbohydrate 2 g", "dv": "1%", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Total Sugars 0 g", "dv": "†", "indent": true, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Sodium 500 mg", "dv": "22%", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Potassium 400 mg", "dv": "9%", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Chloride 700 mg", "dv": "30%", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Magnesium 100 mg", "dv": "24%", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Calcium 60 mg", "dv": "5%", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Zinc 2 mg", "dv": "18%", "indent": false, "heavy_rule": false } },
+      { "type": "fact", "settings": { "name": "Selenium 10 mcg", "dv": "18%", "indent": false, "heavy_rule": true } },
+      { "type": "fact", "settings": { "name": "Proprietary Hydration Blend 4.5 g", "dv": "†", "indent": false, "heavy_rule": false } },
+      { "type": "step", "settings": { "number": "01", "title": "Scoop", "desc": "One level scoop." } },
+      { "type": "step", "settings": { "number": "02", "title": "Mix", "desc": "Into 12–16oz cold water." } },
+      { "type": "step", "settings": { "number": "03", "title": "Hydrate", "desc": "Anytime, daily." } },
+      { "type": "faq", "settings": { "q": "How many servings per tub?", "a": "30 servings — one scoop (12.5 g) each. About a month of daily hydration.", "open": false } },
+      { "type": "faq", "settings": { "q": "Does it really have zero sugar?", "a": "Yes. 0 g sugar, naturally flavored Glacier Citrus, no artificial junk.", "open": false } },
+      { "type": "faq", "settings": { "q": "Can I cancel my subscription?", "a": "Anytime. Skip, swap, or cancel from your account in a couple of clicks — no fees.", "open": false } },
+      { "type": "faq", "settings": { "q": "Is it third-party tested?", "a": "Every batch is third-party tested for purity and label accuracy. Made in the USA.", "open": false } }
+    ]}
+  ]
+}
+{% endschema %}

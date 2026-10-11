@@ -1,0 +1,197 @@
+{%- comment -%} HYDRIX — Interactive bundle builder (Subscribe page). Live savings via hydrix.js. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign s = section.settings
+  assign unit = s.unit_price | default: 49
+  assign save_frac = s.save_percent | divided_by: 100.0
+  assign discount_amt = unit | times: 1.0 | times: save_frac
+  assign per_tile = unit | minus: discount_amt
+-%}
+
+<section class="hx-section hx-bb" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  --hx-glow: {{ s.glow_color }};
+  --hx-success: {{ s.savings_color }};
+  --hx-panel-border: {{ s.panel_border }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    {%- if s.eyebrow != blank or s.heading != blank or s.subheading != blank -%}
+      <div class="hx-section-head scroll-trigger animate--fade-in">
+        {%- if s.eyebrow != blank -%}<div class="hx-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="hx-h2">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.subheading != blank -%}<p class="hx-lead hx-bb__sub">{{ s.subheading }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="hx-bb__grid scroll-trigger animate--slide-in"
+         data-hx-bundle data-unit="{{ unit }}" data-save="{{ save_frac }}">
+      <div class="hx-bb__tiles">
+        {%- for block in section.blocks -%}
+          {%- assign bs = block.settings -%}
+          <button type="button" class="hx-bb__tile{% if bs.selected %} is-active{% endif %}" data-hx-tile
+                  style="--tile-accent:{{ bs.accent }};--tile-glow:{{ bs.glow }};--tile-bar:{{ bs.bar_color }};"
+                  {{ block.shopify_attributes }}>
+            <div class="hx-bb__tile-top">
+              {%- if bs.image != blank -%}
+                <img class="hx-bb__tile-img" src="{{ bs.image | image_url: width: 160 }}" alt="{{ bs.name | escape }}" loading="lazy" width="54" height="72">
+              {%- else -%}
+                <span class="hx-bb__tub"></span>
+              {%- endif -%}
+              <span class="hx-bb__check" aria-hidden="true"></span>
+            </div>
+            <div class="hx-bb__tile-name">{{ bs.name }}</div>
+            {%- if bs.desc != blank -%}<div class="hx-bb__tile-desc">{{ bs.desc }}</div>{%- endif -%}
+            <div class="hx-bb__tile-price">
+              {{ unit | prepend: '$' }}
+              <span class="hx-bb__tile-was">→ {{ per_tile | round: 2 | prepend: '$' }}</span>
+            </div>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      <aside class="hx-bb__summary">
+        <div class="hx-bb__summary-title">{{ s.summary_title }}</div>
+        <div class="hx-bb__rows">
+          <div class="hx-bb__row"><span>{{ s.items_label }}</span><span class="hx-bb__val" data-hx-items>0</span></div>
+          <div class="hx-bb__row"><span>{{ s.subtotal_label }}</span><span class="hx-bb__val" data-hx-subtotal>$0.00</span></div>
+          <div class="hx-bb__row hx-bb__row--save"><span>{{ s.savings_label }}</span><span data-hx-savings>−$0.00</span></div>
+        </div>
+        <div class="hx-divider hx-bb__divider"></div>
+        <div class="hx-bb__total-row">
+          <span class="hx-bb__total-label">{{ s.total_label }}</span>
+          <span class="hx-bb__total" data-hx-total>$0.00</span>
+        </div>
+        <a href="{{ s.cta_url }}" class="hx-btn hx-btn--block hx-bb__cta">{{ s.cta_label }}</a>
+        {%- if s.fineprint != blank -%}<div class="hx-bb__fine">{{ s.fineprint }}</div>{%- endif -%}
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-bb__sub { margin: 12px auto 0; max-width: 560px; }
+  #shopify-section-{{ section.id }} .hx-bb__grid {
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(260px,340px); gap: 24px; align-items: start;
+  }
+  #shopify-section-{{ section.id }} .hx-bb__tiles {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 16px;
+  }
+  #shopify-section-{{ section.id }} .hx-bb__tile {
+    cursor: pointer; text-align: left; border: 1px solid var(--hx-border); border-radius: 16px;
+    padding: 22px; background: var(--hx-bg); color: var(--hx-heading);
+    font-family: var(--hx-font-body); transition: border-color .2s, background .2s, box-shadow .2s;
+  }
+  #shopify-section-{{ section.id }} .hx-bb__tile:hover { border-color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-bb__tile.is-active {
+    border-color: var(--hx-accent); background: rgba(45,107,255,.06);
+    box-shadow: 0 0 30px rgba(45,107,255,.14);
+  }
+  #shopify-section-{{ section.id }} .hx-bb__tile-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  #shopify-section-{{ section.id }} .hx-bb__tub {
+    position: relative; width: 54px; height: 72px; border-radius: 9px 9px 7px 7px; display: block;
+    background: linear-gradient(160deg,#1a1d24,#0c0d11);
+    box-shadow: 0 0 22px var(--tile-glow, rgba(45,107,255,.5)), inset 0 6px 0 -3px #2a2e36;
+  }
+  #shopify-section-{{ section.id }} .hx-bb__tub::after {
+    content: ''; position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 60%; background: var(--tile-bar, linear-gradient(180deg,#8FD9FF,#2D6BFF));
+  }
+  #shopify-section-{{ section.id }} .hx-bb__tile-img { width: 54px; height: 72px; object-fit: contain; display: block; }
+  #shopify-section-{{ section.id }} .hx-bb__check {
+    width: 24px; height: 24px; border-radius: 50%; border: 2px solid #3a3f48;
+    display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    transition: border-color .2s, background .2s;
+  }
+  #shopify-section-{{ section.id }} .hx-bb__check::after { content: ''; color: #fff; font-size: 13px; line-height: 1; }
+  #shopify-section-{{ section.id }} .hx-bb__tile.is-active .hx-bb__check { border-color: var(--hx-accent); background: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-bb__tile.is-active .hx-bb__check::after { content: '✓'; }
+  #shopify-section-{{ section.id }} .hx-bb__tile-name { margin-top: 16px; font-family: var(--hx-font-display); font-weight: 700; font-size: 18px; color: var(--tile-accent, var(--hx-accent)); }
+  #shopify-section-{{ section.id }} .hx-bb__tile-desc { color: var(--hx-body); font-size: 12.5px; margin-top: 3px; }
+  #shopify-section-{{ section.id }} .hx-bb__tile-price { margin-top: 10px; font-weight: 600; font-size: 14px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-bb__tile-was { color: var(--hx-glow); font-size: 12px; }
+  #shopify-section-{{ section.id }} .hx-bb__summary {
+    position: sticky; top: 90px; border: 1px solid var(--hx-panel-border); border-radius: 18px; padding: 28px;
+    background: linear-gradient(180deg,#16181f,#101218); box-shadow: 0 0 50px rgba(45,107,255,.14);
+  }
+  #shopify-section-{{ section.id }} .hx-bb__summary-title { font-family: var(--hx-font-display); font-weight: 600; font-size: 18px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-bb__rows { margin: 18px 0; display: flex; flex-direction: column; gap: 10px; }
+  #shopify-section-{{ section.id }} .hx-bb__row { display: flex; justify-content: space-between; color: var(--hx-slate, #9AA5B3); font-size: 14px; }
+  #shopify-section-{{ section.id }} .hx-bb__val { color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-bb__row--save, #shopify-section-{{ section.id }} .hx-bb__row--save span { color: var(--hx-success); }
+  #shopify-section-{{ section.id }} .hx-bb__divider { margin: 8px 0 18px; }
+  #shopify-section-{{ section.id }} .hx-bb__total-row { display: flex; justify-content: space-between; align-items: baseline; }
+  #shopify-section-{{ section.id }} .hx-bb__total-label { color: var(--hx-body); font-size: 14px; }
+  #shopify-section-{{ section.id }} .hx-bb__total { font-family: var(--hx-font-display); font-weight: 800; font-size: 30px; color: var(--hx-glow); }
+  #shopify-section-{{ section.id }} .hx-bb__cta { margin-top: 20px; }
+  #shopify-section-{{ section.id }} .hx-bb__fine { margin-top: 14px; color: var(--hx-body); font-size: 12px; text-align: center; }
+  @media (max-width: 720px) {
+    #shopify-section-{{ section.id }} .hx-bb__grid { grid-template-columns: 1fr; }
+    #shopify-section-{{ section.id }} .hx-bb__summary { position: static; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Bundle Builder",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Build your bundle" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Build your bundle" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Tap to add a formula. Your savings update live." },
+    { "type": "header", "content": "Pricing" },
+    { "type": "number", "id": "unit_price", "label": "Unit price (per formula)", "default": 49 },
+    { "type": "number", "id": "save_percent", "label": "Subscription save %", "default": 15 },
+    { "type": "header", "content": "Summary panel" },
+    { "type": "text", "id": "summary_title", "label": "Summary title", "default": "Your bundle" },
+    { "type": "text", "id": "items_label", "label": "Items label", "default": "Items" },
+    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "Subtotal" },
+    { "type": "text", "id": "savings_label", "label": "Savings label", "default": "Subscription savings" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "Total / cycle" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Start subscription" },
+    { "type": "url", "id": "cta_url", "label": "CTA link" },
+    { "type": "text", "id": "fineprint", "label": "Fine print", "default": "Free shipping · Skip or cancel anytime" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 2, "unit": "px", "default": 70 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" },
+    { "type": "color", "id": "border", "label": "Tile border", "default": "#20242A" },
+    { "type": "color", "id": "panel_border", "label": "Summary panel border", "default": "#2D6BFF" },
+    { "type": "color", "id": "glow_color", "label": "Glow / discounted price", "default": "#8FD9FF" },
+    { "type": "color", "id": "savings_color", "label": "Savings (green)", "default": "#21C36F" }
+  ],
+  "blocks": [
+    { "type": "tile", "name": "Formula tile", "settings": [
+      { "type": "text", "id": "name", "label": "Name", "default": "DAILY" },
+      { "type": "text", "id": "desc", "label": "Description", "default": "Everyday hydration" },
+      { "type": "image_picker", "id": "image", "label": "Image (optional; uses tub if empty)" },
+      { "type": "checkbox", "id": "selected", "label": "Selected by default", "default": false },
+      { "type": "color", "id": "accent", "label": "Accent color", "default": "#2D6BFF" },
+      { "type": "color", "id": "glow", "label": "Glow color", "default": "#2D6BFF" },
+      { "type": "color", "id": "bar_color", "label": "Tub bar color", "default": "#8FD9FF" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Bundle Builder", "blocks": [
+    { "type": "tile", "settings": { "name": "DAILY", "desc": "Everyday hydration", "selected": true, "accent": "#2D6BFF", "glow": "#2D6BFF", "bar_color": "#8FD9FF" } },
+    { "type": "tile", "settings": { "name": "FOCUS", "desc": "Clarity & energy", "selected": false, "accent": "#22D37D", "glow": "#22D37D", "bar_color": "#7DFFC2" } },
+    { "type": "tile", "settings": { "name": "ACTIVE", "desc": "Performance", "selected": false, "accent": "#FF6B1A", "glow": "#FF6B1A", "bar_color": "#FFBC66" } },
+    { "type": "tile", "settings": { "name": "RECOVER", "desc": "Rest & repair", "selected": false, "accent": "#4B5BFF", "glow": "#4B5BFF", "bar_color": "#CFA4FF" } }
+  ]}]
+}
+{% endschema %}

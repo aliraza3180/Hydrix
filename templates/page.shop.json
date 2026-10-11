@@ -1,0 +1,102 @@
+{
+  "sections": {
+    "shop": {
+      "type": "hydrix-shop-grid",
+      "blocks": {
+        "b1": {
+          "type": "filter",
+          "settings": {
+            "label": "All",
+            "active": true
+          }
+        },
+        "b2": {
+          "type": "filter",
+          "settings": {
+            "label": "Hydration",
+            "active": false
+          }
+        },
+        "b3": {
+          "type": "filter",
+          "settings": {
+            "label": "Energy",
+            "active": false
+          }
+        },
+        "b4": {
+          "type": "filter",
+          "settings": {
+            "label": "Recovery",
+            "active": false
+          }
+        },
+        "b5": {
+          "type": "product",
+          "settings": {
+            "title": "DAILY",
+            "subtitle": "Glacier Citrus · Everyday hydration",
+            "price": "$49",
+            "accent": "#2D6BFF",
+            "rim_top": "#8FD9FF",
+            "link": "/pages/product-daily",
+            "cta_label": "Shop DAILY",
+            "cta_solid": true
+          }
+        },
+        "b6": {
+          "type": "product",
+          "settings": {
+            "title": "FOCUS",
+            "subtitle": "Yuzu Green · Clarity & energy",
+            "price": "$49",
+            "tag": "New",
+            "accent": "#22D37D",
+            "rim_top": "#7DFFC2",
+            "cta_label": "Quick add",
+            "cta_solid": false
+          }
+        },
+        "b7": {
+          "type": "product",
+          "settings": {
+            "title": "ACTIVE",
+            "subtitle": "Blood Orange · Performance",
+            "price": "$49",
+            "tag": "New",
+            "accent": "#FF6B1A",
+            "rim_top": "#FFBC66",
+            "cta_label": "Quick add",
+            "cta_solid": false
+          }
+        },
+        "b8": {
+          "type": "product",
+          "settings": {
+            "title": "RECOVER",
+            "subtitle": "Wild Berry · Rest & repair",
+            "price": "$49",
+            "tag": "New",
+            "accent": "#8E9BFF",
+            "rim_top": "#CFA4FF",
+            "cta_label": "Quick add",
+            "cta_solid": false
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8"
+      ]
+    }
+  },
+  "order": [
+    "shop"
+  ]
+}

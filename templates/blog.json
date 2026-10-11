@@ -1,0 +1,116 @@
+{
+  "sections": {
+    "blog": {
+      "type": "hydrix-blog-grid",
+      "blocks": {
+        "b1": {
+          "type": "category",
+          "settings": {
+            "label": "All",
+            "active": true
+          }
+        },
+        "b2": {
+          "type": "category",
+          "settings": {
+            "label": "Science",
+            "active": false
+          }
+        },
+        "b3": {
+          "type": "category",
+          "settings": {
+            "label": "Performance",
+            "active": false
+          }
+        },
+        "b4": {
+          "type": "category",
+          "settings": {
+            "label": "Recipes",
+            "active": false
+          }
+        },
+        "b5": {
+          "type": "article",
+          "settings": {
+            "tag": "Science",
+            "title": "The 7 electrolytes your body actually needs",
+            "meta": "6 min read · June 2026"
+          }
+        },
+        "b6": {
+          "type": "article",
+          "settings": {
+            "tag": "Performance",
+            "title": "Hydrating around your training, the right way",
+            "meta": "5 min read · June 2026"
+          }
+        },
+        "b7": {
+          "type": "article",
+          "settings": {
+            "tag": "Science",
+            "title": "Sugar-free hydration: how we did it",
+            "meta": "4 min read · May 2026"
+          }
+        },
+        "b8": {
+          "type": "article",
+          "settings": {
+            "tag": "Recipes",
+            "title": "Three Glacier Citrus mixes for hot days",
+            "meta": "3 min read · May 2026"
+          }
+        },
+        "b9": {
+          "type": "article",
+          "settings": {
+            "tag": "Performance",
+            "title": "Signs of mild dehydration you ignore",
+            "meta": "5 min read · May 2026"
+          }
+        },
+        "b10": {
+          "type": "article",
+          "settings": {
+            "tag": "Science",
+            "title": "What \"full-spectrum\" actually means",
+            "meta": "7 min read · April 2026"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10"
+      ]
+    },
+    "news": {
+      "type": "hydrix-cta-beam",
+      "settings": {
+        "anchor": "blog-news",
+        "heading": "Stay hydrated, stay in the loop.",
+        "subheading": "Hydration tips, drops, and subscriber-only offers.",
+        "action_type": "email",
+        "email_tag": "newsletter",
+        "button_label": "Subscribe",
+        "success_text": "✓ You're in. Welcome to HYDRIX.",
+        "show_counter": false,
+        "show_arc": false,
+        "padding": 110
+      }
+    }
+  },
+  "order": [
+    "blog",
+    "news"
+  ]
+}

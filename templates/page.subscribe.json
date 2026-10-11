@@ -1,0 +1,205 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hydrix-hero",
+      "settings": {
+        "layout": "centered",
+        "anchor": "sub-hero",
+        "eyebrow": "hydration. reimagined.",
+        "heading": "Never run dry — save 15%.",
+        "subheading": "Subscribe and lock in 15% off every order. Skip, swap, or cancel anytime.",
+        "action_type": "buttons",
+        "button_label": "Build your bundle",
+        "button_url": "#bundle",
+        "show_counter": false,
+        "microcopy": "",
+        "show_beam": true,
+        "show_arc": true,
+        "padding_top": 150,
+        "padding_bottom": 80
+      }
+    },
+    "how": {
+      "type": "hydrix-steps",
+      "settings": {
+        "heading": "How subscription works",
+        "top_border": true
+      },
+      "blocks": {
+        "b1": {
+          "type": "step",
+          "settings": {
+            "icon": "scoop",
+            "title": "01 · Choose",
+            "desc": "Pick the formulas you want delivered."
+          }
+        },
+        "b2": {
+          "type": "step",
+          "settings": {
+            "icon": "mix",
+            "title": "02 · Save 15%",
+            "desc": "Your subscriber discount applies automatically."
+          }
+        },
+        "b3": {
+          "type": "step",
+          "settings": {
+            "icon": "hydrate",
+            "title": "03 · Flex",
+            "desc": "Skip, swap, or cancel anytime — no lock-in."
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "bundle": {
+      "type": "hydrix-bundle-builder",
+      "blocks": {
+        "b1": {
+          "type": "tile",
+          "settings": {
+            "name": "DAILY",
+            "desc": "Everyday hydration",
+            "selected": true,
+            "accent": "#2D6BFF",
+            "glow": "#2D6BFF",
+            "bar_color": "#8FD9FF"
+          }
+        },
+        "b2": {
+          "type": "tile",
+          "settings": {
+            "name": "FOCUS",
+            "desc": "Clarity & energy",
+            "selected": false,
+            "accent": "#22D37D",
+            "glow": "#22D37D",
+            "bar_color": "#7DFFC2"
+          }
+        },
+        "b3": {
+          "type": "tile",
+          "settings": {
+            "name": "ACTIVE",
+            "desc": "Performance",
+            "selected": false,
+            "accent": "#FF6B1A",
+            "glow": "#FF6B1A",
+            "bar_color": "#FFBC66"
+          }
+        },
+        "b4": {
+          "type": "tile",
+          "settings": {
+            "name": "RECOVER",
+            "desc": "Rest & repair",
+            "selected": false,
+            "accent": "#4B5BFF",
+            "glow": "#4B5BFF",
+            "bar_color": "#CFA4FF"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    },
+    "flex": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "Total flexibility",
+        "heading": "On your terms",
+        "center_cards": true,
+        "min_card_width": 260
+      },
+      "blocks": {
+        "b1": {
+          "type": "card",
+          "settings": {
+            "title": "Skip anytime",
+            "desc": "Pause a delivery whenever life happens.",
+            "icon": "clock"
+          }
+        },
+        "b2": {
+          "type": "card",
+          "settings": {
+            "title": "Swap formulas",
+            "desc": "Change flavors or formulas between cycles.",
+            "icon": "hexagon"
+          }
+        },
+        "b3": {
+          "type": "card",
+          "settings": {
+            "title": "Cancel anytime",
+            "desc": "No contracts, no fees, no hassle.",
+            "icon": "shield"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ]
+    },
+    "faq": {
+      "type": "hydrix-faq",
+      "settings": {
+        "heading": "Subscription questions"
+      },
+      "blocks": {
+        "b1": {
+          "type": "qa",
+          "settings": {
+            "question": "How much do I save?",
+            "answer": "Subscribers save 15% on every order, automatically applied at each cycle."
+          }
+        },
+        "b2": {
+          "type": "qa",
+          "settings": {
+            "question": "Can I change my delivery date?",
+            "answer": "Yes — manage, skip, or reschedule any delivery from your account."
+          }
+        },
+        "b3": {
+          "type": "qa",
+          "settings": {
+            "question": "Is there a commitment?",
+            "answer": "None. Skip, swap, or cancel anytime with no fees."
+          }
+        },
+        "b4": {
+          "type": "qa",
+          "settings": {
+            "question": "Can I add more than one formula?",
+            "answer": "Absolutely — build a bundle of DAILY, FOCUS, ACTIVE, and RECOVER."
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "how",
+    "bundle",
+    "flex",
+    "faq"
+  ]
+}

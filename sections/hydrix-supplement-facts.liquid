@@ -1,0 +1,170 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+{%- comment -%} HYDRIX — "Why this product" story + Supplement Facts label + trust cards. {%- endcomment -%}
+{%- liquid assign s = section.settings -%}
+
+{%- capture ic_beaker -%}<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/>{%- endcapture -%}
+{%- capture ic_shield -%}<path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>{%- endcapture -%}
+{%- capture ic_leaf -%}<path d="M11 20c-5 0-8-3-8-9 6 0 9 1 9 9Z"/><path d="M11 20c0-7 4-12 10-13 0 7-3 13-10 13Z"/>{%- endcapture -%}
+{%- capture ic_check -%}<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.3 2.3 4.7-4.6"/>{%- endcapture -%}
+
+<section class="hx-section hx-sf"
+  style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-border:{{ s.border }};--hx-card:{{ s.card_bg }};--hx-facts-bg:{{ s.facts_bg }};--hx-facts-ink:{{ s.facts_ink }};--hx-facts-rule:{{ s.facts_rule }};padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap hx-sf__grid">
+
+    {%- comment -%} ---- LEFT: story + trust cards ---- {%- endcomment -%}
+    <div class="hx-sf__left">
+      <div class="hx-sf__why scroll-trigger animate--slide-in">
+        {%- if s.show_watermark -%}
+          <img class="hx-sf__wm" aria-hidden="true" src="{{ s.watermark | default: 'hydrix-monogram-white.png' | image_url: width: 600 }}" alt="" loading="lazy" onerror="this.style.display='none'">
+        {%- endif -%}
+        <div class="hx-sf__why-in">
+          {%- if s.eyebrow != blank -%}<div class="hx-sf__eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+          <h2 class="hx-sf__h2">{{ s.heading }}<span class="hx-sf__accent">{{ s.heading_accent }}</span>{{ s.heading_after }}</h2>
+          {%- if s.body != blank -%}<p class="hx-sf__body">{{ s.body }}</p>{%- endif -%}
+        </div>
+      </div>
+
+      {%- assign trust_blocks = section.blocks | where: 'type', 'trust' -%}
+      {%- if trust_blocks.size > 0 -%}
+        <div class="hx-sf__trust">
+          {%- for block in trust_blocks -%}
+            <div class="hx-sf__tcard" {{ block.shopify_attributes }}>
+              <span class="hx-sf__ticon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--hx-accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{% case block.settings.icon %}{% when 'shield' %}{{ ic_shield }}{% when 'leaf' %}{{ ic_leaf }}{% when 'check' %}{{ ic_check }}{% else %}{{ ic_beaker }}{% endcase %}</svg>
+              </span>
+              <div class="hx-sf__tt">{{ block.settings.title }}</div>
+              {%- if block.settings.text != blank -%}<div class="hx-sf__tx">{{ block.settings.text }}</div>{%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ---- RIGHT: supplement facts label ---- {%- endcomment -%}
+    <div class="hx-sf__facts scroll-trigger animate--fade-in">
+      <div class="hx-sf__facts-h">{{ s.facts_title }}</div>
+      {%- if s.serving_size != blank -%}<div class="hx-sf__serv">Serving Size: {{ s.serving_size }}</div>{%- endif -%}
+      {%- if s.servings != blank -%}<div class="hx-sf__serv hx-sf__serv--b">Servings Per Container: {{ s.servings }}</div>{%- endif -%}
+      <table class="hx-sf__table">
+        <tr class="hx-sf__row hx-sf__row--head"><td>Amount Per Serving</td><td>%DV</td></tr>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'fact' -%}
+            <tr class="hx-sf__row{% if block.settings.bold %} hx-sf__row--b{% endif %}" {{ block.shopify_attributes }}>
+              <td>{{ block.settings.label }}</td>
+              <td>{{ block.settings.amount }}{% if block.settings.dv != blank %} ({{ block.settings.dv }}){% endif %}</td>
+            </tr>
+          {%- endif -%}
+        {%- endfor -%}
+      </table>
+      {%- if s.ingredients != blank -%}<div class="hx-sf__ingredients">{{ s.ingredients }}</div>{%- endif -%}
+      {%- if s.footnote != blank -%}<div class="hx-sf__foot">{{ s.footnote }}</div>{%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-sf__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 32px); align-items: start; }
+  #shopify-section-{{ section.id }} .hx-sf__left { display: flex; flex-direction: column; gap: 20px; }
+  #shopify-section-{{ section.id }} .hx-sf__why { position: relative; overflow: hidden; border-radius: 22px; border: 1px solid var(--hx-border); background: var(--hx-card, #0d1018); padding: clamp(28px, 4vw, 44px); min-height: 320px; display: flex; align-items: flex-end; }
+  #shopify-section-{{ section.id }} .hx-sf__wm { position: absolute; top: 50%; left: 50%; width: 95%; transform: translate(-50%, -55%); opacity: .06; pointer-events: none; }
+  #shopify-section-{{ section.id }} .hx-sf__why-in { position: relative; z-index: 1; }
+  #shopify-section-{{ section.id }} .hx-sf__eyebrow { font-family: var(--hx-font-sora); font-weight: 500; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body); margin-bottom: 12px; }
+  #shopify-section-{{ section.id }} .hx-sf__h2 { font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.02em; font-size: clamp(26px, 3vw, 38px); line-height: 1.1; color: var(--hx-heading); margin: 0; }
+  #shopify-section-{{ section.id }} .hx-sf__accent { color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-sf__body { margin: 16px 0 0; color: var(--hx-body); font-size: 14.5px; line-height: 1.65; max-width: 420px; }
+  #shopify-section-{{ section.id }} .hx-sf__trust { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  #shopify-section-{{ section.id }} .hx-sf__tcard { border: 1px solid var(--hx-border); border-radius: 16px; background: var(--hx-card, #0d1018); padding: 20px; }
+  #shopify-section-{{ section.id }} .hx-sf__ticon { display: inline-flex; }
+  #shopify-section-{{ section.id }} .hx-sf__tt { margin-top: 14px; font-family: var(--hx-font-sora); font-weight: 600; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-sf__tx { margin-top: 6px; color: var(--hx-body); font-size: 13px; line-height: 1.5; }
+
+  #shopify-section-{{ section.id }} .hx-sf__facts { background: var(--hx-facts-bg, #F5F7FA); color: var(--hx-facts-ink, #0A0B0F); border-radius: 22px; padding: clamp(22px, 3vw, 34px); }
+  #shopify-section-{{ section.id }} .hx-sf__facts-h { font-family: var(--hx-font-sora); font-weight: 700; font-size: 22px; letter-spacing: -.01em; }
+  #shopify-section-{{ section.id }} .hx-sf__serv { font-size: 13.5px; margin-top: 8px; border-top: 1px solid var(--hx-facts-rule, #20242A); padding-top: 8px; }
+  #shopify-section-{{ section.id }} .hx-sf__serv--b { font-weight: 600; }
+  #shopify-section-{{ section.id }} .hx-sf__table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  #shopify-section-{{ section.id }} .hx-sf__row td { padding: 9px 0; font-size: 13.5px; border-top: 1px solid var(--hx-facts-rule, #20242A); }
+  #shopify-section-{{ section.id }} .hx-sf__row td:last-child { text-align: right; white-space: nowrap; }
+  #shopify-section-{{ section.id }} .hx-sf__row--head td { font-weight: 700; border-top: 6px solid var(--hx-facts-ink, #0A0B0F); }
+  #shopify-section-{{ section.id }} .hx-sf__row--b td { font-weight: 700; }
+  #shopify-section-{{ section.id }} .hx-sf__ingredients { font-size: 12px; line-height: 1.5; margin-top: 12px; border-top: 1px solid var(--hx-facts-rule, #20242A); padding-top: 12px; opacity: .85; }
+  #shopify-section-{{ section.id }} .hx-sf__foot { font-size: 11.5px; line-height: 1.5; margin-top: 12px; opacity: .7; }
+
+  @media (max-width: 860px) {
+    #shopify-section-{{ section.id }} .hx-sf__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 460px) {
+    #shopify-section-{{ section.id }} .hx-sf__trust { grid-template-columns: 1fr; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Supplement Facts",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Story (left)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading (plain)", "default": "Why " },
+    { "type": "text", "id": "heading_accent", "label": "Heading (accent word)", "default": "DAILY" },
+    { "type": "text", "id": "heading_after", "label": "Heading (after accent)", "default": "?" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Most hydration products are just flavored salt water. DAILY uses a full-spectrum matrix to hydrate at a cellular level, fueling real performance." },
+    { "type": "checkbox", "id": "show_watermark", "label": "Show HX watermark", "default": true },
+    { "type": "image_picker", "id": "watermark", "label": "Watermark image", "info": "Defaults to the bundled HX monogram." },
+    { "type": "header", "content": "Supplement facts (right)" },
+    { "type": "text", "id": "facts_title", "label": "Title", "default": "Supplement Facts" },
+    { "type": "text", "id": "serving_size", "label": "Serving size", "default": "1 Scoop (12.5 g)" },
+    { "type": "text", "id": "servings", "label": "Servings per container", "default": "30" },
+    { "type": "textarea", "id": "ingredients", "label": "Blend ingredients line", "default": "Coconut Water Powder, Taurine, Inositol, AquaMin® Sea Minerals, Ioniplex®" },
+    { "type": "textarea", "id": "footnote", "label": "Footnote", "default": "* Percent Daily Values are based on a 2,000 calorie diet. † Daily Value not established." },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 2, "unit": "px", "default": 80 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "card_bg", "label": "Dark card background", "default": "#0D1018" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" },
+    { "type": "color", "id": "facts_bg", "label": "Facts label background", "default": "#F5F7FA" },
+    { "type": "color", "id": "facts_ink", "label": "Facts label text", "default": "#0A0B0F" },
+    { "type": "color", "id": "facts_rule", "label": "Facts label rules", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "fact", "name": "Facts row", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Sodium" },
+      { "type": "text", "id": "amount", "label": "Amount", "default": "500 mg" },
+      { "type": "text", "id": "dv", "label": "% Daily Value" },
+      { "type": "checkbox", "id": "bold", "label": "Bold row", "default": false }
+    ]},
+    { "type": "trust", "name": "Trust card", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [ { "value": "beaker", "label": "Beaker" }, { "value": "shield", "label": "Shield" }, { "value": "check", "label": "Check" }, { "value": "leaf", "label": "Leaf" } ], "default": "beaker" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Clean ingredients" },
+      { "type": "text", "id": "text", "label": "Text", "default": "No artificial dyes, fillers, or binders. Ever." }
+    ]}
+  ],
+  "max_blocks": 20,
+  "presets": [
+    { "name": "Supplement Facts", "blocks": [
+      { "type": "fact", "settings": { "label": "Calories", "amount": "10" } },
+      { "type": "fact", "settings": { "label": "Total Carbohydrate", "amount": "2 g", "dv": "1%*" } },
+      { "type": "fact", "settings": { "label": "Total Sugars", "amount": "0 g", "dv": "†" } },
+      { "type": "fact", "settings": { "label": "Sodium (as sea salt)", "amount": "500 mg", "dv": "22%" } },
+      { "type": "fact", "settings": { "label": "Potassium", "amount": "400 mg", "dv": "9%" } },
+      { "type": "fact", "settings": { "label": "Magnesium", "amount": "100 mg", "dv": "24%" } },
+      { "type": "fact", "settings": { "label": "Calcium", "amount": "60 mg", "dv": "5%" } },
+      { "type": "fact", "settings": { "label": "Zinc", "amount": "2 mg", "dv": "18%" } },
+      { "type": "fact", "settings": { "label": "Proprietary Hydration Blend", "amount": "4.5 g", "dv": "†", "bold": true } },
+      { "type": "trust", "settings": { "icon": "beaker", "title": "Clean ingredients", "text": "No artificial dyes, fillers, or binders. Ever." } },
+      { "type": "trust", "settings": { "icon": "shield", "title": "Lab tested", "text": "Every batch is third-party tested for purity." } }
+    ]}
+  ]
+}
+{% endschema %}

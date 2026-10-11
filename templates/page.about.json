@@ -1,0 +1,182 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hydrix-hero",
+      "settings": {
+        "layout": "centered",
+        "full_height": false,
+        "anchor": "about-hero",
+        "eyebrow": "OUR STORY",
+        "heading": "hydration. reimagined.",
+        "subheading": "We set out to make hydration something you can actually feel — engineered, tested, and built to a higher standard.",
+        "action_type": "none",
+        "show_counter": false,
+        "show_beam": true,
+        "show_arc": true,
+        "heading_color": "#3B82F6",
+        "padding_top": 150,
+        "padding_bottom": 72,
+        "bg": "#0a0b0f",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      }
+    },
+    "origin": {
+      "type": "hydrix-split",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "value": "2023", "label": "founded" } },
+        "s2": { "type": "stat", "settings": { "value": "7", "label": "electrolytes" } },
+        "s3": { "type": "stat", "settings": { "value": "0g", "label": "added sugar" } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": {
+        "image_first": true,
+        "eyebrow": "HOW IT STARTED",
+        "eyebrow_color": "#8E96A3",
+        "heading": "“Drink more water” was never the answer.",
+        "body": "HYDRIX began at a kitchen table after one too many disappointing hydration products — sugar bombs or under-dosed scoops. We wanted clinical dosing, a clean label, and a design that respected the person drinking it. So we built the full-spectrum system ourselves, and obsessed over how it actually feels.",
+        "padding": 90,
+        "bg": "#12151d",
+        "accent": "#3B82F6",
+        "art_color_1": "#8FD9FF59",
+        "art_color_2": "#2D6BFF66",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "border": "#FFFFFF14"
+      }
+    },
+    "mission": {
+      "type": "hydrix-split",
+      "settings": {
+        "image_first": false,
+        "eyebrow": "WHY WE EXIST",
+        "eyebrow_color": "#8E96A3",
+        "heading": "Hydration you can feel — not just drink.",
+        "body": "Most people are mildly dehydrated and never know it. Water alone doesn't replace what your body loses all day. HYDRIX delivers a full-spectrum electrolyte matrix with cellular co-factors — engineered and third-party tested — so it actually works, and tastes clean doing it.",
+        "padding": 90,
+        "bg": "#090d17",
+        "accent": "#3B82F6",
+        "art_color_1": "#8FD9FF59",
+        "art_color_2": "#2D6BFF66",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "border": "#FFFFFF14"
+      }
+    },
+    "timeline": {
+      "type": "hydrix-timeline",
+      "blocks": {
+        "m1": { "type": "milestone", "settings": { "year": "2023", "title": "The first batch", "text": "Mixed in a kitchen, tested on ourselves, refined until it actually felt different." } },
+        "m2": { "type": "milestone", "settings": { "year": "2024", "title": "Going clinical", "text": "Partnered with formulators to dial in clinical doses and third-party testing." } },
+        "m3": { "type": "milestone", "settings": { "year": "2025", "title": "The full spectrum", "text": "DAILY launches — seven electrolytes, cellular co-factors, zero sugar." } },
+        "m4": { "type": "milestone", "settings": { "year": "2026", "title": "What's next", "text": "A full system: FOCUS, ACTIVE, RECOVER. Engineered for how you live." } }
+      },
+      "block_order": ["m1", "m2", "m3", "m4"],
+      "settings": {
+        "eyebrow": "OUR JOURNEY",
+        "heading": "From frustration to formula.",
+        "padding": 88,
+        "bg": "#0a0b0f",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14"
+      }
+    },
+    "values": {
+      "type": "hydrix-feature-grid",
+      "blocks": {
+        "v1": { "type": "card", "settings": { "icon": "check", "number": "01", "title": "Efficacy first", "desc": "Clinical dosing over marketing claims, always." } },
+        "v2": { "type": "card", "settings": { "icon": "shield", "number": "02", "title": "Radical transparency", "desc": "Full labels, third-party testing, no hidden junk." } },
+        "v3": { "type": "card", "settings": { "icon": "star", "number": "03", "title": "Design that respects you", "desc": "Premium, calm, and made to last." } }
+      },
+      "block_order": ["v1", "v2", "v3"],
+      "settings": {
+        "eyebrow": "WHAT WE STAND FOR",
+        "heading": "Our values",
+        "center_cards": true,
+        "min_card_width": 300,
+        "padding": 88,
+        "bg": "#12151d",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14",
+        "card_bg": "#FFFFFF05"
+      }
+    },
+    "team": {
+      "type": "hydrix-team",
+      "blocks": {
+        "t1": { "type": "member", "settings": { "name": "Aria Reyes", "role": "Co-founder & CEO", "bio": "Former endurance athlete who spent a decade chasing better recovery. She keeps the standard uncompromising." } },
+        "t2": { "type": "member", "settings": { "name": "Jonah Kim", "role": "Co-founder & Head of Science", "bio": "Formulation scientist behind every milligram, the mineral sourcing, and every third-party test." } },
+        "t3": { "type": "member", "settings": { "name": "Mara Cole", "role": "Co-founder & Design", "bio": "Designer obsessed with how a product feels in the hand. She built the HYDRIX look." } }
+      },
+      "block_order": ["t1", "t2", "t3"],
+      "settings": {
+        "eyebrow": "THE TEAM",
+        "heading": "Builders, not marketers.",
+        "subheading": "A small team obsessed with doing hydration right.",
+        "padding": 88,
+        "bg": "#090d17",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14"
+      }
+    },
+    "manifesto": {
+      "type": "hydrix-brand-story",
+      "settings": {
+        "eyebrow": "OUR MANIFESTO",
+        "tagline": "hydration. reimagined.",
+        "body": "Hydration is electrolytes, minerals, and absorption — engineered, tested, and made to be felt. That's the standard we hold every batch to.",
+        "use_default_watermark": true,
+        "show_beam": true,
+        "bg": "#0a0b0f",
+        "accent": "#3B82F6",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3"
+      }
+    },
+    "press": {
+      "type": "hydrix-press",
+      "blocks": {
+        "l1": { "type": "logo", "settings": { "name": "MEN'S HEALTH" } },
+        "l2": { "type": "logo", "settings": { "name": "GQ" } },
+        "l3": { "type": "logo", "settings": { "name": "OUTSIDE" } },
+        "l4": { "type": "logo", "settings": { "name": "FORBES" } },
+        "l5": { "type": "logo", "settings": { "name": "WIRED" } }
+      },
+      "block_order": ["l1", "l2", "l3", "l4", "l5"],
+      "settings": {
+        "label": "As seen in",
+        "bg": "#12151d",
+        "border": "#FFFFFF14"
+      }
+    },
+    "newsletter": {
+      "type": "hydrix-newsletter-banner",
+      "settings": {
+        "eyebrow": "STAY IN THE LOOP",
+        "heading": "Get launch news first.",
+        "subheading": "New drops, the science, and early-access perks — straight to your inbox.",
+        "email_placeholder": "your@email.com",
+        "button_label": "Subscribe",
+        "email_tag": "newsletter",
+        "success_text": "You're subscribed. Watch your inbox.",
+        "microcopy": "No spam. Unsubscribe anytime.",
+        "padding": 72,
+        "bg": "#090d17",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      }
+    }
+  },
+  "order": ["hero", "origin", "mission", "timeline", "values", "team", "manifesto", "press", "newsletter"]
+}

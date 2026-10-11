@@ -1,0 +1,135 @@
+{%- comment -%} HYDRIX — Feature / benefit card grid (icon + title + desc). Highly reusable. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign min = s.min_card_width
+  assign cols = s.columns | default: 'auto'
+-%}
+
+{%- capture icon_droplet -%}<path d="M12 3.5c3 4 5.5 6.7 5.5 10a5.5 5.5 0 0 1-11 0c0-3.3 2.5-6 5.5-10Z"/>{%- endcapture -%}
+{%- capture icon_bolt -%}<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>{%- endcapture -%}
+{%- capture icon_brain -%}<path d="M9 5a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 9 19V5Z"/><path d="M15 5a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 15 19V5Z"/>{%- endcapture -%}
+{%- capture icon_hexagon -%}<path d="m12 3 7 4v8l-7 4-7-4V7l7-4Z"/><path d="M12 12 5 7m7 5 7-5m-7 5v9"/>{%- endcapture -%}
+{%- capture icon_plus -%}<path d="M12 6v12M6 12h12"/>{%- endcapture -%}
+{%- capture icon_leaf -%}<path d="M11 20c-5 0-8-3-8-9 6 0 9 1 9 9Z"/><path d="M11 20c0-7 4-12 10-13 0 7-3 13-10 13Z"/>{%- endcapture -%}
+{%- capture icon_shield -%}<path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"/>{%- endcapture -%}
+{%- capture icon_beaker -%}<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/>{%- endcapture -%}
+{%- capture icon_check -%}<path d="M20 6 9 17l-5-5"/>{%- endcapture -%}
+{%- capture icon_star -%}<path d="m12 3 2.6 5.3 5.9.9-4.2 4.1 1 5.9L12 16.9 6.7 19.2l1-5.9L3.5 9.2l5.9-.9L12 3Z"/>{%- endcapture -%}
+{%- capture icon_clock -%}<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>{%- endcapture -%}
+{%- capture icon_dollar -%}<path d="M12 3v18M16 7a4 3 0 0 0-4-2c-2.5 0-4 1.3-4 3s1.5 2.5 4 3 4 1.3 4 3-1.5 3-4 3a4 3 0 0 1-4-2"/>{%- endcapture -%}
+{%- capture icon_globe -%}<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/>{%- endcapture -%}
+{%- capture icon_users -%}<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M16 6a3 3 0 0 1 0 6m5 8c0-2.7-1.5-4.4-4-4.8"/>{%- endcapture -%}
+
+<section class="hx-section hx-fgrid" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  --hx-card-bg: {{ s.card_bg }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    {%- if s.eyebrow != blank or s.heading != blank -%}
+      <div class="hx-section-head scroll-trigger animate--fade-in">
+        {%- if s.eyebrow != blank -%}<div class="hx-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="hx-h2">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.subheading != blank -%}<p class="hx-lead" style="margin:14px auto 0;max-width:560px">{{ s.subheading }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="hx-fgrid__grid scroll-trigger animate--slide-in">
+      {%- for block in section.blocks -%}
+        {%- assign ic = block.settings.icon -%}
+        <div class="hx-card hx-card--glow" style="{% if s.center_cards %}text-align:center;{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.number != blank -%}
+            <div class="hx-fgrid__num" style="color:{{ s.accent }}">{{ block.settings.number }}</div>
+          {%- elsif ic != 'none' -%}
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="{{ block.settings.icon_color | default: s.accent }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" {% if s.center_cards %}style="margin:0 auto;display:block"{% endif %}>{% case ic %}{% when 'droplet' %}{{ icon_droplet }}{% when 'bolt' %}{{ icon_bolt }}{% when 'brain' %}{{ icon_brain }}{% when 'hexagon' %}{{ icon_hexagon }}{% when 'plus' %}{{ icon_plus }}{% when 'leaf' %}{{ icon_leaf }}{% when 'shield' %}{{ icon_shield }}{% when 'beaker' %}{{ icon_beaker }}{% when 'check' %}{{ icon_check }}{% when 'star' %}{{ icon_star }}{% when 'clock' %}{{ icon_clock }}{% when 'dollar' %}{{ icon_dollar }}{% when 'globe' %}{{ icon_globe }}{% when 'users' %}{{ icon_users }}{% else %}{{ icon_droplet }}{% endcase %}</svg>
+          {%- endif -%}
+          <h3 class="hx-h3 hx-fgrid__title">{{ block.settings.title }}</h3>
+          {%- if block.settings.amount != blank -%}
+            <div class="hx-fgrid__amount" style="color:{{ s.accent }}">{{ block.settings.amount }}</div>
+          {%- endif -%}
+          {%- if block.settings.desc != blank -%}<p class="hx-body hx-fgrid__desc">{{ block.settings.desc }}</p>{%- endif -%}
+          {%- if block.settings.link_label != blank -%}
+            <a href="{{ block.settings.link_url }}" class="hx-fgrid__link" style="color:{{ s.accent }}">{{ block.settings.link_label }} →</a>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-fgrid__grid {
+    display: grid; gap: 18px;
+    grid-template-columns: {% if cols != 'auto' %}repeat({{ cols }}, minmax(0, 1fr)){% else %}repeat(auto-fit, minmax({{ min }}px, 1fr)){% endif %};
+  }
+  {%- if cols != 'auto' -%}
+  @media (max-width: 1100px) { #shopify-section-{{ section.id }} .hx-fgrid__grid { grid-template-columns: repeat({% if cols == '4' or cols == '5' or cols == '6' %}3{% else %}{{ cols }}{% endif %}, minmax(0, 1fr)); } }
+  @media (max-width: 760px) { #shopify-section-{{ section.id }} .hx-fgrid__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 480px) { #shopify-section-{{ section.id }} .hx-fgrid__grid { grid-template-columns: 1fr; } }
+  {%- endif -%}
+  #shopify-section-{{ section.id }} .hx-fgrid__num { font-family: var(--hx-font-display); font-weight: 700; font-size: 30px; line-height: 1; }
+  #shopify-section-{{ section.id }} .hx-fgrid__title { margin-top: 18px; }
+  #shopify-section-{{ section.id }} .hx-fgrid__amount { font-family: var(--hx-font-display); font-weight: 700; font-size: 22px; margin-top: 8px; }
+  #shopify-section-{{ section.id }} .hx-fgrid__desc { margin-top: 8px; font-size: 14px; }
+  #shopify-section-{{ section.id }} .hx-fgrid__link { display: inline-block; margin-top: 14px; text-decoration: none; font-weight: 600; font-size: 14px; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Feature Grid",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why HYDRIX" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Six ways it works for you" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading" },
+    { "type": "checkbox", "id": "center_cards", "label": "Center card content", "default": false },
+    { "type": "range", "id": "min_card_width", "label": "Min card width", "min": 180, "max": 360, "step": 10, "unit": "px", "default": 280 },
+    { "type": "select", "id": "columns", "label": "Columns (desktop)", "options": [ { "value": "auto", "label": "Auto (fit to card width)" }, { "value": "2", "label": "2" }, { "value": "3", "label": "3" }, { "value": "4", "label": "4" }, { "value": "5", "label": "5" }, { "value": "6", "label": "6" } ], "default": "auto", "info": "Auto uses the min card width above. Pick a number to force an exact column count (collapses to 3 / 2 / 1 on smaller screens)." },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent / icons", "default": "#2D6BFF" },
+    { "type": "color", "id": "border", "label": "Card border", "default": "#20242A" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#0A0B0F" }
+  ],
+  "blocks": [
+    { "type": "card", "name": "Card", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [
+        { "value": "none", "label": "None" }, { "value": "droplet", "label": "Droplet" }, { "value": "bolt", "label": "Bolt" },
+        { "value": "brain", "label": "Brain" }, { "value": "hexagon", "label": "Hexagon" }, { "value": "plus", "label": "Plus" },
+        { "value": "leaf", "label": "Leaf" }, { "value": "shield", "label": "Shield" }, { "value": "beaker", "label": "Beaker" },
+        { "value": "check", "label": "Check" }, { "value": "star", "label": "Star" }, { "value": "clock", "label": "Clock" },
+        { "value": "dollar", "label": "Dollar" }, { "value": "globe", "label": "Globe" }, { "value": "users", "label": "Users" }
+      ], "default": "droplet" },
+      { "type": "color", "id": "icon_color", "label": "Icon color" },
+      { "type": "text", "id": "number", "label": "Number (overrides icon, e.g. 01)" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Daily Hydration" },
+      { "type": "text", "id": "amount", "label": "Amount / value (optional)" },
+      { "type": "textarea", "id": "desc", "label": "Description", "default": "Replenish what your body loses every single day." },
+      { "type": "text", "id": "link_label", "label": "Link label" },
+      { "type": "url", "id": "link_url", "label": "Link URL" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Feature Grid", "blocks": [
+    { "type": "card", "settings": { "icon": "droplet", "title": "Daily Hydration", "desc": "Replenish what your body loses every single day." } },
+    { "type": "card", "settings": { "icon": "bolt", "title": "Energy Support", "desc": "Help support energy and reduce daily fatigue." } },
+    { "type": "card", "settings": { "icon": "brain", "title": "Mental Clarity", "desc": "Support focus, cognitive function, and mood." } },
+    { "type": "card", "settings": { "icon": "hexagon", "title": "Electrolyte Replenishment", "desc": "7 essential electrolytes to hydrate and restore." } },
+    { "type": "card", "settings": { "icon": "plus", "title": "Cellular Hydration", "desc": "Support optimal cell function and balance." } },
+    { "type": "card", "settings": { "icon": "leaf", "title": "Zero Sugar", "desc": "No sugar. No junk. No compromise." } }
+  ]}]
+}
+{% endschema %}

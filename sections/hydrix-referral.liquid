@@ -1,0 +1,527 @@
+{%- comment -%} HYDRIX — Referral / "You're in" page. Share link + futuristic reward ladder. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign s = section.settings
+  assign uid = section.id
+-%}
+
+{%- case s.chrome_mode -%}
+  {%- when 'hidden' -%}
+    <style>.shopify-section-group-header-group, .shopify-section-group-footer-group { display: none !important; }</style>
+  {%- when 'logo' -%}
+    <style>
+      /* Referral page: keep only the logo in the header and footer */
+      .shopify-section-group-header-group .announcement-bar,
+      .shopify-section-group-header-group .utility-bar,
+      .shopify-section-group-header-group .header__inline-menu,
+      .shopify-section-group-header-group header-drawer,
+      .shopify-section-group-header-group .header__icons { display: none !important; }
+      .shopify-section-group-header-group .header {
+        display: flex !important; justify-content: center !important; align-items: center !important;
+      }
+      .shopify-section-group-footer-group .hx-footer__col,
+      .shopify-section-group-footer-group .hx-footer__bottom { display: none !important; }
+      .shopify-section-group-footer-group .hx-footer__grid {
+        display: flex !important; justify-content: center !important; text-align: center !important;
+      }
+      .shopify-section-group-footer-group .hx-footer__brand { min-width: 0 !important; text-align: center !important; }
+      .shopify-section-group-footer-group .hx-footer__brand img { margin-left: auto !important; margin-right: auto !important; }
+    </style>
+{%- endcase -%}
+
+<section class="hx-section hx-ref" id="{{ s.anchor | default: 'referral' }}" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  --hx-gold-a: {{ s.gold_from }};
+  --hx-gold-b: {{ s.gold_mid }};
+  --hx-gold-c: {{ s.gold_to }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  {%- if s.show_beam -%}<div class="hx-beam hx-beam--short"></div>{%- endif -%}
+
+  <div class="hx-wrap hx-ref__wrap">
+
+    {%- if s.thanks_label != blank -%}
+      <div class="hx-ref__thanks scroll-trigger animate--fade-in">
+        <span class="hx-ref__thanks-dot"></span>{{ s.thanks_label }}
+      </div>
+    {%- endif -%}
+
+    {%- if s.show_visual or s.show_panel -%}
+    <div class="hx-ref__top{% unless s.show_visual and s.show_panel %} hx-ref__top--single{% endunless %}">
+      {%- if s.show_visual -%}
+      <!-- Visual: raisin (dehydrated => stay ahead of hydration) + overlay wordmark -->
+      <div class="hx-ref__visual scroll-trigger animate--fade-in">
+        {%- if s.visual_image != blank -%}
+          <img class="hx-ref__visual-img" src="{{ s.visual_image | image_url: width: 900 }}" alt="{{ s.visual_image.alt | default: 'HYDRIX' }}" width="{{ s.visual_image.width }}" height="{{ s.visual_image.height }}" loading="lazy">
+        {%- else -%}
+          <div class="hx-ref__visual-ph" aria-hidden="true"><span>Upload raisin image</span></div>
+        {%- endif -%}
+        {%- if s.visual_text != blank -%}<div class="hx-ref__visual-text">{{ s.visual_text }}</div>{%- endif -%}
+      </div>
+      {%- endif -%}
+
+      {%- if s.show_panel -%}
+      <!-- Share panel -->
+      <div class="hx-ref__panel scroll-trigger animate--slide-in">
+        {%- if s.eyebrow != blank -%}<div class="hx-eyebrow hx-ref__eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+        {%- if s.heading != blank -%}<h1 class="hx-ref__h1">{{ s.heading }}</h1>{%- endif -%}
+        {%- if s.body != blank -%}<p class="hx-ref__body">{{ s.body }}</p>{%- endif -%}
+
+        {%- if s.use_vl_form and s.vl_campaign_id != blank -%}
+        <div class="hx-ref__vlform"><form-widget ucid="{{ s.vl_campaign_id }}"></form-widget></div>
+        {%- else -%}
+        <div class="hx-ref__linkbox" data-hx-ref-box>
+          <input class="hx-ref__link" data-hx-ref-link type="text" readonly value="{{ s.default_link }}" aria-label="Your referral link">
+          <button class="hx-ref__copy" type="button" data-hx-ref-copy>{{ s.copy_label | default: 'Copy' }}</button>
+        </div>
+
+        <div class="hx-ref__socials">
+          {%- if s.show_facebook -%}
+            <a class="hx-ref__social" data-hx-share="facebook" href="#" aria-label="Share on Facebook" rel="nofollow noopener" target="_blank">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.9v-7H7.9v-2.9h2.54V9.85c0-2.52 1.5-3.91 3.78-3.91 1.1 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.44 2.9h-2.34v7C18.34 21.2 22 17.06 22 12.06Z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s.show_instagram -%}
+            <a class="hx-ref__social" data-hx-share="instagram" href="{{ s.instagram_url | default: '#' }}" aria-label="Share on Instagram" rel="nofollow noopener" target="_blank">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s.show_x -%}
+            <a class="hx-ref__social" data-hx-share="x" href="#" aria-label="Share on X" rel="nofollow noopener" target="_blank">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+        {%- endif -%}
+
+        {%- if s.microcopy != blank -%}<p class="hx-ref__micro">{{ s.microcopy }}</p>{%- endif -%}
+      </div>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+
+    <!-- Reward ladder -->
+    {%- if section.blocks.size > 0 -%}
+      <div class="hx-ref__ladder scroll-trigger animate--slide-in">
+        <div class="hx-ref__ladder-head">
+          {%- if s.ladder_eyebrow != blank -%}<div class="hx-eyebrow">{{ s.ladder_eyebrow }}</div>{%- endif -%}
+          {%- if s.ladder_heading != blank -%}<h2 class="hx-ref__ladder-h2">{{ s.ladder_heading }}</h2>{%- endif -%}
+          {%- if s.ladder_progress != blank -%}<p class="hx-ref__ladder-progress" data-hx-ref-progress>{{ s.ladder_progress }}</p>{%- endif -%}
+        </div>
+
+        <div class="hx-ref__track">
+          <div class="hx-ref__track-line" aria-hidden="true"></div>
+          <div class="hx-ref__track-fill" aria-hidden="true" style="width: {{ s.progress_percent | default: 0 }}%"></div>
+          <div class="hx-ref__nodes">
+            {%- for block in section.blocks -%}
+              <div class="hx-ref__node{% if s.progress_percent >= block.settings.threshold_percent %} is-reached{% endif %}" data-hx-node data-count="{{ block.settings.count | replace: ',', '' | strip }}" data-threshold="{{ block.settings.threshold_percent }}" {{ block.shopify_attributes }}>
+                <div class="hx-ref__node-dot">
+                  <span class="hx-ref__node-count">{{ block.settings.count }}</span>
+                </div>
+                <div class="hx-ref__node-label">referrals</div>
+                <div class="hx-ref__node-reward">{{ block.settings.reward }}</div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {%- if s.ladder_note != blank -%}
+          <div class="hx-ref__ladder-note"><span class="hx-ref__ladder-note-dot"></span>{{ s.ladder_note }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.getElementById('shopify-section-{{ uid }}');
+    if (!root) return;
+    var input = root.querySelector('[data-hx-ref-link]');
+    // Resolve a personal link: use ?ref= from the URL if present, else the configured default.
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('ref');
+      if (code && input) {
+        var base = {{ s.link_base | default: '' | json }};
+        if (!base) base = window.location.origin + window.location.pathname;
+        input.value = base + (base.indexOf('?') > -1 ? '&' : '?') + 'ref=' + encodeURIComponent(code);
+      }
+    } catch (e) {}
+
+    var link = function () { return input ? input.value : ''; };
+    var shareText = {{ s.share_text | default: 'I just joined HYDRIX. Hydration, reimagined. Join me:' | json }};
+
+    var copyBtn = root.querySelector('[data-hx-ref-copy]');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var done = function () {
+          var t = copyBtn.textContent; copyBtn.textContent = 'Copied';
+          copyBtn.classList.add('is-copied');
+          setTimeout(function () { copyBtn.textContent = t; copyBtn.classList.remove('is-copied'); }, 1600);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link()).then(done).catch(function () { if (input) { input.select(); document.execCommand('copy'); done(); } });
+        } else if (input) { input.select(); document.execCommand('copy'); done(); }
+      });
+    }
+
+    root.querySelectorAll('[data-hx-share]').forEach(function (a) {
+      var net = a.getAttribute('data-hx-share');
+      if (net === 'instagram') return; // Instagram has no web share URL; leave as profile/deep link.
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var u = encodeURIComponent(link());
+        var t = encodeURIComponent(shareText);
+        var url = net === 'facebook'
+          ? 'https://www.facebook.com/sharer/sharer.php?u=' + u
+          : 'https://twitter.com/intent/tweet?text=' + t + '&url=' + u;
+        window.open(url, '_blank', 'noopener,width=600,height=520');
+      });
+    });
+
+    // ---- Viral Loops: real referral link + live ladder progress ----
+    var ucid = {{ s.vl_campaign_id | default: '' | json }};
+    var progressEl = root.querySelector('[data-hx-ref-progress]');
+    var fillEl = root.querySelector('.hx-ref__track-fill');
+    var tiers = [].slice.call(root.querySelectorAll('[data-hx-node]')).map(function (n) {
+      var rw = n.querySelector('.hx-ref__node-reward');
+      return { el: n, count: parseInt(n.getAttribute('data-count'), 10) || 0,
+               pct: parseFloat(n.getAttribute('data-threshold')) || 0,
+               reward: rw ? rw.textContent.trim() : '' };
+    }).sort(function (a, b) { return a.count - b.count; });
+
+    function fillPercentForCount(n) {
+      if (!tiers.length || n <= 0) return 0;
+      var last = tiers[tiers.length - 1];
+      if (n >= last.count) return last.pct;
+      var prevCount = 0, prevPct = 0;
+      for (var i = 0; i < tiers.length; i++) {
+        var t = tiers[i];
+        if (n < t.count) {
+          var span = t.count - prevCount;
+          return prevPct + (t.pct - prevPct) * (span > 0 ? (n - prevCount) / span : 0);
+        }
+        prevCount = t.count; prevPct = t.pct;
+      }
+      return last.pct;
+    }
+
+    function applyCount(n) {
+      n = parseInt(n, 10); if (isNaN(n) || n < 0) n = 0;
+      tiers.forEach(function (t) { t.el.classList.toggle('is-reached', n >= t.count); });
+      if (fillEl) fillEl.style.width = fillPercentForCount(n) + '%';
+      if (progressEl) {
+        var next = null;
+        for (var i = 0; i < tiers.length; i++) { if (n < tiers[i].count) { next = tiers[i]; break; } }
+        if (n > 0 && !next) {
+          progressEl.textContent = 'You have unlocked every reward. You are a HYDRIX founding legend.';
+        } else if (n > 0 && next) {
+          var remaining = next.count - n;
+          progressEl.textContent = n + (n === 1 ? ' friend has joined. ' : ' friends have joined. ') +
+            remaining + (remaining === 1 ? ' more to unlock: ' : ' more to unlock: ') + next.reward + '.';
+        }
+      }
+    }
+
+    // Optional on-screen debug: add ?vldebug=1 to the URL to see what Viral Loops returns.
+    var vldebug = false;
+    try { vldebug = new URLSearchParams(window.location.search).get('vldebug') === '1'; } catch (e) {}
+    function dbg(label, obj) {
+      if (!vldebug) return;
+      var box = document.getElementById('hx-vl-debug');
+      if (!box) {
+        box = document.createElement('pre'); box.id = 'hx-vl-debug';
+        box.style.cssText = 'position:fixed;left:8px;bottom:8px;max-width:92vw;max-height:44vh;overflow:auto;z-index:99999;margin:0;background:#000;color:#4ade80;font:11px/1.45 monospace;padding:10px;border:1px solid #4ade80;white-space:pre-wrap;border-radius:8px;';
+        (document.body || root).appendChild(box);
+      }
+      var out; try { out = (typeof obj === 'string') ? obj : JSON.stringify(obj, function (k, v) { return typeof v === 'function' ? '[fn]' : v; }, 2); } catch (e) { out = String(obj); }
+      box.textContent += '\n' + label + ': ' + out;
+    }
+
+    function pickCount(u) {
+      if (!u || typeof u !== 'object') return null;
+      var keys = ['referralCount', 'referrals', 'referral_count', 'referralsCount', 'totalReferrals', 'referredCount', 'count'];
+      for (var i = 0; i < keys.length; i++) { if (typeof u[keys[i]] === 'number') return u[keys[i]]; }
+      if (u.stats) return pickCount(u.stats);
+      if (u.user) return pickCount(u.user);
+      return null;
+    }
+    function pickLink(u) {
+      if (!u) return null;
+      return u.referralLink || u.refLink || u.shareUrl || u.referralUrl ||
+             (u.referralCode ? 'https://vrlps.co/' + u.referralCode : null);
+    }
+    function applyUser(u) {
+      if (!u) { dbg('user', 'null'); return; }
+      dbg('user', u);
+      var url = pickLink(u); if (url && input) input.value = url;
+      var c = pickCount(u); if (c != null) applyCount(c);
+    }
+    function wireCampaign(c) {
+      if (!c) return;
+      dbg('campaign keys', Object.keys(c));
+      try {
+        var u = c.getUser && c.getUser();
+        if (u && typeof u.then === 'function') { u.then(applyUser)['catch'](function (e) { dbg('getUser err', String(e)); }); }
+        else { applyUser(u); }
+      } catch (e) { dbg('getUser threw', String(e)); }
+      try { if (c.on) c.on('participation', function (vlUser) { applyUser(vlUser); }); } catch (e) {}
+    }
+    function initVL() {
+      if (!ucid || typeof window.ViralLoops === 'undefined' || !window.ViralLoops.getCampaign) return false;
+      try {
+        var r = window.ViralLoops.getCampaign(ucid);
+        if (r && typeof r.then === 'function') { r.then(wireCampaign)['catch'](function (e) { dbg('getCampaign err', String(e)); }); }
+        else { wireCampaign(r); }
+      } catch (e) { dbg('getCampaign threw', String(e)); }
+      return true;
+    }
+    // The loader is async, so ViralLoops may not exist yet — poll briefly, and also listen for ready events.
+    if (!initVL()) {
+      var tries = 0;
+      var iv = setInterval(function () { tries++; if (initVL() || tries > 40) clearInterval(iv); }, 300);
+    }
+    window.addEventListener('vl_events_ready', initVL);
+    document.addEventListener('vl:ready', initVL);
+    if (vldebug) dbg('ViralLoops at start', typeof window.ViralLoops);
+
+    // QA override: ?refcount=NN previews the ladder filling without a live account.
+    try {
+      var qc = new URLSearchParams(window.location.search).get('refcount');
+      if (qc !== null) applyCount(qc);
+    } catch (e) {}
+  })();
+</script>
+
+{% style %}
+  #shopify-section-{{ uid }} .hx-ref__wrap { position: relative; z-index: 5; }
+  #shopify-section-{{ uid }} .hx-ref__thanks {
+    display: inline-flex; align-items: center; gap: 8px; margin: 0 auto 34px;
+    padding: 8px 16px; border-radius: 9999px; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--hx-heading); background: rgba(255,255,255,.04); border: 1px solid var(--hx-border);
+  }
+  #shopify-section-{{ uid }} .hx-ref__thanks-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--hx-accent); box-shadow: 0 0 10px 1px var(--hx-accent); }
+
+  #shopify-section-{{ uid }} .hx-ref__top {
+    display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(28px, 4vw, 56px); align-items: stretch;
+  }
+  #shopify-section-{{ uid }} .hx-ref__top--single { grid-template-columns: 1fr; max-width: 620px; margin: 0 auto; }
+  #shopify-section-{{ uid }} .hx-ref__vlform { margin-top: 24px; }
+
+  /* Visual */
+  #shopify-section-{{ uid }} .hx-ref__visual {
+    position: relative; border-radius: 24px; overflow: hidden; min-height: 380px;
+    border: 1px solid var(--hx-border); background: #06070a;
+  }
+  #shopify-section-{{ uid }} .hx-ref__visual-img { width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; inset: 0; }
+  #shopify-section-{{ uid }} .hx-ref__visual-ph {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: #3a3f48; font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+    background: radial-gradient(circle at 40% 40%, #14161c, #06070a);
+  }
+  #shopify-section-{{ uid }} .hx-ref__visual::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(6,7,10,.15) 0%, rgba(6,7,10,.55) 62%, rgba(6,7,10,.9) 100%);
+  }
+  #shopify-section-{{ uid }} .hx-ref__visual-text {
+    position: absolute; left: clamp(22px,3vw,38px); bottom: clamp(22px,3vw,34px); z-index: 2;
+    font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.03em; line-height: 1.02;
+    font-size: clamp(30px, 4.4vw, 52px); color: #fff; max-width: 82%; text-wrap: balance;
+  }
+
+  /* Share panel */
+  #shopify-section-{{ uid }} .hx-ref__panel {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: clamp(26px,3.4vw,44px); border-radius: 24px;
+    border: 1px solid var(--hx-border);
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.012));
+    backdrop-filter: blur(10px);
+  }
+  #shopify-section-{{ uid }} .hx-ref__eyebrow { color: var(--hx-body); }
+  #shopify-section-{{ uid }} .hx-ref__h1 {
+    font-family: var(--hx-font-sora); font-weight: 700; letter-spacing: -.02em; line-height: 1.06;
+    font-size: clamp(28px, 3.6vw, 42px); margin-top: 12px;
+    background: linear-gradient(120deg, var(--hx-gold-a) 0%, var(--hx-gold-b) 46%, var(--hx-gold-c) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #shopify-section-{{ uid }} .hx-ref__body { margin-top: 14px; color: var(--hx-body); font-size: 15px; line-height: 1.6; max-width: 440px; }
+
+  #shopify-section-{{ uid }} .hx-ref__linkbox {
+    margin-top: 26px; display: flex; gap: 8px; padding: 6px 6px 6px 6px;
+    border-radius: 14px; border: 1px solid var(--hx-border); background: rgba(255,255,255,.03);
+  }
+  #shopify-section-{{ uid }} .hx-ref__link {
+    flex: 1 1 auto; min-width: 0; border: 0; background: transparent; color: var(--hx-heading);
+    font-family: var(--hx-font-body); font-size: 14px; padding: 10px 12px; outline: none;
+  }
+  #shopify-section-{{ uid }} .hx-ref__copy {
+    flex: 0 0 auto; border: 0; cursor: pointer; border-radius: 10px; padding: 10px 20px;
+    font-family: var(--hx-font-body); font-weight: 600; font-size: 14px; color: #fff;
+    background: var(--hx-accent); transition: background .2s, transform .1s;
+  }
+  #shopify-section-{{ uid }} .hx-ref__copy:hover { background: var(--hx-accent-hover); }
+  #shopify-section-{{ uid }} .hx-ref__copy.is-copied { background: #21c36f; }
+
+  #shopify-section-{{ uid }} .hx-ref__socials { margin-top: 20px; display: flex; gap: 12px; }
+  #shopify-section-{{ uid }} .hx-ref__social {
+    display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+    border-radius: 12px; color: var(--hx-heading); border: 1px solid var(--hx-border);
+    background: rgba(255,255,255,.03); transition: color .2s, border-color .2s, background .2s, transform .15s;
+  }
+  #shopify-section-{{ uid }} .hx-ref__social:hover { color: var(--hx-accent); border-color: var(--hx-accent); transform: translateY(-2px); }
+  #shopify-section-{{ uid }} .hx-ref__micro { margin-top: 16px; color: var(--hx-body); font-size: 12.5px; }
+
+  /* Ladder */
+  #shopify-section-{{ uid }} .hx-ref__ladder { margin-top: clamp(48px, 7vw, 88px); }
+  #shopify-section-{{ uid }} .hx-ref__ladder-head { text-align: center; margin-bottom: clamp(36px, 5vw, 54px); }
+  #shopify-section-{{ uid }} .hx-ref__ladder-h2 {
+    font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.02em; margin-top: 10px; color: #fff;
+    font-size: clamp(26px, 3.4vw, 40px);
+  }
+  #shopify-section-{{ uid }} .hx-ref__ladder-progress { margin-top: 12px; color: var(--hx-body); font-size: 14px; }
+  #shopify-section-{{ uid }} .hx-ref__ladder-note {
+    display: flex; align-items: center; gap: 9px; width: fit-content; max-width: 92%;
+    margin: clamp(34px, 5vw, 52px) auto 0; padding: 10px 18px;
+    border: 1px solid var(--hx-border); border-radius: 9999px;
+    background: rgba(143,217,255,.05); color: var(--hx-heading);
+    font-size: 13px; letter-spacing: .03em; text-align: center;
+  }
+  #shopify-section-{{ uid }} .hx-ref__ladder-note-dot {
+    flex: 0 0 auto; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--hx-accent); box-shadow: 0 0 10px 1px var(--hx-accent);
+  }
+
+  #shopify-section-{{ uid }} .hx-ref__track { position: relative; padding-top: 8px; }
+  #shopify-section-{{ uid }} .hx-ref__track-line,
+  #shopify-section-{{ uid }} .hx-ref__track-fill {
+    position: absolute; top: 30px; left: 6%; right: 6%; height: 2px; border-radius: 2px;
+  }
+  #shopify-section-{{ uid }} .hx-ref__track-line { background: var(--hx-border); }
+  #shopify-section-{{ uid }} .hx-ref__track-fill {
+    right: auto; background: linear-gradient(90deg, var(--hx-accent), #8fd9ff);
+    box-shadow: 0 0 16px 1px rgba(45,107,255,.6); transition: width .6s ease;
+  }
+  #shopify-section-{{ uid }} .hx-ref__nodes {
+    position: relative; display: grid; grid-template-columns: repeat({{ section.blocks.size }}, 1fr); gap: 12px;
+  }
+  #shopify-section-{{ uid }} .hx-ref__node { text-align: center; }
+  #shopify-section-{{ uid }} .hx-ref__node-dot {
+    width: 60px; height: 60px; margin: 0 auto; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 35%, #12151d, #090b10);
+    border: 1px solid var(--hx-border); position: relative; z-index: 1;
+    transition: border-color .3s, box-shadow .3s, transform .3s;
+  }
+  #shopify-section-{{ uid }} .hx-ref__node-count { font-family: var(--hx-font-display); font-weight: 700; font-size: 20px; color: var(--hx-heading); }
+  #shopify-section-{{ uid }} .hx-ref__node-label { margin-top: 12px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--hx-body); }
+  #shopify-section-{{ uid }} .hx-ref__node-reward { margin-top: 8px; font-size: 13.5px; line-height: 1.45; color: var(--hx-heading); padding: 0 6px; }
+  #shopify-section-{{ uid }} .hx-ref__node.is-reached .hx-ref__node-dot {
+    border-color: var(--hx-accent);
+    box-shadow: 0 0 0 4px rgba(45,107,255,.12), 0 0 26px 2px rgba(45,107,255,.55);
+    transform: translateY(-2px);
+  }
+  #shopify-section-{{ uid }} .hx-ref__node.is-reached .hx-ref__node-count { color: #8fd9ff; }
+
+  @media (max-width: 820px) {
+    #shopify-section-{{ uid }} .hx-ref__top { grid-template-columns: 1fr; }
+    #shopify-section-{{ uid }} .hx-ref__visual { min-height: 300px; }
+    #shopify-section-{{ uid }} .hx-ref__track-line,
+    #shopify-section-{{ uid }} .hx-ref__track-fill { display: none; }
+    #shopify-section-{{ uid }} .hx-ref__nodes { grid-template-columns: 1fr 1fr; gap: 22px 12px; }
+  }
+  @media (max-width: 460px) {
+    #shopify-section-{{ uid }} .hx-ref__nodes { grid-template-columns: 1fr; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Referral",
+  "tag": "section",
+  "class": "hx-referral-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 80 },
+    { "type": "text", "id": "anchor", "label": "Anchor id", "default": "referral" },
+    { "type": "select", "id": "chrome_mode", "label": "Header & footer on this page", "options": [
+      { "value": "full", "label": "Full (default)" },
+      { "value": "logo", "label": "Logo only (no menus)" },
+      { "value": "hidden", "label": "Hidden completely" }
+    ], "default": "full", "info": "Use 'Logo only' on the referral page so no other pages are reachable from the menu." },
+    { "type": "text", "id": "thanks_label", "label": "Thank-you pill", "default": "Thank you for signing up" },
+    { "type": "header", "content": "Visual (raisin)" },
+    { "type": "checkbox", "id": "show_visual", "label": "Show visual", "default": true, "info": "Turn off to show a compact ladder-only block (e.g. below the hero on the prelaunch page)." },
+    { "type": "image_picker", "id": "visual_image", "label": "Visual image", "info": "Upload the raisin image (dehydrated = stay ahead of hydration)." },
+    { "type": "text", "id": "visual_text", "label": "Overlay text", "default": "hydration. reimagined." },
+    { "type": "header", "content": "Share panel" },
+    { "type": "checkbox", "id": "show_panel", "label": "Show share panel", "default": true, "info": "Turn off to show a compact ladder-only block." },
+    { "type": "checkbox", "id": "use_vl_form", "label": "Use Viral Loops form + share buttons", "default": false, "info": "Replaces the custom link box and social buttons with the Viral Loops form widget (real join form + share URL). Recommended once the campaign is live." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Hydration is better together" },
+    { "type": "text", "id": "heading", "label": "Heading (gradient gold)", "default": "Share HYDRIX. Unlock Exclusive Rewards" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Share your unique link via Facebook, Instagram or X and unlock founder rewards for every friend who joins the waitlist." },
+    { "type": "text", "id": "default_link", "label": "Default referral link", "info": "Shown before a personal ?ref code is present. A referral app fills in each member's unique code.", "default": "https://1hydrix.com/?ref=FOUNDER" },
+    { "type": "text", "id": "link_base", "label": "Link base (advanced)", "info": "Optional. When a ?ref code is in the URL, the link is built as base + ?ref=CODE. Leave empty to use the current page URL." },
+    { "type": "text", "id": "copy_label", "label": "Copy button label", "default": "Copy" },
+    { "type": "text", "id": "share_text", "label": "Share message", "default": "I just joined HYDRIX. Hydration, reimagined. Join me:" },
+    { "type": "text", "id": "microcopy", "label": "Microcopy", "default": "Rewards credited automatically once friends join." },
+    { "type": "header", "content": "Social buttons" },
+    { "type": "checkbox", "id": "show_facebook", "label": "Facebook", "default": true },
+    { "type": "checkbox", "id": "show_instagram", "label": "Instagram", "default": true },
+    { "type": "text", "id": "instagram_url", "label": "Instagram link", "info": "Instagram has no web share dialog. Point this at your IG profile or a story link.", "default": "#" },
+    { "type": "checkbox", "id": "show_x", "label": "X", "default": true },
+    { "type": "header", "content": "Reward ladder" },
+    { "type": "text", "id": "ladder_eyebrow", "label": "Ladder eyebrow", "default": "HERE'S HOW IT WORKS" },
+    { "type": "text", "id": "ladder_heading", "label": "Ladder heading", "default": "The more you share, the more you unlock." },
+    { "type": "text", "id": "ladder_progress", "label": "Progress line", "default": "No friends have joined yet. Share your link to start climbing." },
+    { "type": "text", "id": "ladder_note", "label": "Ladder note (below rewards)", "default": "All rewards ship together with your first order.", "info": "A reassurance line under the reward ladder. Leave blank to hide." },
+    { "type": "range", "id": "progress_percent", "label": "Progress fill (demo)", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 0, "info": "Demo fill shown before live data loads. Viral Loops overrides this with each member's real referral count." },
+    { "type": "text", "id": "vl_campaign_id", "label": "Viral Loops campaign id", "default": "mFfbAfGXeOHEsFV07WAlJGN9uJY", "info": "Powers the real referral link and live ladder progress. Leave blank to run in demo mode only." },
+    { "type": "header", "content": "Decoration & spacing" },
+    { "type": "checkbox", "id": "show_beam", "label": "Show beam", "default": true },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 60, "max": 180, "step": 4, "unit": "px", "default": 108 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading / text", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" },
+    { "type": "color", "id": "border", "label": "Border / inputs", "default": "#20242A" },
+    { "type": "header", "content": "Gradient gold" },
+    { "type": "color", "id": "gold_from", "label": "Gold start", "default": "#FFE9A8" },
+    { "type": "color", "id": "gold_mid", "label": "Gold mid", "default": "#F5B400" },
+    { "type": "color", "id": "gold_to", "label": "Gold end", "default": "#B8860B" }
+  ],
+  "blocks": [
+    { "type": "tier", "name": "Reward tier", "settings": [
+      { "type": "text", "id": "count", "label": "Referral count", "default": "5" },
+      { "type": "textarea", "id": "reward", "label": "Reward", "default": "Free shipping + Founder sticker pack" },
+      { "type": "range", "id": "threshold_percent", "label": "Reached at progress ≥", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 0, "info": "This node glows when the progress fill reaches this value." }
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "HYDRIX Referral",
+      "blocks": [
+        { "type": "tier", "settings": { "count": "5",   "reward": "Free shipping + Founder sticker pack", "threshold_percent": 10 } },
+        { "type": "tier", "settings": { "count": "10",  "reward": "HYDRIX Shaker Bottle", "threshold_percent": 30 } },
+        { "type": "tier", "settings": { "count": "25",  "reward": "Limited-Edition Founder Tee", "threshold_percent": 55 } },
+        { "type": "tier", "settings": { "count": "50",  "reward": "Free tub of HYDRIX", "threshold_percent": 78 } },
+        { "type": "tier", "settings": { "count": "100", "reward": "One-year HYDRIX subscription + Numbered metal Founders Pass", "threshold_percent": 100 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

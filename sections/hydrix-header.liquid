@@ -1,0 +1,179 @@
+{%- comment -%} HYDRIX — Header / Nav {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign uid = section.id
+-%}
+
+<header class="hx-section hx-header hx-header--{{ s.layout }}" style="
+  --hx-bg: {{ s.bg }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  --hx-link: {{ s.link_color }};
+  --hx-link-hover: {{ s.link_hover }};
+">
+  <input type="checkbox" id="hx-menu-{{ uid }}" class="hx-menu-checkbox" hidden>
+  <nav class="hx-header__nav hx-wrap--wide">
+    <a href="{{ s.logo_link | default: routes.root_url }}" class="hx-header__logo" aria-label="{{ shop.name }}">
+      {%- if s.logo != blank -%}
+        <img src="{{ s.logo | image_url: width: 400 }}" alt="{{ shop.name }}" width="160" height="{{ s.logo_height }}" style="height:{{ s.logo_height }}px;width:auto;display:block">
+      {%- elsif s.logo_default != 'none' -%}
+        <img src="{{ s.logo_default | asset_url }}" alt="{{ shop.name }}" width="160" height="{{ s.logo_height }}" style="height:{{ s.logo_height }}px;width:auto;display:block">
+      {%- else -%}
+        <span class="hx-header__wordmark">{{ s.logo_text | default: shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <div class="hx-desk hx-header__links">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link' -%}
+          <a href="{{ block.settings.url }}" class="hx-header__link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if s.show_cart -%}
+        <a href="{{ routes.cart_url }}" class="hx-header__cart" aria-label="Cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12L5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+          <span class="hx-header__cart-count">{{ cart.item_count | default: 0 }}</span>
+        </a>
+      {%- endif -%}
+
+      {%- if s.cta_label != blank -%}
+        <a href="{{ s.cta_url }}" class="hx-btn hx-btn--sm">{{ s.cta_label }}</a>
+      {%- endif -%}
+    </div>
+
+    <div class="hx-mobtog hx-header__mob">
+      {%- if s.show_cart -%}
+        <a href="{{ routes.cart_url }}" class="hx-header__cart" aria-label="Cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12L5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+          <span class="hx-header__cart-count">{{ cart.item_count | default: 0 }}</span>
+        </a>
+      {%- endif -%}
+      <label for="hx-menu-{{ uid }}" class="hx-header__burger" aria-label="Open menu">≡</label>
+    </div>
+  </nav>
+
+  <!-- Mobile overlay -->
+  <div class="hx-header__overlay">
+    <label for="hx-menu-{{ uid }}" class="hx-header__overlay-close" aria-label="Close menu">×</label>
+    {%- if s.logo != blank -%}
+      <img src="{{ s.logo | image_url: width: 200 }}" alt="" width="160" height="40" style="height:40px;width:auto;opacity:.9">
+    {%- elsif s.logo_default != 'none' -%}
+      <img src="{{ s.logo_default | asset_url }}" alt="" width="160" height="36" style="height:36px;width:auto;opacity:.9">
+    {%- endif -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'link' -%}
+        <a href="{{ block.settings.url }}" class="hx-header__overlay-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if s.cta_label != blank -%}
+      <a href="{{ s.cta_url }}" class="hx-btn">{{ s.cta_label }}</a>
+    {%- endif -%}
+  </div>
+</header>
+
+{% style %}
+  #shopify-section-{{ uid }} { position: relative; z-index: 40; }
+  #shopify-section-{{ uid }} .hx-header { color: #fff; }
+  #shopify-section-{{ uid }} .hx-header--sticky {
+    position: sticky; top: 0;
+    background: {{ s.bg | color_modify: 'alpha', 0.82 }};
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--hx-border);
+  }
+  #shopify-section-{{ uid }} .hx-header--transparent {
+    position: absolute; top: {{ s.transparent_offset }}px; left: 0; right: 0; background: transparent;
+  }
+  #shopify-section-{{ uid }} .hx-header__nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 0 auto; padding: {{ s.padding }}px 28px;
+  }
+  #shopify-section-{{ uid }} .hx-header__logo { display: flex; align-items: center; text-decoration: none; }
+  #shopify-section-{{ uid }} .hx-header__wordmark {
+    font-family: var(--hx-font-display); font-weight: 700; letter-spacing: .18em;
+    font-size: 20px; color: #fff; text-transform: uppercase;
+  }
+  #shopify-section-{{ uid }} .hx-header__links { align-items: center; gap: 26px; }
+  #shopify-section-{{ uid }} .hx-header__link {
+    color: var(--hx-link); text-decoration: none; font-size: 14px; font-weight: 500;
+    transition: color .2s;
+  }
+  #shopify-section-{{ uid }} .hx-header__link:hover { color: var(--hx-link-hover); }
+  #shopify-section-{{ uid }} .hx-header__cart { position: relative; color: #fff; display: flex; align-items: center; text-decoration: none; }
+  #shopify-section-{{ uid }} .hx-header__cart-count {
+    position: absolute; top: -7px; right: -9px; background: var(--hx-accent); color: #fff;
+    font-size: 10px; font-weight: 600; min-width: 16px; height: 16px; border-radius: 100px;
+    display: flex; align-items: center; justify-content: center; padding: 0 3px;
+  }
+  #shopify-section-{{ uid }} .hx-header__mob { align-items: center; gap: 16px; }
+  #shopify-section-{{ uid }} .hx-header__burger {
+    background: transparent; border: 1px solid var(--hx-border); border-radius: 8px;
+    width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #fff; font-size: 18px;
+  }
+  #shopify-section-{{ uid }} .hx-header__overlay {
+    position: fixed; inset: 0; z-index: 60; background: rgba(10,11,15,.97);
+    backdrop-filter: blur(8px); display: none; flex-direction: column;
+    align-items: center; justify-content: center; gap: 28px;
+  }
+  #shopify-section-{{ uid }} .hx-menu-checkbox:checked ~ .hx-header__overlay { display: flex; }
+  #shopify-section-{{ uid }} .hx-header__overlay-close {
+    position: absolute; top: 30px; right: 28px; color: #fff; font-size: 30px; cursor: pointer;
+  }
+  #shopify-section-{{ uid }} .hx-header__overlay-link {
+    color: #fff; text-decoration: none; font-size: 22px; font-family: var(--hx-font-display);
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Header",
+  "tag": "section",
+  "class": "hx-header-wrap",
+  "settings": [
+    { "type": "select", "id": "layout", "label": "Layout", "options": [
+      { "value": "sticky", "label": "Sticky blurred (store pages)" },
+      { "value": "transparent", "label": "Transparent over hero (landing)" }
+    ], "default": "sticky" },
+    { "type": "range", "id": "transparent_offset", "label": "Transparent top offset", "min": 0, "max": 80, "step": 2, "unit": "px", "default": 42, "info": "Only used in transparent mode (sits below the announcement bar)." },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 10, "max": 28, "step": 1, "unit": "px", "default": 16 },
+    { "type": "header", "content": "Logo" },
+    { "type": "image_picker", "id": "logo", "label": "Logo image" },
+    { "type": "select", "id": "logo_default", "label": "Bundled logo (if none picked)", "options": [
+      { "value": "none", "label": "None (use text)" },
+      { "value": "hydrix-wordmark-white.png", "label": "White wordmark" },
+      { "value": "hydrix-monogram-white.png", "label": "White monogram" },
+      { "value": "hydrix-logo-white.png", "label": "White full lockup" }
+    ], "default": "hydrix-wordmark-white.png" },
+    { "type": "text", "id": "logo_text", "label": "Logo text (if no image)", "default": "HYDRIX" },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 14, "max": 48, "step": 1, "unit": "px", "default": 21 },
+    { "type": "url", "id": "logo_link", "label": "Logo link" },
+    { "type": "header", "content": "Cart & CTA" },
+    { "type": "checkbox", "id": "show_cart", "label": "Show cart icon", "default": true },
+    { "type": "text", "id": "cta_label", "label": "CTA button label" },
+    { "type": "url", "id": "cta_url", "label": "CTA button link" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" },
+    { "type": "color", "id": "link_color", "label": "Link", "default": "#E6EAF0" },
+    { "type": "color", "id": "link_hover", "label": "Link hover", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent", "label": "Accent / CTA", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" }
+  ],
+  "blocks": [
+    { "type": "link", "name": "Nav link", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "Shop" },
+      { "type": "url", "id": "url", "label": "Link" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Header", "blocks": [
+    { "type": "link", "settings": { "label": "Shop", "url": "/pages/shop" } },
+    { "type": "link", "settings": { "label": "Science", "url": "/pages/science" } },
+    { "type": "link", "settings": { "label": "About", "url": "/pages/about" } },
+    { "type": "link", "settings": { "label": "Subscribe", "url": "/pages/subscribe" } }
+  ]}]
+}
+{% endschema %}

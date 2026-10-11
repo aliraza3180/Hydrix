@@ -1,0 +1,233 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+{%- comment -%}
+  HYDRIX — custom main-product. Real product object: live gallery, variant switching, AJAX add-to-cart.
+  JS: initProductForm (variant switching) + initAtc (AJAX cart) in hydrix.js.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign p = product
+  assign cv = p.selected_or_first_available_variant
+  assign on_sale = false
+  if cv.compare_at_price > cv.price
+    assign on_sale = true
+  endif
+-%}
+
+<section class="hx-section hx-mp" id="hydrix-product"
+  style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-accent-hover:{{ s.accent_hover }};--hx-border:{{ s.border }};--hx-stage:{{ s.stage_bg }};padding:{{ s.padding_top }}px 24px {{ s.padding_bottom }}px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+
+  <div class="hx-wrap hx-mp__grid" data-hx-product>
+
+    {%- comment -%} ===================== GALLERY ===================== {%- endcomment -%}
+    <div class="hx-mp__gallery scroll-trigger animate--fade-in">
+      <div class="hx-mp__stage">
+        <span class="hx-mp__glow" aria-hidden="true"></span>
+        {%- if on_sale -%}<span class="hx-mp__badge">Sale</span>{%- elsif s.badge != blank -%}<span class="hx-mp__badge">{{ s.badge }}</span>{%- endif -%}
+        {%- if p.featured_media -%}
+          <img class="hx-mp__img" data-hx-main src="{{ p.featured_media | image_url: width: 1100 }}" alt="{{ p.featured_media.alt | escape | default: p.title }}" width="900" height="900" data-media-id="{{ p.featured_media.id }}">
+        {%- else -%}
+          {%- render 'hxh-bottle', name: p.title -%}
+        {%- endif -%}
+      </div>
+
+      {%- if p.media.size > 1 -%}
+        <div class="hx-mp__thumbs">
+          {%- for media in p.media -%}
+            <button type="button" class="hx-mp__thumb{% if forloop.first %} is-active{% endif %}" data-hx-thumb data-media-id="{{ media.id }}" data-src="{{ media | image_url: width: 1100 }}" aria-label="View image {{ forloop.index }}">
+              <img src="{{ media | image_url: width: 200 }}" alt="" width="80" height="80" loading="lazy">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ===================== BUY BOX ===================== {%- endcomment -%}
+    <div class="hx-mp__info scroll-trigger animate--slide-in">
+      {%- if s.show_vendor and p.vendor != blank -%}<div class="hx-mp__vendor">{{ p.vendor }}</div>{%- endif -%}
+      <h1 class="hx-mp__title">{{ p.title }}</h1>
+      {%- if s.tagline != blank -%}<div class="hx-mp__tagline">{{ s.tagline }}</div>{%- endif -%}
+
+      {%- if s.rating != blank -%}
+        <div class="hx-mp__rating"><span class="hx-mp__stars">★★★★★</span> <span>{{ s.rating }}</span></div>
+      {%- endif -%}
+
+      <div class="hx-mp__price">
+        <span class="hx-mp__price-now" data-hx-price>{{ cv.price | money }}</span>
+        <span class="hx-mp__price-was" data-hx-compare{% unless on_sale %} hidden{% endunless %}>{{ cv.compare_at_price | money }}</span>
+      </div>
+
+      {%- form 'product', product, class: 'hx-mp__form', novalidate: 'novalidate', data-hx-atc: 'true' -%}
+        {%- unless p.has_only_default_variant -%}
+          {%- for option in p.options_with_values -%}
+            <div class="hx-mp__opt">
+              <div class="hx-mp__opt-name">{{ option.name }}</div>
+              <div class="hx-mp__opt-values">
+                {%- for value in option.values -%}
+                  {%- assign oid = 'opt-' | append: section.id | append: '-' | append: option.position | append: '-' | append: forloop.index -%}
+                  <input class="hx-mp__opt-input" type="radio" id="{{ oid }}" name="option{{ option.position }}" value="{{ value | escape }}" data-hx-opt data-position="{{ option.position }}"{% if option.selected_value == value %} checked{% endif %}>
+                  <label class="hx-mp__opt-pill" for="{{ oid }}">{{ value }}</label>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <input type="hidden" name="id" value="{{ cv.id }}" data-hx-variant-id>
+
+        <div class="hx-mp__buy">
+          <div class="hx-mp__qty">
+            <button type="button" class="hx-mp__qty-btn" data-hx-dec aria-label="Decrease quantity">−</button>
+            <input class="hx-mp__qty-input" type="number" name="quantity" value="1" min="1" inputmode="numeric" data-hx-qty>
+            <button type="button" class="hx-mp__qty-btn" data-hx-inc aria-label="Increase quantity">+</button>
+          </div>
+          <button type="submit" name="add" class="hx-mp__atc" data-hx-atc-btn data-label="{{ s.atc_label | default: 'Add to cart' | escape }}"{% unless cv.available %} disabled{% endunless %}>
+            {%- if cv.available -%}{{ s.atc_label | default: 'Add to cart' }}{%- else -%}Sold out{%- endif -%}
+          </button>
+        </div>
+
+        {%- if s.show_dynamic_checkout -%}<div class="hx-mp__dynamic">{{ form | payment_button }}</div>{%- endif -%}
+      {%- endform -%}
+
+      {%- if s.trust_line != blank -%}<div class="hx-mp__trust">{{ s.trust_line }}</div>{%- endif -%}
+
+      {%- if s.show_description and p.description != blank -%}
+        <div class="hx-mp__desc rte">{{ p.description }}</div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="hx-mp__features">
+          {%- for block in section.blocks -%}
+            <div class="hx-mp__feature" {{ block.shopify_attributes }}>
+              <span class="hx-mp__feature-dot" aria-hidden="true"></span>
+              <div>
+                <div class="hx-mp__feature-t">{{ block.settings.title }}</div>
+                {%- if block.settings.text != blank -%}<div class="hx-mp__feature-x">{{ block.settings.text }}</div>{%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Variant data for JS (price in cents, availability, featured media id) {%- endcomment -%}
+    <script type="application/json" data-hx-variant-json>
+      [
+        {%- for v in p.variants -%}
+          {"id":{{ v.id }},"available":{{ v.available }},"price":{{ v.price | json }},"compare_at_price":{{ v.compare_at_price | json }},"options":{{ v.options | json }},"media_id":{{ v.featured_media.id | default: 'null' }}}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    </script>
+    <span data-hx-money-format hidden>{{ shop.money_format }}</span>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-mp__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  #shopify-section-{{ section.id }} .hx-mp__gallery { position: sticky; top: 90px; }
+  #shopify-section-{{ section.id }} .hx-mp__stage {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 1/1; border-radius: 26px; overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 10%, rgba(255,255,255,.05), transparent 55%), var(--hx-stage, #07080B);
+    border: 1px solid var(--hx-border);
+  }
+  #shopify-section-{{ section.id }} .hx-mp__glow { position: absolute; bottom: 4%; left: 50%; transform: translateX(-50%); width: 60%; height: 34%; border-radius: 50%; background: radial-gradient(circle, var(--hx-accent), transparent 70%); opacity: .4; filter: blur(34px); }
+  #shopify-section-{{ section.id }} .hx-mp__img { position: relative; z-index: 1; width: 86%; height: 86%; object-fit: contain; display: block; transition: opacity .2s; }
+  #shopify-section-{{ section.id }} .hx-mp__badge { position: absolute; top: 16px; left: 16px; z-index: 3; font-family: var(--hx-font-sora); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 6px 12px; border-radius: 100px; color: #fff; background: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-mp__thumbs { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  #shopify-section-{{ section.id }} .hx-mp__thumb { width: 72px; height: 72px; border-radius: 14px; overflow: hidden; border: 1px solid var(--hx-border); background: var(--hx-stage, #07080B); cursor: pointer; padding: 0; transition: border-color .2s; }
+  #shopify-section-{{ section.id }} .hx-mp__thumb.is-active { border-color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-mp__thumb img { width: 100%; height: 100%; object-fit: contain; }
+
+  #shopify-section-{{ section.id }} .hx-mp__vendor { font-family: var(--hx-font-sora); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body); }
+  #shopify-section-{{ section.id }} .hx-mp__title { font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.025em; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; margin: 8px 0 0; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-mp__tagline { margin-top: 10px; color: var(--hx-accent); font-size: 15px; }
+  #shopify-section-{{ section.id }} .hx-mp__rating { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--hx-body); }
+  #shopify-section-{{ section.id }} .hx-mp__stars { color: var(--hx-accent); letter-spacing: 2px; }
+  #shopify-section-{{ section.id }} .hx-mp__price { margin-top: 20px; display: flex; align-items: baseline; gap: 12px; }
+  #shopify-section-{{ section.id }} .hx-mp__price-now { font-family: var(--hx-font-sora); font-weight: 600; font-size: 28px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-mp__price-was { color: var(--hx-body); text-decoration: line-through; font-size: 17px; }
+  #shopify-section-{{ section.id }} .hx-mp__price-was[hidden] { display: none; }
+
+  #shopify-section-{{ section.id }} .hx-mp__opt { margin-top: 26px; }
+  #shopify-section-{{ section.id }} .hx-mp__opt-name { font-size: 13px; color: var(--hx-body); margin-bottom: 10px; }
+  #shopify-section-{{ section.id }} .hx-mp__opt-values { display: flex; flex-wrap: wrap; gap: 10px; }
+  #shopify-section-{{ section.id }} .hx-mp__opt-input { position: absolute; opacity: 0; pointer-events: none; }
+  #shopify-section-{{ section.id }} .hx-mp__opt-pill { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 9999px; border: 1px solid var(--hx-border); color: var(--hx-heading); font-size: 14px; cursor: pointer; transition: border-color .2s, background .2s; }
+  #shopify-section-{{ section.id }} .hx-mp__opt-input:checked + .hx-mp__opt-pill { border-color: var(--hx-accent); background: rgba(59,130,246,.12); }
+  #shopify-section-{{ section.id }} .hx-mp__opt-input:focus-visible + .hx-mp__opt-pill { outline: 2px solid var(--hx-accent); outline-offset: 2px; }
+
+  #shopify-section-{{ section.id }} .hx-mp__buy { margin-top: 28px; display: flex; gap: 12px; }
+  #shopify-section-{{ section.id }} .hx-mp__qty { display: inline-flex; align-items: center; border: 1px solid var(--hx-border); border-radius: 9999px; overflow: hidden; flex: 0 0 auto; }
+  #shopify-section-{{ section.id }} .hx-mp__qty-btn { width: 44px; height: 52px; background: transparent; border: 0; color: var(--hx-heading); font-size: 18px; cursor: pointer; }
+  #shopify-section-{{ section.id }} .hx-mp__qty-input { width: 44px; height: 52px; text-align: center; background: transparent; border: 0; color: var(--hx-heading); font-family: var(--hx-font-sora); font-size: 16px; -moz-appearance: textfield; }
+  #shopify-section-{{ section.id }} .hx-mp__qty-input::-webkit-outer-spin-button,
+  #shopify-section-{{ section.id }} .hx-mp__qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  #shopify-section-{{ section.id }} .hx-mp__atc { flex: 1; min-height: 52px; border: 0; border-radius: 9999px; background: var(--hx-accent); color: #fff; font-family: var(--hx-font-body); font-weight: 600; font-size: 15px; cursor: pointer; transition: filter .2s, box-shadow .2s; }
+  #shopify-section-{{ section.id }} .hx-mp__atc:hover:not([disabled]) { filter: brightness(1.06); box-shadow: 0 0 30px -4px var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-mp__atc[disabled] { opacity: .5; cursor: not-allowed; }
+  #shopify-section-{{ section.id }} .hx-mp__dynamic { margin-top: 12px; }
+
+  #shopify-section-{{ section.id }} .hx-mp__trust { margin-top: 16px; color: var(--hx-body); font-size: 13px; }
+  #shopify-section-{{ section.id }} .hx-mp__desc { margin-top: 26px; color: var(--hx-body); font-size: 15px; line-height: 1.7; }
+  #shopify-section-{{ section.id }} .hx-mp__desc p { margin: 0 0 12px; }
+  #shopify-section-{{ section.id }} .hx-mp__features { margin-top: 26px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--hx-border); padding-top: 24px; }
+  #shopify-section-{{ section.id }} .hx-mp__feature { display: flex; gap: 12px; align-items: flex-start; }
+  #shopify-section-{{ section.id }} .hx-mp__feature-dot { flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; background: var(--hx-accent); box-shadow: 0 0 12px var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-mp__feature-t { color: var(--hx-heading); font-weight: 600; font-size: 14.5px; }
+  #shopify-section-{{ section.id }} .hx-mp__feature-x { color: var(--hx-body); font-size: 13.5px; margin-top: 2px; }
+
+  @media (max-width: 900px) {
+    #shopify-section-{{ section.id }} .hx-mp__grid { grid-template-columns: 1fr; gap: 28px; }
+    #shopify-section-{{ section.id }} .hx-mp__gallery { position: static; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Product",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Buy box" },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false },
+    { "type": "text", "id": "tagline", "label": "Tagline under title", "default": "Full-spectrum hydration" },
+    { "type": "text", "id": "rating", "label": "Rating text", "default": "4.9 (2,300+ reviews)" },
+    { "type": "text", "id": "badge", "label": "Badge (when not on sale)", "default": "Bestseller" },
+    { "type": "text", "id": "atc_label", "label": "Add to cart label", "default": "Add to cart" },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout buttons", "default": true },
+    { "type": "checkbox", "id": "show_description", "label": "Show product description", "default": true },
+    { "type": "text", "id": "trust_line", "label": "Trust line under button", "default": "Free shipping over $50 · 30-day money-back guarantee" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 20, "max": 120, "step": 2, "unit": "px", "default": 56 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 20, "max": 120, "step": 2, "unit": "px", "default": 64 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "stage_bg", "label": "Image stage background", "default": "#07080B" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#5B97F8" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "blocks": [
+    { "type": "feature", "name": "Feature line", "settings": [
+      { "type": "text", "id": "title", "label": "Title", "default": "7 essential electrolytes" },
+      { "type": "text", "id": "text", "label": "Text" }
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [
+    { "name": "HYDRIX Product", "blocks": [
+      { "type": "feature", "settings": { "title": "7 essential electrolytes", "text": "Clinically dosed for real absorption." } },
+      { "type": "feature", "settings": { "title": "Zero sugar", "text": "No junk, naturally flavored." } },
+      { "type": "feature", "settings": { "title": "Third-party tested", "text": "Every batch, for purity and potency." } }
+    ]}
+  ]
+}
+{% endschema %}

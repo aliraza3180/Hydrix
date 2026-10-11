@@ -1,0 +1,162 @@
+{%- comment -%} HYDRIX — Blog grid (featured split card + category chips + article card grid). {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-blog" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  --hx-card-bg: {{ s.card_bg }};
+  --hx-glow: {{ s.glow }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    <div class="hx-blog__head scroll-trigger animate--fade-in">
+      {%- if s.eyebrow != blank -%}<div class="hx-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+      {%- if s.heading != blank -%}<h1 class="hx-h1 hx-blog__title">{{ s.heading }}</h1>{%- endif -%}
+    </div>
+
+    {%- if s.featured_title != blank -%}
+      {%- capture featured_inner -%}
+        <div class="hx-blog__feat-media">
+          {%- if s.featured_image != blank -%}
+            <img src="{{ s.featured_image | image_url: width: 800 }}" alt="{{ s.featured_title | escape }}" class="hx-blog__feat-img" loading="lazy" width="800" height="600">
+          {%- endif -%}
+        </div>
+        <div class="hx-blog__feat-body">
+          {%- if s.featured_tag != blank -%}<span class="hx-pill hx-blog__tag">{{ s.featured_tag }}</span>{%- endif -%}
+          <h2 class="hx-h2 hx-blog__feat-title">{{ s.featured_title }}</h2>
+          {%- if s.featured_excerpt != blank -%}<p class="hx-blog__feat-excerpt">{{ s.featured_excerpt }}</p>{%- endif -%}
+          {%- if s.featured_meta != blank -%}<div class="hx-blog__meta">{{ s.featured_meta }}</div>{%- endif -%}
+        </div>
+      {%- endcapture -%}
+      <div class="hx-blog__featured scroll-trigger animate--slide-in">
+        {%- if s.featured_link != blank -%}
+          <a href="{{ s.featured_link }}" class="hx-blog__feat-card">{{ featured_inner }}</a>
+        {%- else -%}
+          <div class="hx-blog__feat-card">{{ featured_inner }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- assign cat_blocks = section.blocks | where: 'type', 'category' -%}
+    {%- assign post_blocks = section.blocks | where: 'type', 'article' -%}
+
+    {%- if cat_blocks.size > 0 -%}
+      <div class="hx-blog__chips scroll-trigger animate--fade-in">
+        {%- for block in cat_blocks -%}
+          <button type="button" class="hx-chip{% if block.settings.active %} hx-chip--active{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.label }}</button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="hx-grid hx-blog__grid scroll-trigger animate--slide-in">
+      {%- for block in post_blocks -%}
+        {%- assign bs = block.settings -%}
+        {%- capture article_inner -%}
+          <div class="hx-blog__media">
+            {%- if bs.image != blank -%}
+              <img src="{{ bs.image | image_url: width: 600 }}" alt="{{ bs.title | escape }}" class="hx-blog__img" loading="lazy" width="600" height="375">
+            {%- endif -%}
+          </div>
+          <div class="hx-blog__card-body">
+            {%- if bs.tag != blank -%}<span class="hx-pill hx-blog__tag hx-blog__tag--sm">{{ bs.tag }}</span>{%- endif -%}
+            <h3 class="hx-blog__card-title">{{ bs.title }}</h3>
+            {%- if bs.meta != blank -%}<div class="hx-blog__meta">{{ bs.meta }}</div>{%- endif -%}
+          </div>
+        {%- endcapture -%}
+        {%- if bs.link != blank -%}
+          <a href="{{ bs.link }}" class="hx-card hx-card--glow hx-blog__card" {{ block.shopify_attributes }}>{{ article_inner }}</a>
+        {%- else -%}
+          <div class="hx-card hx-card--glow hx-blog__card" {{ block.shopify_attributes }}>{{ article_inner }}</div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-blog__head { text-align: left; }
+  #shopify-section-{{ section.id }} .hx-blog__title { margin-top: 12px; font-size: clamp(34px, 5vw, 56px); }
+  #shopify-section-{{ section.id }} .hx-blog__featured { margin-top: 32px; }
+  #shopify-section-{{ section.id }} .hx-blog__feat-card { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0; border: 1px solid var(--hx-border); border-radius: 20px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .2s; }
+  #shopify-section-{{ section.id }} .hx-blog__feat-card:hover { border-color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-blog__feat-media { position: relative; min-height: 280px; background: radial-gradient(circle at 60% 40%, color-mix(in srgb, var(--hx-glow) 22%, transparent), transparent 50%), radial-gradient(circle at 30% 70%, color-mix(in srgb, var(--hx-accent) 34%, transparent), transparent 55%), #070809; }
+  #shopify-section-{{ section.id }} .hx-blog__feat-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #shopify-section-{{ section.id }} .hx-blog__feat-body { padding: clamp(28px, 4vw, 44px); display: flex; flex-direction: column; justify-content: center; }
+  #shopify-section-{{ section.id }} .hx-blog__tag { align-self: flex-start; }
+  #shopify-section-{{ section.id }} .hx-blog__feat-title { margin-top: 16px; font-size: clamp(24px, 3.2vw, 36px); line-height: 1.1; }
+  #shopify-section-{{ section.id }} .hx-blog__feat-excerpt { margin-top: 14px; color: var(--hx-body); font-size: 15px; line-height: 1.6; }
+  #shopify-section-{{ section.id }} .hx-blog__meta { margin-top: 18px; color: var(--hx-body); font-size: 13px; }
+  #shopify-section-{{ section.id }} .hx-blog__chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+  #shopify-section-{{ section.id }} .hx-blog__grid { margin-top: 24px; grid-template-columns: repeat(auto-fit, minmax({{ s.min_card }}px, 1fr)); }
+  #shopify-section-{{ section.id }} .hx-blog__card { padding: 0; overflow: hidden; text-decoration: none; color: inherit; display: block; }
+  #shopify-section-{{ section.id }} .hx-blog__media { position: relative; aspect-ratio: 16/10; background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--hx-accent) 22%, transparent), transparent 60%), #070809; }
+  #shopify-section-{{ section.id }} .hx-blog__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #shopify-section-{{ section.id }} .hx-blog__card-body { padding: 22px; }
+  #shopify-section-{{ section.id }} .hx-blog__card-title { margin-top: 12px; font-family: var(--hx-font-display); font-weight: 600; font-size: 18px; line-height: 1.25; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-blog__tag--sm { font-size: 11.5px; padding: 5px 11px; }
+  #shopify-section-{{ section.id }} .hx-blog__card .hx-blog__meta { margin-top: 12px; font-size: 12.5px; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Blog Grid",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Journal" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Hydration, decoded" },
+    { "type": "range", "id": "min_card", "label": "Min card width", "min": 220, "max": 360, "step": 10, "unit": "px", "default": 280 },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 56 },
+    { "type": "header", "content": "Featured article" },
+    { "type": "image_picker", "id": "featured_image", "label": "Featured image" },
+    { "type": "text", "id": "featured_tag", "label": "Featured tag", "default": "Science" },
+    { "type": "text", "id": "featured_title", "label": "Featured title", "default": "Why water alone won't hydrate you" },
+    { "type": "textarea", "id": "featured_excerpt", "label": "Featured excerpt", "default": "The co-transport mechanism that makes electrolytes essential — and how to dose them right." },
+    { "type": "text", "id": "featured_meta", "label": "Featured meta", "default": "8 min read · June 2026" },
+    { "type": "url", "id": "featured_link", "label": "Featured link" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "glow", "label": "Glow", "default": "#8FD9FF" },
+    { "type": "color", "id": "border", "label": "Card border", "default": "#20242A" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#0A0B0F" }
+  ],
+  "blocks": [
+    { "type": "category", "name": "Category chip", "settings": [
+      { "type": "text", "id": "label", "label": "Label", "default": "All" },
+      { "type": "checkbox", "id": "active", "label": "Active", "default": false }
+    ]},
+    { "type": "article", "name": "Article", "settings": [
+      { "type": "image_picker", "id": "image", "label": "Image (else gradient box)" },
+      { "type": "text", "id": "tag", "label": "Tag / category", "default": "Science" },
+      { "type": "text", "id": "title", "label": "Title", "default": "The 7 electrolytes your body actually needs" },
+      { "type": "text", "id": "meta", "label": "Meta line", "default": "6 min read · June 2026" },
+      { "type": "url", "id": "link", "label": "Link" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Blog Grid", "blocks": [
+    { "type": "category", "settings": { "label": "All", "active": true } },
+    { "type": "category", "settings": { "label": "Science", "active": false } },
+    { "type": "category", "settings": { "label": "Performance", "active": false } },
+    { "type": "category", "settings": { "label": "Recipes", "active": false } },
+    { "type": "article", "settings": { "tag": "Science", "title": "The 7 electrolytes your body actually needs", "meta": "6 min read · June 2026" } },
+    { "type": "article", "settings": { "tag": "Performance", "title": "Hydrating around your training, the right way", "meta": "5 min read · June 2026" } },
+    { "type": "article", "settings": { "tag": "Science", "title": "Sugar-free hydration: how we did it", "meta": "4 min read · May 2026" } },
+    { "type": "article", "settings": { "tag": "Recipes", "title": "Three Glacier Citrus mixes for hot days", "meta": "3 min read · May 2026" } },
+    { "type": "article", "settings": { "tag": "Performance", "title": "Signs of mild dehydration you ignore", "meta": "5 min read · May 2026" } },
+    { "type": "article", "settings": { "tag": "Science", "title": "What \"full-spectrum\" actually means", "meta": "7 min read · April 2026" } }
+  ]}]
+}
+{% endschema %}

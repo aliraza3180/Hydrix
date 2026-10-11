@@ -1,0 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hydrix-hero",
+      "settings": {
+        "bg_position": "center",
+        "bg_overlay": "#0a0b0f",
+        "bg_overlay_opacity": 56,
+        "layout": "centered",
+        "full_height": true,
+        "anchor": "hero",
+        "eyebrow": "hydration. reimagined.",
+        "eyebrow_large": true,
+        "heading": "A Full-Spectrum Hydration System built for everyday life.",
+        "subheading": "",
+        "show_showcase": true,
+        "showcase_image": "shopify://shop_images/New_Project_1.png",
+        "showcase_default": "hydrix-hero-product.png",
+        "showcase_alt": "HYDRIX hydration system",
+        "action_type": "email",
+        "use_viral_loops": true,
+        "vl_campaign_id": "mFfbAfGXeOHEsFV07WAlJGN9uJY",
+        "email_placeholder": "Enter your email",
+        "email_tag": "waitlist",
+        "success_text": "You're on the list. Watch your inbox for founding access.",
+        "button_label": "Join the Waitlist",
+        "button_url": "",
+        "button2_label": "",
+        "button2_url": "",
+        "show_counter": true,
+        "counter_start": 3742,
+        "counter_target": 3842,
+        "counter_increment": 1,
+        "counter_interval": 5,
+        "counter_label": "people already in line",
+        "counter_color": "#8fd9ff",
+        "microcopy": "No spam · Unsubscribe anytime · Early access perks",
+        "show_safe": true,
+        "safe_image": "shopify://shop_images/hydrix-safe.png",
+        "safe_label": "BE THE FIRST TO KNOW",
+        "safe_alt": "HYDRIX vault",
+        "image_default": "daily-front.png",
+        "chrome_mode": "logo",
+        "show_beam": false,
+        "show_arc": false,
+        "padding_top": 160,
+        "padding_bottom": 90,
+        "bg": "#0a0b0f",
+        "heading_color": "#ffffff",
+        "body_color": "#6c7685",
+        "accent": "#2d6bff",
+        "accent_hover": "#3b7eff",
+        "border": "#20242a",
+        "vl_redirect_url": "/pages/referral"
+      }
+    }
+  },
+  "order": [
+    "hero"
+  ]
+}

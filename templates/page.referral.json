@@ -1,0 +1,98 @@
+{
+  "sections": {
+    "referral": {
+      "type": "hydrix-referral",
+      "settings": {
+        "bg_overlay": "#0a0b0f",
+        "bg_overlay_opacity": 80,
+        "anchor": "referral",
+        "thanks_label": "Thank you for signing up",
+        "show_visual": false,
+        "show_panel": true,
+        "use_vl_form": true,
+        "vl_campaign_id": "mFfbAfGXeOHEsFV07WAlJGN9uJY",
+        "visual_text": "hydration. reimagined.",
+        "eyebrow": "Hydration is better together",
+        "heading": "Share HYDRIX. Unlock Exclusive Rewards",
+        "body": "Share your unique link via Facebook, Instagram or X and unlock founder rewards for every friend who joins the waitlist.",
+        "default_link": "https://1hydrix.com/?ref=FOUNDER",
+        "link_base": "",
+        "copy_label": "Copy",
+        "share_text": "I just joined HYDRIX. Hydration, reimagined. Join me:",
+        "microcopy": "Rewards credited automatically once friends join.",
+        "show_facebook": true,
+        "show_instagram": true,
+        "instagram_url": "#",
+        "show_x": true,
+        "ladder_eyebrow": "HERE'S HOW IT WORKS",
+        "ladder_heading": "The more you share, the more you unlock.",
+        "ladder_progress": "No friends have joined yet. Share your link to start climbing.",
+        "progress_percent": 0,
+        "show_beam": false,
+        "padding": 110,
+        "bg": "#0a0b0f",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#2d6bff",
+        "accent_hover": "#3b7eff",
+        "border": "#20242a",
+        "gold_from": "#ffe9a8",
+        "gold_mid": "#f5b400",
+        "gold_to": "#b8860b",
+        "chrome_mode": "logo"
+      },
+      "blocks": {
+        "t1": {
+          "type": "tier",
+          "settings": {
+            "count": "5",
+            "reward": "Free shipping + Founder sticker pack",
+            "threshold_percent": 10
+          }
+        },
+        "t2": {
+          "type": "tier",
+          "settings": {
+            "count": "10",
+            "reward": "HYDRIX Shaker Bottle",
+            "threshold_percent": 30
+          }
+        },
+        "t3": {
+          "type": "tier",
+          "settings": {
+            "count": "25",
+            "reward": "Limited-Edition Founder Tee",
+            "threshold_percent": 55
+          }
+        },
+        "t4": {
+          "type": "tier",
+          "settings": {
+            "count": "50",
+            "reward": "Free tub of HYDRIX",
+            "threshold_percent": 78
+          }
+        },
+        "t5": {
+          "type": "tier",
+          "settings": {
+            "count": "100",
+            "reward": "One-year HYDRIX subscription + Numbered metal Founders Pass",
+            "threshold_percent": 100
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5"
+      ]
+    }
+  },
+  "order": [
+    "referral"
+  ]
+}

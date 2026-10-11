@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0A0B0F;color:#fff;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:#2D6BFF;color:#fff}
+  a{color:inherit}
+  .desk{display:flex}.mobtog{display:none}
+  @media(max-width:860px){.desk{display:none!important}.mobtog{display:inline-flex!important}}
+</style>
+</helmet>
+
+<div style="background:#0A0B0F;min-height:100vh;overflow-x:hidden">
+  <header style="position:sticky;top:0;z-index:40;background:rgba(10,11,15,.82);backdrop-filter:blur(14px);border-bottom:1px solid #20242A">
+    <nav style="display:flex;align-items:center;justify-content:space-between;max-width:1240px;margin:0 auto;padding:16px 28px">
+      <a href="Home.dc.html" style="text-decoration:none"><img src="assets/hydrix-wordmark-white.png" alt="HYDRIX" style="height:21px;width:auto;display:block"></a>
+      <div class="desk" style="align-items:center;gap:28px">
+        <a href="Shop.dc.html" style="color:#2D6BFF;text-decoration:none;font-size:14px;font-weight:500">Shop</a>
+        <a href="Science.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Science</a>
+        <a href="About.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">About</a>
+        <a href="Subscribe.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Subscribe</a>
+        <a href="Home.dc.html" style="color:#fff;display:flex"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12L5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></a>
+      </div>
+      <button class="mobtog" onClick="{{ toggleMenu }}" style="display:none;background:transparent;border:1px solid #20242A;border-radius:8px;width:42px;height:42px;cursor:pointer;color:#fff;font-size:18px">≡</button>
+    </nav>
+  </header>
+  <sc-if value="{{ menuOpen }}"><div style="position:fixed;inset:0;z-index:60;background:rgba(10,11,15,.97);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px"><button onClick="{{ toggleMenu }}" style="position:absolute;top:30px;right:28px;background:transparent;border:none;color:#fff;font-size:30px;cursor:pointer">×</button><a href="Shop.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Shop</a><a href="Science.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Science</a><a href="About.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">About</a><a href="Subscribe.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Subscribe</a></div></sc-if>
+
+  <!-- HEADER -->
+  <section style="max-width:1180px;margin:0 auto;padding:48px 28px 0">
+    <div style="color:#6C7685;font-size:13px">Shop / All products</div>
+    <h1 style="margin-top:10px;font-family:'Saira';font-weight:700;font-size:clamp(34px,5vw,56px)">The full system</h1>
+    <p style="margin-top:12px;color:#6C7685;font-size:16px;max-width:520px">Four formulas, one engineering standard. Zero sugar, seven electrolytes, third-party tested.</p>
+  </section>
+
+  <!-- FILTER BAR -->
+  <section style="max-width:1180px;margin:0 auto;padding:28px 28px 0">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid #20242A;padding-bottom:18px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4"><button onClick="{{ f.select }}" style="cursor:pointer;background:{{ f.bg }};color:{{ f.color }};font-size:13.5px;padding:9px 16px;border-radius:100px;border:1px solid {{ f.border }};transition:all .2s">{{ f.name }}</button></sc-for>
+      </div>
+      <div style="color:#6C7685;font-size:13px">Sort: <span style="color:#fff">Featured ▾</span></div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section style="max-width:1180px;margin:0 auto;padding:32px 28px 60px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px">
+      <div style="border:1px solid #20242A;border-radius:18px;padding:28px;background:#0A0B0F;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column" style-hover="border-color:#2D6BFF;box-shadow:0 0 44px rgba(45,107,255,.16)">
+        <a href="Product-DAILY.dc.html" style="text-decoration:none;color:inherit"><div style="position:relative;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:radial-gradient(ellipse at center,rgba(45,107,255,.18),transparent 65%),#070809;display:flex;align-items:center;justify-content:center"><img src="assets/daily-front.png" style="width:90%;height:90%;object-fit:contain" alt="DAILY"></div></a>
+        <div style="margin-top:18px;display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Saira';font-weight:700;font-size:20px;color:#2D6BFF">DAILY</div><div style="font-weight:600">$49</div></div>
+        <div style="color:#6C7685;font-size:13px;margin-top:4px">Glacier Citrus · Everyday hydration</div>
+        <a href="Product-DAILY.dc.html" style="margin-top:18px;text-align:center;text-decoration:none;background:#2D6BFF;color:#fff;font-weight:600;font-size:14px;padding:12px;border-radius:9px;transition:all .2s" style-hover="background:#3B7EFF">Shop DAILY</a>
+      </div>
+      <div style="border:1px solid #20242A;border-radius:18px;padding:28px;background:#0A0B0F;transition:border-color .2s;display:flex;flex-direction:column" style-hover="border-color:#22D37D">
+        <div style="position:relative;aspect-ratio:1/1;border-radius:14px;background:radial-gradient(ellipse at center,rgba(34,211,125,.16),transparent 62%),#070809;display:flex;align-items:center;justify-content:center"><div style="position:relative;width:120px;height:160px;border-radius:18px 18px 12px 12px;background:linear-gradient(160deg,#1a1d24,#0c0d11);box-shadow:0 0 40px rgba(34,211,125,.4),inset 0 10px 0 -5px #2a2e36"><div style="position:absolute;top:18px;left:50%;transform:translateX(-50%);width:3px;height:62%;background:linear-gradient(180deg,#7DFFC2,#22D37D)"></div></div><span style="position:absolute;top:14px;right:14px;background:#20242A;color:#22D37D;font-size:11px;padding:5px 10px;border-radius:100px">New</span></div>
+        <div style="margin-top:18px;display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Saira';font-weight:700;font-size:20px;color:#22D37D">FOCUS</div><div style="font-weight:600">$49</div></div>
+        <div style="color:#6C7685;font-size:13px;margin-top:4px">Yuzu Green · Clarity &amp; energy</div>
+        <button style="margin-top:18px;background:transparent;border:1px solid #20242A;color:#fff;font-weight:600;font-size:14px;padding:12px;border-radius:9px;cursor:pointer;transition:border .2s" style-hover="border-color:#22D37D">Quick add</button>
+      </div>
+      <div style="border:1px solid #20242A;border-radius:18px;padding:28px;background:#0A0B0F;transition:border-color .2s;display:flex;flex-direction:column" style-hover="border-color:#FF6B1A">
+        <div style="position:relative;aspect-ratio:1/1;border-radius:14px;background:radial-gradient(ellipse at center,rgba(255,107,26,.15),transparent 62%),#070809;display:flex;align-items:center;justify-content:center"><div style="position:relative;width:120px;height:160px;border-radius:18px 18px 12px 12px;background:linear-gradient(160deg,#1a1d24,#0c0d11);box-shadow:0 0 40px rgba(255,107,26,.38),inset 0 10px 0 -5px #2a2e36"><div style="position:absolute;top:18px;left:50%;transform:translateX(-50%);width:3px;height:62%;background:linear-gradient(180deg,#FFBC66,#FF6B1A)"></div></div><span style="position:absolute;top:14px;right:14px;background:#20242A;color:#FF6B1A;font-size:11px;padding:5px 10px;border-radius:100px">New</span></div>
+        <div style="margin-top:18px;display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Saira';font-weight:700;font-size:20px;color:#FF6B1A">ACTIVE</div><div style="font-weight:600">$49</div></div>
+        <div style="color:#6C7685;font-size:13px;margin-top:4px">Blood Orange · Performance</div>
+        <button style="margin-top:18px;background:transparent;border:1px solid #20242A;color:#fff;font-weight:600;font-size:14px;padding:12px;border-radius:9px;cursor:pointer;transition:border .2s" style-hover="border-color:#FF6B1A">Quick add</button>
+      </div>
+      <div style="border:1px solid #20242A;border-radius:18px;padding:28px;background:#0A0B0F;transition:border-color .2s;display:flex;flex-direction:column" style-hover="border-color:#4B5BFF">
+        <div style="position:relative;aspect-ratio:1/1;border-radius:14px;background:radial-gradient(ellipse at center,rgba(75,91,255,.18),transparent 62%),#070809;display:flex;align-items:center;justify-content:center"><div style="position:relative;width:120px;height:160px;border-radius:18px 18px 12px 12px;background:linear-gradient(160deg,#1a1d24,#0c0d11);box-shadow:0 0 40px rgba(75,91,255,.42),inset 0 10px 0 -5px #2a2e36"><div style="position:absolute;top:18px;left:50%;transform:translateX(-50%);width:3px;height:62%;background:linear-gradient(180deg,#CFA4FF,#4B5BFF)"></div></div><span style="position:absolute;top:14px;right:14px;background:#20242A;color:#8E9BFF;font-size:11px;padding:5px 10px;border-radius:100px">New</span></div>
+        <div style="margin-top:18px;display:flex;justify-content:space-between;align-items:baseline"><div style="font-family:'Saira';font-weight:700;font-size:20px;color:#8E9BFF">RECOVER</div><div style="font-weight:600">$49</div></div>
+        <div style="color:#6C7685;font-size:13px;margin-top:4px">Wild Berry · Rest &amp; repair</div>
+        <button style="margin-top:18px;background:transparent;border:1px solid #20242A;color:#fff;font-weight:600;font-size:14px;padding:12px;border-radius:9px;cursor:pointer;transition:border .2s" style-hover="border-color:#4B5BFF">Quick add</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBSCRIPTION UPSELL -->
+  <section style="padding:0 28px 64px"><div style="max-width:1180px;margin:0 auto;border:1px solid #2D6BFF;border-radius:18px;padding:clamp(26px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:linear-gradient(120deg,rgba(45,107,255,.07),transparent 70%)"><div><h3 style="font-family:'Saira';font-weight:700;font-size:clamp(22px,3vw,30px)">Subscribe &amp; save 15% on any formula</h3><p style="margin-top:8px;color:#6C7685;font-size:14.5px">Free shipping, founder pricing locked, skip or cancel anytime.</p></div><a href="Subscribe.dc.html" style="text-decoration:none;background:#2D6BFF;color:#fff;font-weight:600;font-size:15px;padding:14px 26px;border-radius:10px;white-space:nowrap;transition:all .2s" style-hover="background:#3B7EFF">Start a subscription</a></div></section>
+
+  <footer style="border-top:1px solid #20242A;padding:48px 24px 36px"><div style="max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap"><div><img src="assets/hydrix-wordmark-white.png" alt="HYDRIX" style="height:20px;display:block"><div style="margin-top:10px;color:#2D6BFF;font-size:13px">hydration. reimagined.</div></div><div style="display:flex;gap:24px;flex-wrap:wrap"><a href="Home.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Home</a><a href="Science.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Science</a><a href="About.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">About</a><a href="Contact.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Contact</a></div></div><div style="max-width:1180px;margin:32px auto 0;padding-top:20px;border-top:1px solid #20242A;color:#6C7685;font-size:12.5px">© 2026 HYDRIX. All rights reserved.</div></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { menuOpen: false, filter: 0 };
+  renderVals() {
+    const names = ['All', 'Hydration', 'Energy', 'Recovery'];
+    const filters = names.map((name, i) => ({
+      name,
+      bg: this.state.filter === i ? '#2D6BFF' : 'transparent',
+      color: this.state.filter === i ? '#fff' : '#9AA5B3',
+      border: this.state.filter === i ? '#2D6BFF' : '#20242A',
+      select: () => this.setState({ filter: i }),
+    }));
+    return {
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      filters,
+    };
+  }
+}
+</script>
+</body>
+</html>

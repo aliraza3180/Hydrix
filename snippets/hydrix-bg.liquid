@@ -1,0 +1,20 @@
+{%- comment -%}
+  HYDRIX — optional section background image layer.
+  Renders an absolutely-positioned image + tint overlay behind a section's content.
+  z-index:-1 paints it above the section's background-color but below all content
+  (and below beams/arcs), so it never disturbs the layout.
+  Usage:  {% render 'hydrix-bg', settings: section.settings %}
+  Expects settings: bg_image, bg_position, bg_overlay, bg_overlay_opacity
+{%- endcomment -%}
+{%- liquid assign st = settings -%}
+{%- if st.bg_image != blank -%}
+  <div class="hx-bgimg" aria-hidden="true" style="position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none">
+    <img src="{{ st.bg_image | image_url: width: 2400 }}"
+         alt=""
+         width="{{ st.bg_image.width | default: 2400 }}"
+         height="{{ st.bg_image.height | default: 1600 }}"
+         loading="lazy"
+         style="width:100%;height:100%;object-fit:cover;object-position:{{ st.bg_position | default: 'center' }};display:block">
+    <div class="hx-bgimg__overlay" style="display:block;position:absolute;inset:0;background:{{ st.bg_overlay | default: '#0A0B0F' }};opacity:{{ st.bg_overlay_opacity | default: 70 | divided_by: 100.0 }}"></div>
+  </div>
+{%- endif -%}

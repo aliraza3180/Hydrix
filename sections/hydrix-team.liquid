@@ -1,0 +1,115 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+{%- liquid assign s = section.settings -%}
+<section class="hx-section hx-team" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-border:{{ s.border }};padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    <div class="hx-team__head scroll-trigger animate--fade-in">
+      {%- if s.eyebrow != blank -%}<div class="hx-team__eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+      {%- if s.heading != blank -%}<h2 class="hx-team__h2">{{ s.heading }}</h2>{%- endif -%}
+      {%- if s.subheading != blank -%}<p class="hx-team__sub">{{ s.subheading }}</p>{%- endif -%}
+    </div>
+    <div class="hx-team__grid">
+      {%- for block in section.blocks -%}
+        {%- assign initials = block.settings.name | strip | truncate: 2, '' | upcase -%}
+        <article class="hx-team__card scroll-trigger animate--fade-in" {{ block.shopify_attributes }}>
+          <div class="hx-team__photo">
+            {%- if block.settings.image != blank -%}
+              <img class="hx-team__img" src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.name | escape }}" width="{{ block.settings.image.width | default: 600 }}" height="{{ block.settings.image.height | default: 600 }}" loading="lazy">
+            {%- else -%}
+              <div class="hx-team__ph"><span class="hx-team__mono">{{ initials | default: '★' }}</span></div>
+            {%- endif -%}
+          </div>
+          <div class="hx-team__text">
+            {%- if block.settings.name != blank -%}<div class="hx-team__name">{{ block.settings.name }}</div>{%- endif -%}
+            {%- if block.settings.role != blank -%}<div class="hx-team__role">{{ block.settings.role }}</div>{%- endif -%}
+            {%- if block.settings.bio != blank -%}<p class="hx-team__bio">{{ block.settings.bio }}</p>{%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-team { position: relative; }
+  #shopify-section-{{ section.id }} .hx-wrap { max-width: 1180px; margin: 0 auto; position: relative; }
+  #shopify-section-{{ section.id }} .hx-team__head { max-width: 720px; margin: 0 auto 44px; text-align: center; }
+  #shopify-section-{{ section.id }} .hx-team__eyebrow { text-transform: uppercase; letter-spacing: .22em; font-size: 11px; color: var(--hx-body); margin-bottom: 16px; }
+  #shopify-section-{{ section.id }} .hx-team__h2 { font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.02em; color: var(--hx-heading); font-size: clamp(30px,4vw,48px); line-height: 1.1; margin: 0; }
+  #shopify-section-{{ section.id }} .hx-team__sub { color: var(--hx-body); font-size: 16px; line-height: 1.6; margin: 16px 0 0; }
+
+  #shopify-section-{{ section.id }} .hx-team__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  #shopify-section-{{ section.id }} .hx-team__card {
+    border-radius: 22px; padding: 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+    border: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(10px);
+    transition: border-color .25s ease, transform .25s ease;
+  }
+  #shopify-section-{{ section.id }} .hx-team__card:hover { border-color: var(--hx-accent); transform: translateY(-3px); }
+
+  #shopify-section-{{ section.id }} .hx-team__photo { aspect-ratio: 1 / 1; border-radius: 16px; overflow: hidden; }
+  #shopify-section-{{ section.id }} .hx-team__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #shopify-section-{{ section.id }} .hx-team__ph {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    background:
+      radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--hx-accent) 22%, transparent), transparent 55%),
+      linear-gradient(160deg, #14171f, #0c0e14);
+  }
+  #shopify-section-{{ section.id }} .hx-team__mono { font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: .04em; font-size: clamp(34px,6vw,52px); color: color-mix(in srgb, var(--hx-heading) 80%, transparent); opacity: .85; }
+
+  #shopify-section-{{ section.id }} .hx-team__text { padding: 16px 8px; }
+  #shopify-section-{{ section.id }} .hx-team__name { font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.02em; font-size: 18px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-team__role { color: var(--hx-accent); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; margin-top: 6px; }
+  #shopify-section-{{ section.id }} .hx-team__bio { color: var(--hx-body); font-size: 14px; line-height: 1.6; margin: 12px 0 0; }
+
+  @media (max-width: 1000px) { #shopify-section-{{ section.id }} .hx-team__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { #shopify-section-{{ section.id }} .hx-team__grid { grid-template-columns: 1fr; } }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Team",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "THE TEAM" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Builders, not marketers." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "A small team obsessed with doing hydration right." },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 2, "unit": "px", "default": 88 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team member",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Aria Reyes" },
+        { "type": "text", "id": "role", "label": "Role", "default": "Co-founder & CEO" },
+        { "type": "textarea", "id": "bio", "label": "Bio", "default": "Former endurance athlete obsessed with how hydration actually feels." }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "home",
+      "blocks": [
+        { "type": "member", "settings": { "name": "Aria Reyes", "role": "Co-founder & CEO", "bio": "Former endurance athlete who spent a decade chasing better recovery." } },
+        { "type": "member", "settings": { "name": "Jonah Kim", "role": "Co-founder & Head of Science", "bio": "Formulation scientist behind every milligram and every third-party test." } },
+        { "type": "member", "settings": { "name": "Mara Cole", "role": "Co-founder & Design", "bio": "Designer obsessed with how a product feels in the hand." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

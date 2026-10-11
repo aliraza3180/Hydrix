@@ -1,0 +1,375 @@
+{%- comment -%} HYDRIX — Hero (Beam & Arc). Reused across landing + store pages. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign s = section.settings
+  assign uid = section.id
+-%}
+
+{%- case s.chrome_mode -%}
+  {%- when 'hidden' -%}
+    <style>.shopify-section-group-header-group, .shopify-section-group-footer-group { display: none !important; }</style>
+  {%- when 'logo' -%}
+    <style>
+      /* Prelaunch: keep only the logo in the header and footer */
+      .shopify-section-group-header-group .announcement-bar,
+      .shopify-section-group-header-group .utility-bar,
+      .shopify-section-group-header-group .header__inline-menu,
+      .shopify-section-group-header-group header-drawer,
+      .shopify-section-group-header-group .header__icons { display: none !important; }
+      .shopify-section-group-header-group .header {
+        display: flex !important; justify-content: center !important; align-items: center !important;
+      }
+      .shopify-section-group-footer-group .hx-footer__col,
+      .shopify-section-group-footer-group .hx-footer__bottom { display: none !important; }
+      .shopify-section-group-footer-group .hx-footer__grid {
+        display: flex !important; justify-content: center !important; text-align: center !important;
+      }
+      .shopify-section-group-footer-group .hx-footer__brand { min-width: 0 !important; text-align: center !important; }
+      .shopify-section-group-footer-group .hx-footer__brand img { margin-left: auto !important; margin-right: auto !important; }
+    </style>
+{%- endcase -%}
+
+<section class="hx-section hx-hero hx-hero--{{ s.layout }}" id="{{ s.anchor | default: 'hero' }}" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  {% if s.full_height %}min-height:100vh;{% endif %}
+  padding: {{ s.padding_top }}px 24px {{ s.padding_bottom }}px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  {%- liquid
+    assign has_showcase = false
+    if s.show_showcase and s.layout != 'split'
+      assign has_showcase = true
+    endif
+  -%}
+  {%- comment -%}
+    With a showcase image the beam is rendered inside .hx-hero__showcase instead, so it
+    terminates on the platform at any screen size. See .hx-hero__showcase-beam below.
+  {%- endcomment -%}
+  {%- if s.show_beam and has_showcase == false -%}
+    <div class="hx-beam-glow"></div>
+    <div class="hx-beam"></div>
+  {%- endif -%}
+  {%- if s.show_arc -%}
+    <div class="hx-arc"></div>
+    <div class="hx-arc-bloom"></div>
+  {%- endif -%}
+
+  <div class="hx-hero__inner hx-wrap">
+    <div class="hx-hero__copy scroll-trigger animate--slide-in">
+      {%- if s.eyebrow != blank -%}<div class="hx-eyebrow hx-tagline{% if s.eyebrow_large %} hx-tagline--lg{% endif %}">{{ s.eyebrow }}</div>{%- endif -%}
+
+      {%- if has_showcase -%}
+        <div class="hx-hero__showcase scroll-trigger animate--fade-in">
+          {%- if s.show_beam -%}
+            <div class="hx-hero__showcase-cone" aria-hidden="true"></div>
+            <div class="hx-hero__showcase-beam" aria-hidden="true"></div>
+          {%- endif -%}
+          <div class="hx-hero__showcase-glow" aria-hidden="true"></div>
+          {%- if s.showcase_image != blank -%}
+            <img class="hx-hero__showcase-img hx-floaty" src="{{ s.showcase_image | image_url: width: 900 }}" alt="{{ s.showcase_alt | default: s.eyebrow }}" width="{{ s.showcase_image.width }}" height="{{ s.showcase_image.height }}" loading="eager">
+          {%- elsif s.showcase_default != 'none' -%}
+            <img class="hx-hero__showcase-img hx-floaty" src="{{ s.showcase_default | asset_url }}" alt="{{ s.showcase_alt | default: s.eyebrow }}" loading="eager">
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if s.heading != blank -%}<h1 class="hx-h1 hx-hero__h1">{{ s.heading }}</h1>{%- endif -%}
+      {%- if s.subheading != blank -%}<p class="hx-lead hx-hero__sub">{{ s.subheading }}</p>{%- endif -%}
+
+      {%- if s.show_safe and s.action_type == 'email' -%}
+        <div class="hx-hero__safe">
+          {%- if s.safe_image != blank -%}
+            <img class="hx-hero__safe-img" src="{{ s.safe_image | image_url: width: 220 }}" alt="{{ s.safe_alt | default: 'HYDRIX vault' }}" width="{{ s.safe_image.width }}" height="{{ s.safe_image.height }}" loading="lazy">
+          {%- else -%}
+            <img class="hx-hero__safe-img" src="{{ 'hydrix-safe.png' | asset_url }}" alt="{{ s.safe_alt | default: 'HYDRIX vault' }}" loading="lazy">
+          {%- endif -%}
+          {%- if s.safe_label != blank -%}<span class="hx-hero__safe-label">{{ s.safe_label }}</span>{%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- case s.action_type -%}
+        {%- when 'email' -%}
+          <div id="join" class="hx-hero__action" style="scroll-margin-top:120px">
+            {%- if s.use_viral_loops -%}
+              <form-widget ucid="{{ s.vl_campaign_id }}"></form-widget>
+            {%- else -%}
+            {% form 'customer', class: 'hx-hero__form' %}
+              {%- if form.posted_successfully? -%}
+                <div class="hx-success"><span class="hx-success__check">✓</span><span style="color:#fff;font-size:15px">{{ s.success_text }}</span></div>
+              {%- else -%}
+                <input type="hidden" name="contact[tags]" value="{{ s.email_tag }}">
+                <div class="hx-form-row">
+                  <input class="hx-input" type="email" name="contact[email]" placeholder="{{ s.email_placeholder }}" required>
+                  <button class="hx-btn" type="submit">{{ s.button_label }}</button>
+                </div>
+              {%- endif -%}
+            {% endform %}
+            {%- endif -%}
+          </div>
+        {%- when 'buttons' -%}
+          <div class="hx-hero__buttons">
+            {%- if s.button_label != blank -%}<a href="{{ s.button_url }}" class="hx-btn">{{ s.button_label }}</a>{%- endif -%}
+            {%- if s.button2_label != blank -%}<a href="{{ s.button2_url }}" class="hx-btn hx-btn--ghost">{{ s.button2_label }}</a>{%- endif -%}
+          </div>
+      {%- endcase -%}
+
+      {%- if s.show_counter -%}
+        <div class="hx-hero__counter">
+          <span class="hx-accent-text">◆</span>
+          <span class="hx-hero__count" data-hx-counter data-target="{{ s.counter_target }}" data-step="{{ s.counter_increment }}" data-interval="{{ s.counter_interval }}">{{ s.counter_start }}</span>
+          <span>{{ s.counter_label }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- if s.microcopy != blank -%}<div class="hx-hero__micro">{{ s.microcopy }}</div>{%- endif -%}
+    </div>
+
+    {%- if s.layout == 'split' -%}
+      <div class="hx-hero__media scroll-trigger animate--fade-in">
+        <div class="hx-floaty hx-hero__media-inner">
+          <div class="hx-hero__media-glow"></div>
+          {%- if s.image != blank -%}
+            <img src="{{ s.image | image_url: width: 880 }}" alt="{{ s.image.alt | default: s.heading }}" class="hx-hero__img" width="{{ s.image.width }}" height="{{ s.image.height }}">
+          {%- elsif s.image_default != 'none' -%}
+            <img src="{{ s.image_default | asset_url }}" alt="{{ s.heading }}" class="hx-hero__img">
+          {%- else -%}
+            <div class="hx-tub" style="width:160px;height:214px"></div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if s.use_viral_loops and s.vl_redirect_url != blank -%}
+  <script>
+    /* After a Viral Loops signup on this page, send the visitor to the referral page. */
+    (function () {
+      var DEST = {{ s.vl_redirect_url | json }};
+      var UCID = {{ s.vl_campaign_id | default: '' | json }};
+      if (!DEST || !UCID) return;
+      var done = false;
+      function go() { if (done) return; done = true; window.location.href = DEST; }
+      function isParticipant(c) {
+        try { var u = c.getUser && c.getUser(); return !!(u && (u.email || u.referralCode || u.referralLink)); }
+        catch (e) { return false; }
+      }
+      function wire(c) {
+        if (!c || !c.on) return;
+        var already = isParticipant(c); /* don't bounce an existing member browsing the page */
+        ['participation', 'conversion', 'registration', 'signup', 'join'].forEach(function (ev) {
+          try { c.on(ev, function () { if (!already && isParticipant(c)) go(); }); } catch (e) {}
+        });
+      }
+      function init() {
+        if (typeof window.ViralLoops === 'undefined' || !window.ViralLoops.getCampaign) return false;
+        try { var r = window.ViralLoops.getCampaign(UCID); if (r && r.then) r.then(wire); else wire(r); } catch (e) {}
+        return true;
+      }
+      if (!init()) { var n = 0, iv = setInterval(function () { if (init() || ++n > 40) clearInterval(iv); }, 300); }
+      window.addEventListener('vl_events_ready', init);
+      document.addEventListener('vl:ready', init);
+    })();
+  </script>
+  {%- endif -%}
+</section>
+
+{% style %}
+  #shopify-section-{{ uid }} .hx-hero { display: flex; align-items: center; }
+  #shopify-section-{{ uid }} .hx-hero__inner { position: relative; z-index: 5; width: 100%; }
+  #shopify-section-{{ uid }} .hx-hero--centered .hx-hero__inner { max-width: 800px; }
+  #shopify-section-{{ uid }} .hx-hero--centered .hx-hero__copy {
+    text-align: center; display: flex; flex-direction: column; align-items: center;
+  }
+  #shopify-section-{{ uid }} .hx-hero--split .hx-hero__inner {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: center;
+  }
+  #shopify-section-{{ uid }} .hx-tagline--lg {
+    font-family: var(--hx-font-display); font-weight: 600; text-transform: none;
+    /* Scales with viewport so a tagline like "hydration. reimagined." stays on one line */
+    font-size: clamp(20px, 7.2vw, 60px); line-height: 1.04; letter-spacing: -.02em;
+    white-space: nowrap; opacity: 1; margin-bottom: 10px;
+    background: none; -webkit-text-fill-color: currentColor;
+    color: var(--hx-accent);
+    text-shadow: 0 2px 22px rgba(10,11,15,.9), 0 0 6px rgba(10,11,15,.8);
+  }
+  /* Heading steps down so the eyebrow leads */
+  #shopify-section-{{ uid }} .hx-tagline--lg + .hx-hero__showcase + .hx-hero__h1,
+  #shopify-section-{{ uid }} .hx-tagline--lg + .hx-hero__h1 {
+    font-size: clamp(24px, 3.2vw, 38px); letter-spacing: -.02em; line-height: 1.14;
+  }
+  #shopify-section-{{ uid }} .hx-tagline--lg + .hx-hero__showcase + .hx-hero__h1 {
+    text-shadow: 0 2px 22px rgba(10,11,15,.92), 0 0 6px rgba(10,11,15,.85);
+  }
+  /* Move the horizon arc up so it sits above the counter */
+  #shopify-section-{{ uid }} .hx-arc { bottom: -960px; }
+  /* Blue glow riding the top of the arc. Kept as its own element because
+     .hx-arc is masked, and a mask clips box-shadow. */
+  #shopify-section-{{ uid }} .hx-arc-bloom {
+    bottom: 210px; width: min(1800px, 190vw); height: 300px;
+    background: radial-gradient(ellipse at 50% 50%,
+      rgba(45,107,255,.50) 0%, rgba(143,217,255,.20) 38%, transparent 72%);
+    filter: blur(32px);
+  }
+  #shopify-section-{{ uid }} .hx-hero__showcase { position: relative; width: fit-content; margin: 30px auto 10px; }
+  /* Beam is anchored to the platform (not the section) so it always lands on the
+     product. It runs up past the top of the section, which clips it. */
+  /* Cone of light, like the beam on the packaging: narrow bright source at the
+     product, fanning wider and softer as it rises. */
+  #shopify-section-{{ uid }} .hx-hero__showcase-cone {
+    position: absolute; left: 50%; bottom: 44%; transform: translateX(-50%);
+    width: 520px; height: 150vh; z-index: -1; pointer-events: none;
+    clip-path: polygon(50% 100%, 12% 0%, 88% 0%);
+    background: linear-gradient(180deg,
+      rgba(45,107,255,0) 0%, rgba(45,107,255,.14) 45%, rgba(45,107,255,.30) 78%, rgba(143,217,255,.5) 100%);
+    filter: blur(22px);
+    animation: hxBeamPulse 4.5s ease-in-out infinite;
+  }
+  /* Bright core of the beam. A soft shaft whose sides feather to transparent
+     (via the horizontal mask) so it reads as light, not a drawn line. */
+  #shopify-section-{{ uid }} .hx-hero__showcase-beam {
+    position: absolute; left: 50%; bottom: 44%; transform: translateX(-50%);
+    width: 26px; height: 150vh; z-index: -1; pointer-events: none;
+    background: linear-gradient(180deg, transparent 0%, rgba(143,217,255,.4) 42%, rgba(191,230,255,.85) 80%, #FFFFFF 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 42%, #000 58%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 42%, #000 58%, transparent 100%);
+    filter: blur(3px);
+    animation: hxBeamPulse 4.5s ease-in-out infinite;
+  }
+  /* Glow pooling under the platform, where the beam lands */
+  #shopify-section-{{ uid }} .hx-hero__showcase-glow {
+    position: absolute; left: 50%; bottom: -10%; transform: translateX(-50%);
+    width: 160%; height: 66%;
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(234,246,255,.5) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 100%, rgba(143,217,255,.5) 0%, transparent 52%),
+      radial-gradient(ellipse at 50% 100%, rgba(45,107,255,.66) 0%, transparent 70%);
+    filter: blur(24px); z-index: 0; pointer-events: none;
+  }
+  #shopify-section-{{ uid }} .hx-hero__showcase-img {
+    position: relative; z-index: 1; display: block; height: auto;
+    width: min(360px, 74vw); filter: drop-shadow(0 30px 52px rgba(0,0,0,.55));
+  }
+  #shopify-section-{{ uid }} .hx-hero__h1 { margin-top: {% if s.eyebrow != blank %}18px{% else %}0{% endif %}; }
+  #shopify-section-{{ uid }} .hx-hero__sub { margin-top: 22px; max-width: 560px; }
+  #shopify-section-{{ uid }} .hx-hero--split .hx-hero__sub { max-width: 460px; }
+  #shopify-section-{{ uid }} .hx-hero__safe { margin-top: 34px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  #shopify-section-{{ uid }} .hx-hero--split .hx-hero__safe { align-items: flex-start; }
+  #shopify-section-{{ uid }} .hx-hero__safe-label { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--hx-body); }
+  #shopify-section-{{ uid }} .hx-hero__safe-img { width: clamp(64px, 8vw, 84px); height: auto; display: block; filter: drop-shadow(0 14px 26px rgba(0,0,0,.5)); }
+  #shopify-section-{{ uid }} .hx-hero__action { margin-top: 20px; width: 100%; max-width: 520px; }
+  #shopify-section-{{ uid }} .hx-hero--split .hx-hero__action { margin-left: 0; }
+  #shopify-section-{{ uid }} .hx-hero__form .hx-form-row { justify-content: {% if s.layout == 'split' %}flex-start{% else %}center{% endif %}; }
+  #shopify-section-{{ uid }} .hx-hero__buttons { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
+  #shopify-section-{{ uid }} .hx-hero--centered .hx-hero__buttons { justify-content: center; }
+  #shopify-section-{{ uid }} .hx-hero__counter {
+    margin-top: 26px; display: flex; align-items: center; gap: 9px; font-size: 15px; color: var(--hx-body);
+  }
+  #shopify-section-{{ uid }} .hx-hero__count { font-family: var(--hx-font-display); font-weight: 700; font-size: 19px; color: {{ s.counter_color }}; }
+  #shopify-section-{{ uid }} .hx-hero__micro { margin-top: 16px; color: var(--hx-body); font-size: 12.5px; letter-spacing: .02em; }
+  #shopify-section-{{ uid }} .hx-hero__media { display: flex; justify-content: center; }
+  #shopify-section-{{ uid }} .hx-hero__media-inner { position: relative; }
+  #shopify-section-{{ uid }} .hx-hero__media-glow {
+    position: absolute; inset: -6% -12%;
+    background: radial-gradient(ellipse at center, rgba(45,107,255,.34), transparent 62%); filter: blur(26px);
+  }
+  #shopify-section-{{ uid }} .hx-hero__img { position: relative; width: min(420px, 82vw); border-radius: 18px; display: block; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Hero",
+  "tag": "section",
+  "class": "hx-hero-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "select", "id": "layout", "label": "Layout", "options": [
+      { "value": "centered", "label": "Centered" },
+      { "value": "split", "label": "Split (copy + image)" }
+    ], "default": "centered" },
+    { "type": "checkbox", "id": "full_height", "label": "Full viewport height", "default": false },
+    { "type": "text", "id": "anchor", "label": "Section anchor id", "default": "hero" },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow / tagline", "default": "hydration. reimagined." },
+    { "type": "checkbox", "id": "eyebrow_large", "label": "Large eyebrow (headline size)", "default": false, "info": "Renders the eyebrow at headline size to grab attention. Good for the prelaunch page." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The waitlist for better hydration." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "A full-spectrum electrolyte system engineered to replenish what your body actually loses. Be first." },
+    { "type": "header", "content": "Showcase image (centered layout)" },
+    { "type": "checkbox", "id": "show_showcase", "label": "Show centered showcase image", "default": true, "info": "Floating product image shown between the tagline and the heading. Centered layout only." },
+    { "type": "image_picker", "id": "showcase_image", "label": "Showcase image", "info": "Use a transparent-background PNG (platform + shaker + powder/cup). Leave empty to use the bundled default." },
+    { "type": "select", "id": "showcase_default", "label": "Bundled default image", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "hydrix-hero-product.png", "label": "HYDRIX platform product" }
+    ], "default": "hydrix-hero-product.png", "info": "Used when no image is picked above." },
+    { "type": "text", "id": "showcase_alt", "label": "Showcase alt text", "default": "HYDRIX hydration system" },
+    { "type": "header", "content": "Action" },
+    { "type": "select", "id": "action_type", "label": "Action", "options": [
+      { "value": "email", "label": "Email capture" },
+      { "value": "buttons", "label": "Buttons" },
+      { "value": "none", "label": "None" }
+    ], "default": "email" },
+    { "type": "checkbox", "id": "use_viral_loops", "label": "Use Viral Loops join form", "default": false, "info": "When on (Email capture only), replaces the email box with the Viral Loops form so joiners enter the referral campaign and get a unique link. Enable this on the prelaunch page only." },
+    { "type": "text", "id": "vl_campaign_id", "label": "Viral Loops campaign id", "default": "mFfbAfGXeOHEsFV07WAlJGN9uJY" },
+    { "type": "text", "id": "vl_redirect_url", "label": "Redirect after signup", "info": "When set (and Viral Loops form is on), the visitor is sent here after they submit. Use /pages/referral on the landing page. Leave blank for no redirect." },
+    { "type": "text", "id": "email_placeholder", "label": "Email placeholder", "default": "Enter your email" },
+    { "type": "text", "id": "email_tag", "label": "Subscriber tag", "default": "waitlist" },
+    { "type": "text", "id": "success_text", "label": "Success message", "default": "You're on the list. Watch your inbox for founding access." },
+    { "type": "text", "id": "button_label", "label": "Button 1 label", "default": "Join the Waitlist" },
+    { "type": "url", "id": "button_url", "label": "Button 1 link" },
+    { "type": "text", "id": "button2_label", "label": "Button 2 label" },
+    { "type": "url", "id": "button2_url", "label": "Button 2 link" },
+    { "type": "header", "content": "Waitlist counter" },
+    { "type": "checkbox", "id": "show_counter", "label": "Show counter", "default": true },
+    { "type": "number", "id": "counter_start", "label": "Start value", "default": 3742 },
+    { "type": "number", "id": "counter_target", "label": "Ramp-to value", "default": 3842 },
+    { "type": "number", "id": "counter_increment", "label": "Live increment (+1 every N s)", "default": 1 },
+    { "type": "range", "id": "counter_interval", "label": "Increment interval", "min": 2, "max": 12, "step": 1, "unit": "s", "default": 5 },
+    { "type": "text", "id": "counter_label", "label": "Counter label", "default": "people already in line" },
+    { "type": "color", "id": "counter_color", "label": "Counter number color", "default": "#8FD9FF" },
+    { "type": "text", "id": "microcopy", "label": "Trust microcopy", "default": "No spam · Unsubscribe anytime · Early access perks" },
+    { "type": "header", "content": "Vault icon (above email)" },
+    { "type": "checkbox", "id": "show_safe", "label": "Show vault icon above the email form", "default": true, "info": "Shows only when the action is Email capture." },
+    { "type": "image_picker", "id": "safe_image", "label": "Vault image", "info": "Leave empty to use the bundled transparent vault PNG." },
+    { "type": "text", "id": "safe_label", "label": "Small label above the vault", "default": "BE THE FIRST TO KNOW" },
+    { "type": "text", "id": "safe_alt", "label": "Vault image alt text", "default": "HYDRIX vault" },
+    { "type": "header", "content": "Split image" },
+    { "type": "image_picker", "id": "image", "label": "Product / hero image" },
+    { "type": "select", "id": "image_default", "label": "Bundled default image", "options": [
+      { "value": "none", "label": "None (tub silhouette)" },
+      { "value": "daily-front.png", "label": "DAILY front" },
+      { "value": "daily-back.png", "label": "DAILY back" },
+      { "value": "daily-lid.png", "label": "DAILY lid" }
+    ], "default": "daily-front.png", "info": "Used when no image is picked above." },
+    { "type": "header", "content": "Prelaunch lock" },
+    { "type": "select", "id": "chrome_mode", "label": "Header & footer on this page", "options": [
+      { "value": "full", "label": "Full (default)" },
+      { "value": "logo", "label": "Logo only (no menus)" },
+      { "value": "hidden", "label": "Hidden completely" }
+    ], "default": "full", "info": "For a focused prelaunch page. 'Logo only' keeps the logo and hides the menu, search, cart, announcement bar, and footer links." },
+    { "type": "header", "content": "Decoration" },
+    { "type": "checkbox", "id": "show_beam", "label": "Show beam", "default": true },
+    { "type": "checkbox", "id": "show_arc", "label": "Show arc", "default": true },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 160 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 40, "max": 160, "step": 2, "unit": "px", "default": 90 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" },
+    { "type": "color", "id": "border", "label": "Border / inputs", "default": "#20242A" }
+  ],
+  "presets": [{ "name": "HYDRIX Hero" }]
+}
+{% endschema %}

@@ -1,0 +1,83 @@
+{%- comment -%} HYDRIX — Counter band (oversized gradient number + chips) {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-counterband" style="
+  --hx-bg: {{ s.bg }};
+  --hx-body: {{ s.body_color }};
+  --hx-border: {{ s.border }};
+  border-top: 1px solid {{ s.border }}; border-bottom: 1px solid {{ s.border }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-counterband__radial"></div>
+  <div class="hx-wrap--narrow scroll-trigger animate--slide-in">
+    <div class="hx-gradient-text hx-counterband__num"
+      {% if s.animate %}data-hx-counter data-target="{{ s.target }}" data-step="{{ s.increment }}" data-interval="{{ s.interval }}"{% endif %}
+      style="--hx-crystal:{{ s.grad_top }};--hx-blue:{{ s.grad_bottom }}">{{ s.start }}</div>
+    <div class="hx-counterband__sub" style="color:{{ s.body_color }}">{{ s.subtext }}</div>
+    {%- if section.blocks.size > 0 -%}
+      <div class="hx-counterband__chips">
+        {%- for block in section.blocks -%}
+          <span class="hx-pill" style="--hx-border:{{ s.chip_bg }};--hx-glow:{{ s.chip_text }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-counterband { position: relative; }
+  #shopify-section-{{ section.id }} .hx-counterband__radial {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 50% 120% at 50% 50%, rgba(11,94,168,.10), transparent 60%);
+  }
+  #shopify-section-{{ section.id }} .hx-wrap--narrow { margin: 0 auto; padding: 0 24px; max-width: 920px; text-align: center; position: relative; }
+  #shopify-section-{{ section.id }} .hx-counterband__num {
+    font-family: var(--hx-font-display); font-weight: 800;
+    font-size: clamp(48px, 9vw, 104px); line-height: 1;
+  }
+  #shopify-section-{{ section.id }} .hx-counterband__sub { margin-top: 8px; font-size: 15px; }
+  #shopify-section-{{ section.id }} .hx-counterband__chips {
+    margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Counter Band",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "number", "id": "start", "label": "Start value", "default": 3742 },
+    { "type": "checkbox", "id": "animate", "label": "Animate counter", "default": true },
+    { "type": "number", "id": "target", "label": "Ramp-to value", "default": 3842 },
+    { "type": "number", "id": "increment", "label": "Live increment", "default": 1 },
+    { "type": "range", "id": "interval", "label": "Increment interval", "min": 2, "max": 12, "step": 1, "unit": "s", "default": 5 },
+    { "type": "text", "id": "subtext", "label": "Subtext", "default": "and counting — join the movement before launch" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 64 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "grad_top", "label": "Number gradient top", "default": "#BDE8FF" },
+    { "type": "color", "id": "grad_bottom", "label": "Number gradient bottom", "default": "#2D6BFF" },
+    { "type": "color", "id": "body_color", "label": "Subtext", "default": "#6C7685" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" },
+    { "type": "color", "id": "chip_bg", "label": "Chip background", "default": "#20242A" },
+    { "type": "color", "id": "chip_text", "label": "Chip text", "default": "#8FD9FF" }
+  ],
+  "blocks": [
+    { "type": "chip", "name": "Chip", "settings": [ { "type": "text", "id": "label", "label": "Label", "default": "Early access" } ] }
+  ],
+  "presets": [{ "name": "HYDRIX Counter Band", "blocks": [
+    { "type": "chip", "settings": { "label": "Early access" } },
+    { "type": "chip", "settings": { "label": "Founder pricing" } },
+    { "type": "chip", "settings": { "label": "Limited founding spots" } }
+  ]}]
+}
+{% endschema %}

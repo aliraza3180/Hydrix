@@ -1,0 +1,27 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "hydrix-footer": {
+      "type": "hydrix-footer",
+      "blocks": {
+        "c1": { "type": "column", "settings": { "title": "Shop", "links": "All Products | /pages/shop\nFounders Club | /pages/founders" } },
+        "c2": { "type": "column", "settings": { "title": "Brand", "links": "About | /pages/about\nScience | /pages/science\nAffiliate | /pages/affiliates" } },
+        "c3": { "type": "column", "settings": { "title": "Support", "links": "Contact | /pages/contact\nShipping | /pages/contact\nReturns | /pages/contact" } }
+      },
+      "block_order": ["c1", "c2", "c3"],
+      "settings": {
+        "logo_default": "hydrix-wordmark-white.png",
+        "logo_height": 22,
+        "description": "HYDRIX engineers full-spectrum hydration for high performers.",
+        "tagline": "Hydration. Reimagined.",
+        "copyright": "© 2026 HYDRIX. All rights reserved.",
+        "bg": "#0A0B0F",
+        "accent": "#3B82F6",
+        "link_color": "#8E96A3",
+        "border": "#FFFFFF14"
+      }
+    }
+  },
+  "order": ["hydrix-footer"]
+}

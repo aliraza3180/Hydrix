@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0A0B0F;color:#fff;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:#2D6BFF;color:#fff}
+  a{color:inherit}
+  @keyframes beamPulse{0%,100%{opacity:.85}50%{opacity:1}}
+</style>
+</helmet>
+
+<div style="background:#0A0B0F;min-height:100vh;overflow-x:hidden;position:relative">
+  <section style="position:relative;overflow:hidden;padding:clamp(60px,8vw,100px) 24px clamp(30px,4vw,50px);text-align:center">
+    <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:2px;height:50%;background:linear-gradient(180deg,#BDE8FF,#2D6BFF 50%,transparent);animation:beamPulse 4.5s ease-in-out infinite"></div>
+    <div style="position:relative;max-width:760px;margin:0 auto">
+      <img src="assets/hydrix-logo-white.png" alt="HYDRIX" style="width:min(280px,70vw);height:auto;display:block;margin:0 auto">
+      <div style="margin-top:18px;color:#2D6BFF;font-family:'Saira';font-size:12px;font-weight:600;letter-spacing:.32em;text-transform:uppercase">Design system · full site</div>
+      <p style="margin-top:14px;color:#6C7685;font-size:15px">Every page in the HYDRIX build. Tap any card to open it.</p>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:20px 24px 40px">
+    <div style="color:#6C7685;font-family:'Saira';font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin:24px 0 14px">Prelaunch &amp; Partners</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+      <sc-for list="{{ groupA }}" as="p" hint-placeholder-count="2">
+        <a href="{{ p.href }}" style="text-decoration:none;color:inherit;border:1px solid #20242A;border-radius:16px;padding:26px;background:#0A0B0F;transition:border-color .2s,box-shadow .2s;display:block" style-hover="border-color:#2D6BFF;box-shadow:0 0 40px rgba(45,107,255,.14)">
+          <div style="font-family:'Saira';font-weight:700;font-size:19px">{{ p.title }}</div>
+          <div style="margin-top:8px;color:#6C7685;font-size:14px;line-height:1.5">{{ p.desc }}</div>
+          <div style="margin-top:16px;color:#2D6BFF;font-size:13px;font-weight:600">Open →</div>
+        </a>
+      </sc-for>
+    </div>
+
+    <div style="color:#6C7685;font-family:'Saira';font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin:36px 0 14px">Ecommerce store</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+      <sc-for list="{{ groupB }}" as="p" hint-placeholder-count="8">
+        <a href="{{ p.href }}" style="text-decoration:none;color:inherit;border:1px solid #20242A;border-radius:16px;padding:26px;background:#0A0B0F;transition:border-color .2s,box-shadow .2s;display:block" style-hover="border-color:#2D6BFF;box-shadow:0 0 40px rgba(45,107,255,.14)">
+          <div style="font-family:'Saira';font-weight:700;font-size:19px">{{ p.title }}</div>
+          <div style="margin-top:8px;color:#6C7685;font-size:14px;line-height:1.5">{{ p.desc }}</div>
+          <div style="margin-top:16px;color:#2D6BFF;font-size:13px;font-weight:600">Open →</div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid #20242A;padding:40px 24px;text-align:center;color:#6C7685;font-size:12.5px">© 2026 HYDRIX. hydration. reimagined.</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      groupA: [
+        { href: 'Prelaunch.dc.html', title: 'Prelaunch Landing', desc: 'Beam & arc hero, live waitlist counter, Founder\u2019s Club, two-tier choice, FAQ.' },
+        { href: 'Affiliates.dc.html', title: 'Affiliates / Partners', desc: 'Commission tiers, how it works, application form, partner FAQ.' },
+      ],
+      groupB: [
+        { href: 'Home.dc.html', title: 'Homepage', desc: 'Hero, trust bar, product range, reviews, subscribe band, cart drawer.' },
+        { href: 'Shop.dc.html', title: 'Shop / Collection', desc: 'Filter bar and product grid with per-product accent glows.' },
+        { href: 'Product-DAILY.dc.html', title: 'Product Page (PDP)', desc: 'Gallery, subscribe vs one-time, qty, supplement facts, reviews.' },
+        { href: 'Science.dc.html', title: 'Science', desc: 'Seven electrolytes, absorption explainer, testing, FAQ.' },
+        { href: 'Subscribe.dc.html', title: 'Subscribe & Bundle', desc: 'Interactive bundle builder with live savings.' },
+        { href: 'About.dc.html', title: 'About', desc: 'Founder story, values, manifesto, press.' },
+        { href: 'Blog.dc.html', title: 'Blog / Journal', desc: 'Featured article, category filter, article grid.' },
+        { href: 'Account.dc.html', title: 'Account Portal', desc: 'Next delivery, savings, order history, founder badge.' },
+        { href: 'Contact.dc.html', title: 'Contact', desc: 'Contact form and support categories.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+{%- comment -%} HYDRIX — Product line / range (tub silhouettes or real images). {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-pline" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  --hx-card-bg: {{ s.card_bg }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    {%- if s.heading != blank -%}
+      <div class="hx-section-head scroll-trigger animate--fade-in">
+        {%- if s.eyebrow != blank -%}<div class="hx-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+        <h2 class="hx-h2">{{ s.heading }}</h2>
+      </div>
+    {%- endif -%}
+    <div class="hxh-pline-row scroll-trigger animate--slide-in">
+      {%- for block in section.blocks -%}
+        {%- assign bs = block.settings -%}
+        {%- assign accent = bs.accent | default: s.accent -%}
+        {%- capture inner -%}
+          <div class="hx-pline__tub-wrap">
+            {%- if bs.image != blank -%}
+              <img src="{{ bs.image | image_url: width: 400 }}" alt="{{ bs.title }}" class="hx-pline__img">
+            {%- else -%}
+              <div class="hx-tub hx-pline__tub" style="box-shadow:0 0 34px {{ accent | color_modify: 'alpha', 0.45 }},inset 0 8px 0 -4px #2a2e36">
+                <span class="hx-pline__rim" style="background:linear-gradient(180deg,{{ bs.rim_top | default: '#8FD9FF' }},{{ accent }})"></span>
+              </div>
+            {%- endif -%}
+          </div>
+          <div class="hx-pline__name" style="color:{{ accent }}">{{ bs.title }}</div>
+          {%- if bs.subtitle != blank -%}<div class="hx-pline__sub">{{ bs.subtitle }}</div>{%- endif -%}
+          {%- if bs.price != blank -%}<div class="hx-pline__price">{{ bs.price }}</div>{%- endif -%}
+        {%- endcapture -%}
+        {%- if bs.link != blank -%}
+          <a href="{{ bs.link }}" class="hx-card hx-card--glow hx-pline__card" style="--hx-accent:{{ accent }};text-decoration:none;color:inherit;display:block" {{ block.shopify_attributes }}>{{ inner }}</a>
+        {%- else -%}
+          <div class="hx-card hx-pline__card" style="--hx-accent:{{ accent }}" {{ block.shopify_attributes }}>{{ inner }}</div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-pline-row {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px;
+  }
+  @media (max-width: 1000px) {
+    #shopify-section-{{ section.id }} .hxh-pline-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    #shopify-section-{{ section.id }} .hxh-pline-row { grid-template-columns: 1fr; }
+  }
+  #shopify-section-{{ section.id }} .hx-pline__card { padding: 30px 22px; text-align: center; border-radius: 16px; }
+  #shopify-section-{{ section.id }} .hx-pline__tub-wrap { display: flex; justify-content: center; }
+  #shopify-section-{{ section.id }} .hx-pline__tub { box-shadow: none; }
+  #shopify-section-{{ section.id }} .hx-pline__tub::after { content: none; }
+  #shopify-section-{{ section.id }} .hx-pline__rim { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 2px; height: 64%; }
+  #shopify-section-{{ section.id }} .hx-pline__img { width: 110px; height: auto; display: block; }
+  #shopify-section-{{ section.id }} .hx-pline__name { margin-top: 20px; font-family: var(--hx-font-display); font-weight: 700; font-size: 18px; }
+  #shopify-section-{{ section.id }} .hx-pline__sub { margin-top: 5px; color: var(--hx-body); font-size: 12.5px; }
+  #shopify-section-{{ section.id }} .hx-pline__price { margin-top: 8px; font-weight: 600; font-size: 14px; color: var(--hx-heading); }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Product Line",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The system" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "One brand. Four formulas." },
+    { "type": "range", "id": "min_card", "label": "Min card width", "min": 180, "max": 300, "step": 10, "unit": "px", "default": 210 },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Default accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "border", "label": "Card border", "default": "#20242A" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#0A0B0F" }
+  ],
+  "blocks": [
+    { "type": "product", "name": "Product", "settings": [
+      { "type": "text", "id": "title", "label": "Name", "default": "DAILY" },
+      { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Everyday hydration" },
+      { "type": "text", "id": "price", "label": "Price / tag", "default": "$49" },
+      { "type": "url", "id": "link", "label": "Link" },
+      { "type": "color", "id": "accent", "label": "Accent (rim + name)" },
+      { "type": "color", "id": "rim_top", "label": "Rim gradient top", "default": "#8FD9FF" },
+      { "type": "image_picker", "id": "image", "label": "Product image (else tub)" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Product Line", "blocks": [
+    { "type": "product", "settings": { "title": "DAILY", "subtitle": "Everyday hydration", "price": "$49", "accent": "#2D6BFF", "rim_top": "#8FD9FF" } },
+    { "type": "product", "settings": { "title": "FOCUS", "subtitle": "Clarity & energy", "price": "$49", "accent": "#22D37D", "rim_top": "#7DFFC2" } },
+    { "type": "product", "settings": { "title": "ACTIVE", "subtitle": "Performance", "price": "$49", "accent": "#FF6B1A", "rim_top": "#FFBC66" } },
+    { "type": "product", "settings": { "title": "RECOVER", "subtitle": "Rest & repair", "price": "$49", "accent": "#4B5BFF", "rim_top": "#CFA4FF" } }
+  ]}]
+}
+{% endschema %}

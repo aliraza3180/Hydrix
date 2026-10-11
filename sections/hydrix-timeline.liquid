@@ -1,0 +1,123 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+{%- comment -%} HYDRIX — Story-page timeline / milestones ("our journey") {%- endcomment -%}
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-timeline" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-border:{{ s.border }};padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    {%- if s.heading != blank or s.eyebrow != blank -%}
+      <div class="hx-tl-head scroll-trigger animate--fade-in">
+        {%- if s.eyebrow != blank -%}<div class="hx-tl-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="hx-tl-heading">{{ s.heading }}</h2>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ol class="hx-tl-list">
+        {%- for block in section.blocks -%}
+          <li class="hx-tl-item scroll-trigger animate--slide-in" {{ block.shopify_attributes }}>
+            <span class="hx-tl-dot" aria-hidden="true"></span>
+            <div class="hx-tl-card">
+              {%- if block.settings.year != blank -%}<div class="hx-tl-year">{{ block.settings.year }}</div>{%- endif -%}
+              {%- if block.settings.title != blank -%}<div class="hx-tl-title">{{ block.settings.title }}</div>{%- endif -%}
+              {%- if block.settings.text != blank -%}<p class="hx-tl-text">{{ block.settings.text }}</p>{%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-tl-head { text-align: center; max-width: 720px; margin: 0 auto 56px; }
+  #shopify-section-{{ section.id }} .hx-tl-eyebrow {
+    font-family: var(--hx-font-sora); font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .22em; color: var(--hx-body); margin-bottom: 14px;
+  }
+  #shopify-section-{{ section.id }} .hx-tl-heading {
+    font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.02em;
+    color: var(--hx-heading); font-size: clamp(30px, 4vw, 48px); line-height: 1.08; margin: 0;
+  }
+
+  #shopify-section-{{ section.id }} .hx-tl-list {
+    list-style: none; margin: 0 auto; padding: 0; max-width: 760px;
+    position: relative;
+  }
+  /* the connecting vertical accent line */
+  #shopify-section-{{ section.id }} .hx-tl-list::before {
+    content: ""; position: absolute; top: 6px; bottom: 6px; left: 7px; width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--hx-accent) 12%, var(--hx-accent) 88%, transparent);
+    opacity: .55;
+  }
+
+  #shopify-section-{{ section.id }} .hx-tl-item {
+    position: relative; padding: 0 0 40px 44px; min-height: 24px;
+  }
+  #shopify-section-{{ section.id }} .hx-tl-item:last-child { padding-bottom: 0; }
+
+  #shopify-section-{{ section.id }} .hx-tl-dot {
+    position: absolute; left: 0; top: 4px; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--hx-accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--hx-accent) 18%, transparent), 0 0 18px 2px color-mix(in srgb, var(--hx-accent) 55%, transparent);
+  }
+
+  #shopify-section-{{ section.id }} .hx-tl-card {
+    background: color-mix(in srgb, var(--hx-heading) 3%, transparent);
+    border: 1px solid var(--hx-border); border-radius: 16px;
+    padding: 20px 22px; backdrop-filter: blur(6px);
+  }
+  #shopify-section-{{ section.id }} .hx-tl-year {
+    font-family: var(--hx-font-sora); font-weight: 700; font-size: 13px;
+    letter-spacing: .04em; color: var(--hx-accent); margin-bottom: 8px;
+  }
+  #shopify-section-{{ section.id }} .hx-tl-title {
+    font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.02em;
+    color: var(--hx-heading); font-size: 20px; line-height: 1.25; margin-bottom: 8px;
+  }
+  #shopify-section-{{ section.id }} .hx-tl-text {
+    color: var(--hx-body); font-size: 14.5px; line-height: 1.6; margin: 0;
+  }
+
+  @media (max-width: 600px) {
+    #shopify-section-{{ section.id }} .hx-tl-head { margin-bottom: 40px; }
+    #shopify-section-{{ section.id }} .hx-tl-item { padding-left: 38px; padding-bottom: 32px; }
+    #shopify-section-{{ section.id }} .hx-tl-card { padding: 18px 18px; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Timeline",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "OUR JOURNEY" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "From frustration to formula." },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 2, "unit": "px", "default": 88 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "blocks": [
+    { "type": "milestone", "name": "Milestone", "settings": [
+      { "type": "text", "id": "year", "label": "Year / label", "default": "2023" },
+      { "type": "text", "id": "title", "label": "Title", "default": "The first batch" },
+      { "type": "textarea", "id": "text", "label": "Text", "default": "Where it all began." }
+    ]}
+  ],
+  "max_blocks": 10,
+  "presets": [{ "name": "home", "blocks": [
+    { "type": "milestone", "settings": { "year": "2023", "title": "The first batch", "text": "Mixed in a kitchen, tested on ourselves, refined until it actually felt different." } },
+    { "type": "milestone", "settings": { "year": "2024", "title": "Going clinical", "text": "Partnered with formulators to dial in clinical doses and third-party testing." } },
+    { "type": "milestone", "settings": { "year": "2025", "title": "The full spectrum", "text": "DAILY launches — seven electrolytes, cellular co-factors, zero sugar." } },
+    { "type": "milestone", "settings": { "year": "2026", "title": "What's next", "text": "A full system: FOCUS, ACTIVE, RECOVER. Engineered for how you live." } }
+  ]}]
+}
+{% endschema %}

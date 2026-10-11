@@ -1,0 +1,70 @@
+{%- comment -%} HYDRIX — Press / "as seen in" logo strip {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-press scroll-trigger animate--fade-in" style="
+  --hx-bg: {{ s.bg }};
+  --hx-border: {{ s.border }};
+  border-top: 1px solid {{ s.border }}; border-bottom: 1px solid {{ s.border }};
+  padding: 40px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div style="max-width:980px;margin:0 auto;text-align:center">
+    {%- if s.label != blank -%}
+      <div class="hx-press__label" style="color:{{ s.label_color }}">{{ s.label }}</div>
+    {%- endif -%}
+    <div class="hx-press__logos" style="color:{{ s.logo_color }}">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.image != blank -%}
+          <img src="{{ block.settings.image | image_url: width: 240 }}" alt="{{ block.settings.name }}" style="height:{{ s.logo_size }}px;width:auto;opacity:.8" {{ block.shopify_attributes }}>
+        {%- else -%}
+          <span {{ block.shopify_attributes }}>{{ block.settings.name }}</span>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-press__label {
+    font-size: 12px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 22px;
+  }
+  #shopify-section-{{ section.id }} .hx-press__logos {
+    display: flex; flex-wrap: wrap; gap: 18px 44px; justify-content: center; align-items: center;
+    font-family: var(--hx-font-display); font-weight: 700; font-size: clamp(16px, 2.4vw, 24px); opacity: .9;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Press Strip",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "label", "label": "Label", "default": "As seen in" },
+    { "type": "range", "id": "logo_size", "label": "Logo height", "min": 16, "max": 48, "step": 2, "unit": "px", "default": 24 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "label_color", "label": "Label", "default": "#6C7685" },
+    { "type": "color", "id": "logo_color", "label": "Logo text", "default": "#4D5665" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "logo", "name": "Logo", "settings": [
+      { "type": "text", "id": "name", "label": "Name (text fallback)", "default": "FORBES" },
+      { "type": "image_picker", "id": "image", "label": "Logo image" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Press Strip", "blocks": [
+    { "type": "logo", "settings": { "name": "MEN'S HEALTH" } },
+    { "type": "logo", "settings": { "name": "GQ" } },
+    { "type": "logo", "settings": { "name": "OUTSIDE" } },
+    { "type": "logo", "settings": { "name": "FORBES" } },
+    { "type": "logo", "settings": { "name": "WIRED" } }
+  ]}]
+}
+{% endschema %}

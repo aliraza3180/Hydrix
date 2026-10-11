@@ -1,0 +1,11 @@
+{%- comment -%}
+  HYDRIX — premium CSS product-bottle placeholder (used when a product card has no image).
+  Styling is scoped per-section via .hxh-bottle / .hxh-bottle__* (see hxh-lineup.liquid).
+  Spans (not divs) are used for sub-parts so Dawn's `div:empty { display:none }` can't hide them.
+  Usage: {% render 'hxh-bottle', name: 'DAILY' %}
+{%- endcomment -%}
+<div class="hxh-bottle" aria-hidden="true">
+  <span class="hxh-bottle__lid"></span>
+  <span class="hxh-bottle__stripe"></span>
+  {%- if name != blank -%}<span class="hxh-bottle__name">{{ name }}</span>{%- endif -%}
+</div>

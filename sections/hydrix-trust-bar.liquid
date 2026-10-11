@@ -1,0 +1,59 @@
+{%- comment -%} HYDRIX — Trust bar (◆ items row) {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-trustbar scroll-trigger animate--fade-in" style="
+  --hx-bg: {{ s.bg }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  border-top: 1px solid {{ s.border }}; border-bottom: 1px solid {{ s.border }};
+  padding: 26px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-trustbar__row" style="color:{{ s.text_color }}">
+    {%- for block in section.blocks -%}
+      <div class="hx-trustbar__item" {{ block.shopify_attributes }}>
+        <span class="hx-accent-text">{{ block.settings.icon | default: '◆' }}</span> {{ block.settings.label }}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-trustbar__row {
+    max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 18px 40px;
+    justify-content: center; font-size: 13.5px; font-weight: 500;
+  }
+  #shopify-section-{{ section.id }} .hx-trustbar__item { display: flex; align-items: center; gap: 8px; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Trust Bar",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#9AA5B3" },
+    { "type": "color", "id": "accent", "label": "Icon accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "item", "name": "Item", "settings": [
+      { "type": "text", "id": "icon", "label": "Icon glyph", "default": "◆" },
+      { "type": "text", "id": "label", "label": "Label", "default": "Zero sugar" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Trust Bar", "blocks": [
+    { "type": "item", "settings": { "label": "Zero sugar" } },
+    { "type": "item", "settings": { "label": "7 electrolytes" } },
+    { "type": "item", "settings": { "label": "Third-party tested" } },
+    { "type": "item", "settings": { "label": "Made in USA" } }
+  ]}]
+}
+{% endschema %}

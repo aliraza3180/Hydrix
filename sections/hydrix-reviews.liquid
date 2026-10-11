@@ -1,0 +1,85 @@
+{%- comment -%} HYDRIX — Reviews (star header + review cards). {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-reviews" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    <div class="hx-section-head scroll-trigger animate--fade-in">
+      <div class="hx-stars" style="font-size:18px;letter-spacing:3px;color:{{ s.accent }}">★★★★★</div>
+      {%- if s.heading != blank -%}<h2 class="hx-h2" style="margin-top:12px;font-size:clamp(26px,3.6vw,40px)">{{ s.heading }}</h2>{%- endif -%}
+    </div>
+    <div class="hx-grid hx-grid--auto scroll-trigger animate--slide-in">
+      {%- for block in section.blocks -%}
+        {%- assign bs = block.settings -%}
+        <div class="hx-card hx-reviews__card" {{ block.shopify_attributes }}>
+          <div class="hx-stars" style="font-size:13px;color:{{ s.accent }}">★★★★★</div>
+          <p class="hx-reviews__quote">{{ bs.quote }}</p>
+          <div class="hx-reviews__author">
+            {%- if bs.avatar != blank -%}
+              <img src="{{ bs.avatar | image_url: width: 80 }}" alt="{{ bs.name }}" class="hx-reviews__avatar">
+            {%- else -%}
+              <span class="hx-reviews__avatar hx-reviews__avatar--ph"></span>
+            {%- endif -%}
+            <div>
+              <div class="hx-reviews__name">{{ bs.name }}</div>
+              <div class="hx-reviews__meta" style="color:{{ s.body_color }}">{{ bs.meta }}</div>
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-reviews__card { border-radius: 14px; padding: 26px; }
+  #shopify-section-{{ section.id }} .hx-reviews__quote { margin-top: 12px; font-size: 15px; line-height: 1.55; color: #E6EAF0; }
+  #shopify-section-{{ section.id }} .hx-reviews__author { margin-top: 18px; display: flex; align-items: center; gap: 10px; }
+  #shopify-section-{{ section.id }} .hx-reviews__avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; display: block; }
+  #shopify-section-{{ section.id }} .hx-reviews__avatar--ph { background: linear-gradient(135deg, #15171d, #20242A); border: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hx-reviews__name { font-size: 13.5px; font-weight: 600; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-reviews__meta { font-size: 12px; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Reviews",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "4.9 from 2,300+ reviews" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Meta", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Stars", "default": "#2D6BFF" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "review", "name": "Review", "settings": [
+      { "type": "textarea", "id": "quote", "label": "Quote", "default": "The only electrolyte that doesn't taste like candy. Clean, crisp, and I actually feel it by mid-afternoon." },
+      { "type": "text", "id": "name", "label": "Name", "default": "Maya R." },
+      { "type": "text", "id": "meta", "label": "Meta", "default": "Verified buyer" },
+      { "type": "image_picker", "id": "avatar", "label": "Avatar" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Reviews", "blocks": [
+    { "type": "review", "settings": { "quote": "The only electrolyte that doesn't taste like candy. Clean, crisp, and I actually feel it by mid-afternoon.", "name": "Maya R.", "meta": "Verified buyer" } },
+    { "type": "review", "settings": { "quote": "Replaced three supplements with one scoop. The dark packaging is unreal too — feels premium.", "name": "Devon K.", "meta": "Verified buyer" } },
+    { "type": "review", "settings": { "quote": "Zero sugar, no jitters, no crash. My training recovery is noticeably better since starting.", "name": "Priya S.", "meta": "Verified buyer" } }
+  ]}]
+}
+{% endschema %}

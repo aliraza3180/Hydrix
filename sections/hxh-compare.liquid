@@ -1,0 +1,115 @@
+{%- comment -%} HYDRIX — Compare: 4-column checkmark comparison table, HYDRIX column highlighted. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hxh-compare" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-border:{{ s.border }};--hx-row-bg:{{ s.row_bg }};--hx-tint:{{ s.highlight_tint }};padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+
+    <div class="hxh-compare__head scroll-trigger animate--fade-in">
+      {%- if s.eyebrow != blank -%}<p class="hxh-eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+      {%- if s.heading != blank or s.heading_accent != blank -%}
+        <h2 class="hxh-h2">{{ s.heading }}<span class="hxh-h2__accent">{{ s.heading_accent }}</span></h2>
+      {%- endif -%}
+    </div>
+
+    <div class="hxh-compare__scroll scroll-trigger animate--slide-in">
+      <table class="hxh-table">
+        <thead>
+          <tr>
+            <th class="hxh-table__rowhead" scope="col"></th>
+            <th class="hxh-table__col hxh-table__col--hl" scope="col">{{ s.col1 }}</th>
+            <th class="hxh-table__col" scope="col">{{ s.col2 }}</th>
+            <th class="hxh-table__col" scope="col">{{ s.col3 }}</th>
+            <th class="hxh-table__col" scope="col">{{ s.col4 }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'row' -%}
+              <tr {{ block.shopify_attributes }}>
+                <th class="hxh-table__rowhead" scope="row">{{ block.settings.label }}</th>
+                <td class="hxh-table__cell hxh-table__cell--hl">{% if block.settings.c1 %}<span class="hxh-yes">✓</span>{% else %}<span class="hxh-no">—</span>{% endif %}</td>
+                <td class="hxh-table__cell">{% if block.settings.c2 %}<span class="hxh-yes">✓</span>{% else %}<span class="hxh-no">—</span>{% endif %}</td>
+                <td class="hxh-table__cell">{% if block.settings.c3 %}<span class="hxh-yes">✓</span>{% else %}<span class="hxh-no">—</span>{% endif %}</td>
+                <td class="hxh-table__cell">{% if block.settings.c4 %}<span class="hxh-yes">✓</span>{% else %}<span class="hxh-no">—</span>{% endif %}</td>
+              </tr>
+            {%- endif -%}
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-compare__head { margin-bottom: clamp(28px, 4vw, 48px); }
+  #shopify-section-{{ section.id }} .hxh-eyebrow { font-family: var(--hx-font-sora); font-weight: 500; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body); margin: 0 0 18px; }
+  #shopify-section-{{ section.id }} .hxh-h2 { font-family: var(--hx-font-sora); font-weight: 600; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.06; letter-spacing: -.025em; color: var(--hx-heading); margin: 0; }
+  #shopify-section-{{ section.id }} .hxh-h2__accent { background: linear-gradient(135deg, #7DD3F0 0%, #4F96F5 35%, var(--hx-accent) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #shopify-section-{{ section.id }} .hxh-compare__scroll { overflow-x: auto; border-radius: 24px; background: linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.015) 100%); border: 1px solid rgba(255,255,255,.08); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); -webkit-overflow-scrolling: touch; }
+  #shopify-section-{{ section.id }} .hxh-table { width: 100%; min-width: 640px; border-collapse: collapse; font-family: var(--hx-font-body); }
+  #shopify-section-{{ section.id }} .hxh-table th,
+  #shopify-section-{{ section.id }} .hxh-table td { padding: 18px 20px; text-align: center; border-bottom: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hxh-table tbody tr:last-child th,
+  #shopify-section-{{ section.id }} .hxh-table tbody tr:last-child td { border-bottom: none; }
+  #shopify-section-{{ section.id }} .hxh-table__rowhead { text-align: left; font-weight: 500; font-size: 15px; color: var(--hx-heading); white-space: nowrap; }
+  #shopify-section-{{ section.id }} thead .hxh-table__col { font-family: var(--hx-font-sora); font-weight: 600; font-size: 14px; color: var(--hx-body); letter-spacing: -.01em; }
+  #shopify-section-{{ section.id }} thead .hxh-table__col--hl { color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hxh-table__col--hl,
+  #shopify-section-{{ section.id }} .hxh-table__cell--hl { background: var(--hx-tint); }
+  #shopify-section-{{ section.id }} .hxh-yes { color: var(--hx-accent); font-size: 17px; font-weight: 700; line-height: 1; }
+  #shopify-section-{{ section.id }} .hxh-table__cell--hl .hxh-yes { color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hxh-no { color: var(--hx-body); font-size: 16px; line-height: 1; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Compare",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "COMPARE" },
+    { "type": "text", "id": "heading", "label": "Heading (plain part)", "default": "Nothing else " },
+    { "type": "text", "id": "heading_accent", "label": "Heading (accent part)", "default": "comes close." },
+    { "type": "text", "id": "col1", "label": "Column 1 (highlighted)", "default": "HYDRIX" },
+    { "type": "text", "id": "col2", "label": "Column 2", "default": "Sports drinks" },
+    { "type": "text", "id": "col3", "label": "Column 3", "default": "Electrolyte tabs" },
+    { "type": "text", "id": "col4", "label": "Column 4", "default": "Hydration powders" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 96 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent / checks", "default": "#3B82F6" },
+    { "type": "color", "id": "border", "label": "Faint border", "default": "#FFFFFF14" },
+    { "type": "color", "id": "row_bg", "label": "Table background", "default": "#FFFFFF05" },
+    { "type": "color", "id": "highlight_tint", "label": "HYDRIX column tint", "default": "#3B82F60F" }
+  ],
+  "blocks": [
+    { "type": "row", "name": "Row", "settings": [
+      { "type": "text", "id": "label", "label": "Row label", "default": "7 essential electrolytes" },
+      { "type": "checkbox", "id": "c1", "label": "HYDRIX (col 1)", "default": true },
+      { "type": "checkbox", "id": "c2", "label": "Column 2", "default": false },
+      { "type": "checkbox", "id": "c3", "label": "Column 3", "default": false },
+      { "type": "checkbox", "id": "c4", "label": "Column 4", "default": false }
+    ]}
+  ],
+  "presets": [
+    { "name": "home", "blocks": [
+      { "type": "row", "settings": { "label": "7 essential electrolytes", "c1": true, "c2": false, "c3": false, "c4": true } },
+      { "type": "row", "settings": { "label": "Zero sugar", "c1": true, "c2": false, "c3": true, "c4": false } },
+      { "type": "row", "settings": { "label": "Cellular co-factors", "c1": true, "c2": false, "c3": false, "c4": false } },
+      { "type": "row", "settings": { "label": "Clinically dosed", "c1": true, "c2": false, "c3": false, "c4": false } },
+      { "type": "row", "settings": { "label": "Mental clarity blend", "c1": true, "c2": false, "c3": false, "c4": false } },
+      { "type": "row", "settings": { "label": "Naturally flavored", "c1": true, "c2": false, "c3": true, "c4": false } }
+    ]}
+  ]
+}
+{% endschema %}

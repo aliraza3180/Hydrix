@@ -1,0 +1,156 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+{%- comment -%} HYDRIX — hxh-cta. Centered final CTA with beam + arc. {%- endcomment -%}
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hxh-cta" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-accent-hover:{{ s.accent_hover }};--hx-border:{{ s.border }};padding:{{ s.padding_top }}px 24px {{ s.padding_bottom }}px;text-align:center;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  {%- if s.show_fx == nil or s.show_fx -%}
+    <div class="hx-glow-arc"></div>
+    <div class="hx-beam hx-beam--future"></div>
+    <div class="hx-glow-bottom"></div>
+    {% render 'hydrix-particles', count: 24 %}
+  {%- endif -%}
+
+  <div class="hx-wrap hxh-cta__inner scroll-trigger animate--slide-in">
+    {%- if s.eyebrow != blank -%}<div class="hxh-cta__eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+
+    <h2 class="hxh-cta__h2">{{ s.heading }}<span class="hxh-cta__accent">{{ s.heading_accent }}</span></h2>
+
+    {%- if s.subheading != blank -%}<p class="hxh-cta__sub">{{ s.subheading }}</p>{%- endif -%}
+
+    {%- if s.action_type == 'email' -%}
+      {% form 'customer', class: 'hxh-cta__form' %}
+        {%- if form.posted_successfully? -%}
+          <div class="hx-success hxh-cta__success"><span class="hx-success__check">✓</span><span>{{ s.success_text }}</span></div>
+        {%- else -%}
+          <input type="hidden" name="contact[tags]" value="{{ s.email_tag }}">
+          <div class="hx-form-row hxh-cta__row">
+            <input class="hx-input" type="email" name="contact[email]" placeholder="{{ s.email_placeholder }}" required>
+            <button class="hxh-cta__btn" type="submit">{{ s.button_label }}</button>
+          </div>
+          {%- if s.microcopy != blank -%}<p class="hxh-cta__microcopy">{{ s.microcopy }}</p>{%- endif -%}
+        {%- endif -%}
+      {% endform %}
+    {%- elsif s.button_label != blank and s.action_type != 'none' -%}
+      <div class="hxh-cta__buttons">
+        <a href="{{ s.button_url | default: '#' }}" class="hxh-cta__btn">{{ s.button_label }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-cta__inner {
+    position: relative; z-index: 5; max-width: 720px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__eyebrow {
+    font-family: var(--hx-font-sora); font-weight: 500; font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body); margin-bottom: 14px;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__h2 {
+    font-family: var(--hx-font-sora); font-weight: 600;
+    font-size: clamp(40px, 7vw, 84px); line-height: 1.02; letter-spacing: -.035em;
+    color: var(--hx-heading); margin: 0; text-wrap: balance;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__accent {
+    background: linear-gradient(135deg, #7DD3F0 0%, #4F96F5 35%, var(--hx-accent) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__sub {
+    margin: 18px 0 0; max-width: 520px;
+    color: var(--hx-body); font-size: clamp(15px, 1.7vw, 18px); line-height: 1.6;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__buttons { margin-top: 32px; }
+  #shopify-section-{{ section.id }} .hxh-cta__btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--hx-font-body); font-weight: 500; font-size: 15px;
+    padding: 14px 30px; border-radius: 9999px; text-decoration: none; white-space: nowrap;
+    background: var(--hx-accent); color: #fff; border: 1px solid transparent;
+    transition: background .2s, box-shadow .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__btn:hover { background: var(--hx-accent-hover); box-shadow: 0 0 36px rgba(59,130,246,.4); }
+  #shopify-section-{{ section.id }} .hxh-cta__form { margin-top: 32px; width: 100%; }
+  #shopify-section-{{ section.id }} .hxh-cta__row {
+    display: flex; gap: 10px; max-width: 460px; margin: 0 auto; width: 100%;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__row .hx-input {
+    flex: 1 1 auto; min-width: 0; padding: 14px 18px; border-radius: 9999px;
+    background: rgba(255,255,255,.04); border: 1px solid var(--hx-border); color: var(--hx-heading);
+    font-family: var(--hx-font-body); font-size: 15px; outline: none; transition: border-color .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-cta__row .hx-input::placeholder { color: var(--hx-body); }
+  #shopify-section-{{ section.id }} .hxh-cta__row .hx-input:focus { border-color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hxh-cta__row .hxh-cta__btn { flex: 0 0 auto; }
+  #shopify-section-{{ section.id }} .hxh-cta__microcopy { margin: 16px 0 0; font-size: 13px; color: var(--hx-body); }
+  #shopify-section-{{ section.id }} .hxh-cta__success {
+    margin-top: 30px; display: inline-flex; align-items: center; gap: 12px; justify-content: center;
+    padding: 14px 22px; border-radius: 9999px; color: #fff; font-size: 15px;
+    background: rgba(33,195,111,.12); border: 1px solid rgba(33,195,111,.4);
+  }
+  @media (max-width: 540px) { #shopify-section-{{ section.id }} .hxh-cta__row { flex-direction: column; } }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HXH CTA",
+  "tag": "section",
+  "class": "hxh-cta-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Hydration." },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent (colored)", "default": "Reimagined." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Join thousands redefining what hydration feels like." },
+    { "type": "header", "content": "Action" },
+    { "type": "select", "id": "action_type", "label": "Action", "options": [
+      { "value": "email", "label": "Newsletter / email capture" }, { "value": "button", "label": "Button (link)" }, { "value": "none", "label": "None" }
+    ], "default": "button" },
+    { "type": "text", "id": "button_label", "label": "Button / submit label", "default": "Subscribe" },
+    { "type": "url", "id": "button_url", "label": "Button link (button action only)" },
+    { "type": "text", "id": "email_placeholder", "label": "Email placeholder", "default": "your@email.com" },
+    { "type": "text", "id": "email_tag", "label": "Subscriber tag", "default": "newsletter" },
+    { "type": "text", "id": "success_text", "label": "Success message", "default": "You're subscribed. Watch your inbox." },
+    { "type": "text", "id": "microcopy", "label": "Microcopy under form", "default": "No spam. Unsubscribe anytime." },
+    { "type": "header", "content": "Animated background" },
+    { "type": "checkbox", "id": "show_fx", "label": "Show beam, glow & rising particles", "default": true },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 120 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 120 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading text", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body text", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#5B97F8" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "presets": [
+    {
+      "name": "home",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Hydration. ",
+        "heading_accent": "Reimagined.",
+        "subheading": "Join thousands redefining what hydration feels like.",
+        "button_label": "Join the Waitlist",
+        "button_url": "#waitlist",
+        "padding_top": 120,
+        "padding_bottom": 120,
+        "bg": "#0A0B0F",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      }
+    }
+  ]
+}
+{% endschema %}

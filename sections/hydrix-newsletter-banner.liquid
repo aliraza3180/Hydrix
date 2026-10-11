@@ -1,0 +1,172 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-nlb" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-accent-hover:{{ s.accent_hover }};--hx-border:{{ s.border }};padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    <div class="hx-nlb__panel">
+      <div class="hx-nlb__copy">
+        {%- if s.eyebrow != blank -%}<p class="hx-nlb__eyebrow">{{ s.eyebrow }}</p>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="hx-nlb__heading">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.subheading != blank -%}<p class="hx-nlb__sub">{{ s.subheading }}</p>{%- endif -%}
+      </div>
+      <div class="hx-nlb__panel-form">
+        {% form 'customer', class: 'hx-nlb__form' %}
+          {%- if form.posted_successfully? -%}
+            <div class="hx-nlb__success"><span class="hx-success__check">✓</span><span>{{ s.success_text }}</span></div>
+          {%- else -%}
+            <input type="hidden" name="contact[tags]" value="{{ s.email_tag }}">
+            <div class="hx-nlb__row">
+              <input class="hx-nlb__input" type="email" name="contact[email]" placeholder="{{ s.email_placeholder }}" required>
+              <button class="hx-nlb__btn" type="submit">{{ s.button_label }}</button>
+            </div>
+            {%- if s.microcopy != blank -%}<p class="hx-nlb__micro">{{ s.microcopy }}</p>{%- endif -%}
+          {%- endif -%}
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-nlb__panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 26px;
+    padding: clamp(32px, 5vw, 56px);
+    background: linear-gradient(180deg, rgba(59,130,246,.10), rgba(255,255,255,.02));
+    border: 1px solid rgba(59,130,246,.30);
+    box-shadow: 0 0 80px rgba(59,130,246,.12);
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__eyebrow {
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: .22em;
+    color: var(--hx-body);
+    margin: 0 0 14px;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__heading {
+    font-family: var(--hx-font-sora);
+    font-weight: 600;
+    font-size: clamp(26px, 3.4vw, 40px);
+    color: var(--hx-heading);
+    letter-spacing: -.02em;
+    line-height: 1.1;
+    margin: 0;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__sub {
+    color: var(--hx-body);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 14px 0 0;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__input {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 9999px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid var(--hx-border);
+    color: var(--hx-heading);
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s ease;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__input::placeholder {
+    color: var(--hx-body);
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__input:focus {
+    border-color: var(--hx-accent);
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__btn {
+    padding: 14px 26px;
+    border-radius: 9999px;
+    background: var(--hx-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color .2s ease, box-shadow .2s ease;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__btn:hover {
+    background: var(--hx-accent-hover);
+    box-shadow: 0 0 28px rgba(59,130,246,.40);
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__success {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(33,195,111,.12);
+    border: 1px solid rgba(33,195,111,.4);
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 9999px;
+    font-size: 15px;
+  }
+  #shopify-section-{{ section.id }} .hx-nlb__micro {
+    font-size: 13px;
+    color: var(--hx-body);
+    margin: 12px 0 0;
+  }
+  @media (max-width: 820px) {
+    #shopify-section-{{ section.id }} .hx-nlb__panel {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 540px) {
+    #shopify-section-{{ section.id }} .hx-nlb__row {
+      flex-direction: column;
+    }
+    #shopify-section-{{ section.id }} .hx-nlb__input,
+    #shopify-section-{{ section.id }} .hx-nlb__btn {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Newsletter",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "STAY IN THE LOOP" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Get launch news first." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "New drops, the science, and early-access perks — straight to your inbox." },
+    { "type": "header", "content": "Form" },
+    { "type": "text", "id": "email_placeholder", "label": "Email placeholder", "default": "your@email.com" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Subscribe" },
+    { "type": "text", "id": "email_tag", "label": "Subscriber tag", "default": "newsletter" },
+    { "type": "text", "id": "success_text", "label": "Success message", "default": "You're subscribed. Watch your inbox." },
+    { "type": "text", "id": "microcopy", "label": "Microcopy", "default": "No spam. Unsubscribe anytime." },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 2, "unit": "px", "default": 72 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#5B97F8" },
+    { "type": "color", "id": "border", "label": "Border / inputs", "default": "#FFFFFF14" }
+  ],
+  "presets": [
+    { "name": "home" }
+  ]
+}
+{% endschema %}

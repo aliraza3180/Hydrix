@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./assets/image-slot.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0A0B0F;color:#fff;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:#2D6BFF;color:#fff}
+  a{color:inherit}
+  @keyframes beamPulse{0%,100%{opacity:.85}50%{opacity:1}}
+  .desk{display:flex}.mobtog{display:none}
+  @media(max-width:860px){.desk{display:none!important}.mobtog{display:inline-flex!important}}
+</style>
+</helmet>
+
+<div style="background:#0A0B0F;min-height:100vh;overflow-x:hidden;position:relative">
+  <header style="position:sticky;top:0;z-index:40;background:rgba(10,11,15,.82);backdrop-filter:blur(14px);border-bottom:1px solid #20242A">
+    <nav style="display:flex;align-items:center;justify-content:space-between;max-width:1240px;margin:0 auto;padding:16px 28px">
+      <a href="Home.dc.html" style="text-decoration:none"><img src="assets/hydrix-wordmark-white.png" alt="HYDRIX" style="height:21px;display:block"></a>
+      <div class="desk" style="align-items:center;gap:28px">
+        <a href="Shop.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Shop</a>
+        <a href="Science.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Science</a>
+        <a href="About.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">About</a>
+        <a href="Subscribe.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Subscribe</a>
+        <a href="Home.dc.html" style="color:#fff;display:flex"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12L5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></a>
+      </div>
+      <button class="mobtog" onClick="{{ toggleMenu }}" style="display:none;background:transparent;border:1px solid #20242A;border-radius:8px;width:42px;height:42px;cursor:pointer;color:#fff;font-size:18px">≡</button>
+    </nav>
+  </header>
+  <sc-if value="{{ menuOpen }}"><div style="position:fixed;inset:0;z-index:60;background:rgba(10,11,15,.97);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px"><button onClick="{{ toggleMenu }}" style="position:absolute;top:30px;right:28px;background:transparent;border:none;color:#fff;font-size:30px;cursor:pointer">×</button><a href="Shop.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Shop</a><a href="Science.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Science</a><a href="About.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">About</a><a href="Subscribe.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Subscribe</a></div></sc-if>
+
+  <section style="max-width:1180px;margin:0 auto;padding:48px 28px 0">
+    <div style="color:#2D6BFF;font-family:'Saira';font-size:12px;font-weight:600;letter-spacing:.32em;text-transform:uppercase">The Journal</div>
+    <h1 style="margin-top:12px;font-family:'Saira';font-weight:700;font-size:clamp(34px,5vw,56px)">Hydration, decoded</h1>
+  </section>
+
+  <!-- FEATURED -->
+  <section style="max-width:1180px;margin:0 auto;padding:32px 28px 0">
+    <a href="#" style="text-decoration:none;color:inherit;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:0;border:1px solid #20242A;border-radius:20px;overflow:hidden;transition:border-color .2s" style-hover="border-color:#2D6BFF">
+      <div style="position:relative;min-height:280px;background:radial-gradient(circle at 60% 40%,rgba(168,233,255,.22),transparent 50%),radial-gradient(circle at 30% 70%,rgba(45,107,255,.34),transparent 55%),#070809"><image-slot id="hx-blog-feat" style="position:absolute;inset:0;width:100%;height:100%" shape="rect" fit="cover" placeholder="Drop the featured article image"></image-slot></div>
+      <div style="padding:clamp(28px,4vw,44px);display:flex;flex-direction:column;justify-content:center"><span style="align-self:flex-start;background:#20242A;color:#8FD9FF;font-size:12px;padding:6px 12px;border-radius:100px">Science</span><h2 style="margin-top:16px;font-family:'Saira';font-weight:700;font-size:clamp(24px,3.2vw,36px);line-height:1.1">Why water alone won't hydrate you</h2><p style="margin-top:14px;color:#6C7685;font-size:15px;line-height:1.6">The co-transport mechanism that makes electrolytes essential — and how to dose them right.</p><div style="margin-top:18px;color:#6C7685;font-size:13px">8 min read · June 2026</div></div>
+    </a>
+  </section>
+
+  <!-- FILTER -->
+  <section style="max-width:1180px;margin:0 auto;padding:36px 28px 0"><div style="display:flex;gap:10px;flex-wrap:wrap"><sc-for list="{{ cats }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.select }}" style="cursor:pointer;background:{{ c.bg }};color:{{ c.color }};font-size:13.5px;padding:9px 16px;border-radius:100px;border:1px solid {{ c.border }};transition:all .2s">{{ c.name }}</button></sc-for></div></section>
+
+  <!-- GRID -->
+  <section style="max-width:1180px;margin:0 auto;padding:24px 28px 60px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      <sc-for list="{{ posts }}" as="p" hint-placeholder-count="6">
+        <a href="#" style="text-decoration:none;color:inherit;border:1px solid #20242A;border-radius:16px;overflow:hidden;display:block;transition:border-color .2s" style-hover="border-color:#2D6BFF">
+          <div style="position:relative;aspect-ratio:16/10;background:radial-gradient(circle at 50% 40%,rgba(45,107,255,.22),transparent 60%),#070809"><image-slot id="{{ p.slot }}" style="position:absolute;inset:0;width:100%;height:100%" shape="rect" fit="cover" placeholder="Article image"></image-slot></div>
+          <div style="padding:22px"><span style="background:#20242A;color:#8FD9FF;font-size:11.5px;padding:5px 11px;border-radius:100px">{{ p.cat }}</span><h3 style="margin-top:12px;font-family:'Saira';font-weight:600;font-size:18px;line-height:1.25">{{ p.title }}</h3><div style="margin-top:12px;color:#6C7685;font-size:12.5px">{{ p.meta }}</div></div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section style="position:relative;overflow:hidden;padding:clamp(60px,8vw,100px) 24px;text-align:center;border-top:1px solid #20242A">
+    <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:2px;height:42%;background:linear-gradient(180deg,#BDE8FF,#2D6BFF 50%,transparent);animation:beamPulse 4.5s ease-in-out infinite"></div>
+    <div style="position:relative;max-width:500px;margin:0 auto"><h2 style="font-family:'Saira';font-weight:700;font-size:clamp(26px,4vw,42px)">Get the next one in your inbox</h2><form onSubmit="{{ submitNews }}" style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><input type="email" required placeholder="Enter your email" style="flex:1;min-width:220px;background:#0A0B0F;border:1px solid #20242A;border-radius:10px;color:#fff;padding:15px 18px;font-size:15px;outline:none;transition:border .2s" style-focus="border-color:#2D6BFF"><button type="submit" style="background:#2D6BFF;color:#fff;font-weight:600;font-size:15px;padding:15px 26px;border:none;border-radius:10px;cursor:pointer;transition:all .2s" style-hover="background:#3B7EFF">Subscribe</button></form><sc-if value="{{ newsDone }}"><div style="margin-top:14px;color:#21C36F;font-size:14px">✓ You're in.</div></sc-if></div>
+  </section>
+
+  <footer style="border-top:1px solid #20242A;padding:48px 24px 36px"><div style="max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap"><div><img src="assets/hydrix-wordmark-white.png" alt="HYDRIX" style="height:20px;display:block"><div style="margin-top:10px;color:#2D6BFF;font-size:13px">hydration. reimagined.</div></div><div style="display:flex;gap:24px;flex-wrap:wrap"><a href="Home.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Home</a><a href="Shop.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Shop</a><a href="Science.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Science</a><a href="About.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">About</a></div></div><div style="max-width:1180px;margin:32px auto 0;padding-top:20px;border-top:1px solid #20242A;color:#6C7685;font-size:12.5px">© 2026 HYDRIX. All rights reserved.</div></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { menuOpen: false, cat: 0, newsDone: false };
+  renderVals() {
+    const names = ['All', 'Science', 'Performance', 'Recipes'];
+    const cats = names.map((name, i) => ({
+      name,
+      bg: this.state.cat === i ? '#2D6BFF' : 'transparent',
+      color: this.state.cat === i ? '#fff' : '#9AA5B3',
+      border: this.state.cat === i ? '#2D6BFF' : '#20242A',
+      select: () => this.setState({ cat: i }),
+    }));
+    const posts = [
+      { cat: 'Science', title: 'The 7 electrolytes your body actually needs', meta: '6 min read · June 2026', slot: 'hx-blog-1' },
+      { cat: 'Performance', title: 'Hydrating around your training, the right way', meta: '5 min read · June 2026', slot: 'hx-blog-2' },
+      { cat: 'Science', title: 'Sugar-free hydration: how we did it', meta: '4 min read · May 2026', slot: 'hx-blog-3' },
+      { cat: 'Recipes', title: 'Three Glacier Citrus mixes for hot days', meta: '3 min read · May 2026', slot: 'hx-blog-4' },
+      { cat: 'Performance', title: 'Signs of mild dehydration you ignore', meta: '5 min read · May 2026', slot: 'hx-blog-5' },
+      { cat: 'Science', title: 'What "full-spectrum" actually means', meta: '7 min read · April 2026', slot: 'hx-blog-6' },
+    ];
+    return {
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      cats, posts,
+      newsDone: this.state.newsDone,
+      submitNews: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ newsDone: true }); },
+    };
+  }
+}
+</script>
+</body>
+</html>

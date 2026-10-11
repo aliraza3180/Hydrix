@@ -1,0 +1,140 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+{%- comment -%} HYDRIX — "Six systems. One scoop." 2x3 card grid {%- endcomment -%}
+
+{%- liquid assign s = section.settings -%}
+
+{%- capture icon_droplet -%}<path d="M12 3.5c3 4 5.5 6.7 5.5 10a5.5 5.5 0 0 1-11 0c0-3.3 2.5-6 5.5-10Z"/>{%- endcapture -%}
+{%- capture icon_bolt -%}<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>{%- endcapture -%}
+{%- capture icon_brain -%}<path d="M9 5a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 9 19V5Z"/><path d="M15 5a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3 3 0 0 1 15 19V5Z"/>{%- endcapture -%}
+{%- capture icon_hexagon -%}<path d="m12 3 7 4v8l-7 4-7-4V7l7-4Z"/>{%- endcapture -%}
+{%- capture icon_plus -%}<path d="M12 6v12M6 12h12"/>{%- endcapture -%}
+{%- capture icon_leaf -%}<path d="M11 20c-5 0-8-3-8-9 6 0 9 1 9 9Z"/><path d="M11 20c0-7 4-12 10-13 0 7-3 13-10 13Z"/>{%- endcapture -%}
+
+<section class="hx-section hxh-systems" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-accent-hover:{{ s.accent_hover }};--hx-border:{{ s.border }};--hx-card-bg:{{ s.card_bg }};padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    <div class="hx-section-head hxh-systems__head scroll-trigger animate--fade-in">
+      {%- if s.eyebrow != blank -%}<div class="hx-eyebrow hxh-systems__eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+      {%- if s.heading != blank or s.heading_accent != blank -%}
+        <h2 class="hx-h2 hxh-systems__h2">{{ s.heading }}<span class="hx-accent-text">{{ s.heading_accent }}</span></h2>
+      {%- endif -%}
+    </div>
+
+    <div class="hxh-systems__grid scroll-trigger animate--slide-in">
+      {%- for block in section.blocks -%}
+        {%- assign ic = block.settings.icon -%}
+        <div class="hx-card hxh-systems__card" {{ block.shopify_attributes }}>
+          <span class="hxh-systems__chip">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--hx-accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{% case ic %}{% when 'droplet' %}{{ icon_droplet }}{% when 'bolt' %}{{ icon_bolt }}{% when 'brain' %}{{ icon_brain }}{% when 'hexagon' %}{{ icon_hexagon }}{% when 'plus' %}{{ icon_plus }}{% when 'leaf' %}{{ icon_leaf }}{% else %}{{ icon_droplet }}{% endcase %}</svg>
+          </span>
+          {%- if block.settings.title != blank -%}<h3 class="hx-h3 hxh-systems__title">{{ block.settings.title }}</h3>{%- endif -%}
+          {%- if block.settings.desc != blank -%}<p class="hx-body hxh-systems__desc">{{ block.settings.desc }}</p>{%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-systems__head { text-align: left; margin-bottom: clamp(28px, 4vw, 44px); }
+  #shopify-section-{{ section.id }} .hxh-systems__eyebrow {
+    font-family: var(--hx-font-sora); font-weight: 500; font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body);
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__h2 {
+    font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.025em;
+    font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; margin-top: 14px;
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__h2 .hx-accent-text {
+    background: linear-gradient(135deg, #7DD3F0 0%, #4F96F5 35%, var(--hx-accent) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__grid {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
+  }
+  @media (max-width: 980px) {
+    #shopify-section-{{ section.id }} .hxh-systems__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    #shopify-section-{{ section.id }} .hxh-systems__grid { grid-template-columns: 1fr; }
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__card {
+    border-radius: 32px; padding: 28px;
+    background: linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.015) 100%);
+    border: 1px solid rgba(255,255,255,.08); backdrop-filter: blur(8px);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__card:hover {
+    border-color: var(--hx-accent); box-shadow: 0 0 40px rgba(59,130,246,.14);
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__chip {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--hx-card-bg); border: 1px solid var(--hx-border);
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__title {
+    font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.025em;
+    font-size: 18px; margin-top: 18px;
+  }
+  #shopify-section-{{ section.id }} .hxh-systems__desc { margin-top: 8px; font-size: 14px; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Systems",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "WHAT IT DOES" },
+    { "type": "text", "id": "heading", "label": "Heading (plain)", "default": "Six systems. " },
+    { "type": "text", "id": "heading_accent", "label": "Heading (accent)", "default": "One scoop." },
+    { "type": "range", "id": "min_card_width", "label": "Min card width", "min": 240, "max": 360, "step": 20, "unit": "px", "default": 300 },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 88 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#5B97F8" },
+    { "type": "color", "id": "border", "label": "Card border", "default": "#FFFFFF14" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#FFFFFF05" }
+  ],
+  "blocks": [
+    { "type": "card", "name": "Card", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [
+        { "value": "droplet", "label": "Droplet" },
+        { "value": "bolt", "label": "Bolt" },
+        { "value": "brain", "label": "Brain" },
+        { "value": "hexagon", "label": "Hexagon" },
+        { "value": "plus", "label": "Plus" },
+        { "value": "leaf", "label": "Leaf" }
+      ], "default": "droplet" },
+      { "type": "text", "id": "title", "label": "Title", "default": "Daily Hydration" },
+      { "type": "textarea", "id": "desc", "label": "Description", "default": "Replenish what your body loses every day." }
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "home",
+      "settings": {
+        "eyebrow": "WHAT IT DOES",
+        "heading": "Six systems. ",
+        "heading_accent": "One scoop."
+      },
+      "blocks": [
+        { "type": "card", "settings": { "icon": "droplet", "title": "Daily Hydration", "desc": "Replenish what your body loses every day." } },
+        { "type": "card", "settings": { "icon": "bolt", "title": "Energy Support", "desc": "Support energy and reduce fatigue." } },
+        { "type": "card", "settings": { "icon": "brain", "title": "Mental Clarity", "desc": "Sharpen focus, cognition and mood." } },
+        { "type": "card", "settings": { "icon": "hexagon", "title": "7 Electrolytes", "desc": "A full-spectrum electrolyte matrix." } },
+        { "type": "card", "settings": { "icon": "plus", "title": "Cellular Hydration", "desc": "Optimal cell function and balance." } },
+        { "type": "card", "settings": { "icon": "leaf", "title": "Zero Sugar", "desc": "No sugar. No junk. No compromise." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

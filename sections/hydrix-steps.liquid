@@ -1,0 +1,92 @@
+{%- comment -%} HYDRIX — How it works / numbered steps {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+{%- capture icon_scoop -%}<path d="M5 11a7 7 0 0 1 14 0v3a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-3Z"/><path d="M9 18v3m6-3v3"/>{%- endcapture -%}
+{%- capture icon_mix -%}<path d="M7 3h10l-1 5H8L7 3Z"/><path d="M8 8c-1 4-2 6-2 9a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3c0-3-1-5-2-9"/>{%- endcapture -%}
+{%- capture icon_hydrate -%}<path d="M12 3.5c3 4 5.5 6.7 5.5 10a5.5 5.5 0 0 1-11 0c0-3.3 2.5-6 5.5-10Z"/>{%- endcapture -%}
+
+<section class="hx-section hx-steps" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  padding: {{ s.padding }}px 24px;
+  {% if s.top_border %}border-top: 1px solid {{ s.border }};{% endif %}
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap" style="max-width:1080px">
+    {%- if s.heading != blank -%}
+      <div class="hx-section-head scroll-trigger animate--fade-in">
+        {%- if s.eyebrow != blank -%}<div class="hx-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+        <h2 class="hx-h2">{{ s.heading }}</h2>
+      </div>
+    {%- endif -%}
+    <div class="hxh-steps-row scroll-trigger animate--slide-in">
+      {%- for block in section.blocks -%}
+        <div class="hx-steps__item" {{ block.shopify_attributes }}>
+          <div class="hx-steps__circle" style="border-color:{{ s.border }}">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{{ s.accent }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">{% case block.settings.icon %}{% when 'scoop' %}{{ icon_scoop }}{% when 'mix' %}{{ icon_mix }}{% when 'hydrate' %}{{ icon_hydrate }}{% else %}{{ icon_scoop }}{% endcase %}</svg>
+          </div>
+          <div class="hx-steps__title">{{ block.settings.title }}</div>
+          {%- if block.settings.desc != blank -%}<p class="hx-steps__desc">{{ block.settings.desc }}</p>{%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-steps-row {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px;
+  }
+  @media (max-width: 760px) {
+    #shopify-section-{{ section.id }} .hxh-steps-row { grid-template-columns: 1fr; gap: 32px; }
+  }
+  #shopify-section-{{ section.id }} .hx-steps__item { text-align: center; }
+  #shopify-section-{{ section.id }} .hx-steps__circle {
+    width: 64px; height: 64px; margin: 0 auto; border-radius: 50%;
+    border: 1px solid var(--hx-border); display: flex; align-items: center; justify-content: center;
+  }
+  #shopify-section-{{ section.id }} .hx-steps__title { margin-top: 16px; font-family: var(--hx-font-display); font-weight: 600; font-size: 18px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-steps__desc { color: var(--hx-body); font-size: 14px; margin-top: 8px; line-height: 1.55; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Steps",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Three steps to better days" },
+    { "type": "checkbox", "id": "top_border", "label": "Top border", "default": true },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 4, "unit": "px", "default": 80 },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent / icons", "default": "#2D6BFF" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "step", "name": "Step", "settings": [
+      { "type": "select", "id": "icon", "label": "Icon", "options": [
+        { "value": "scoop", "label": "Scoop" }, { "value": "mix", "label": "Mix" }, { "value": "hydrate", "label": "Hydrate" }
+      ], "default": "scoop" },
+      { "type": "text", "id": "title", "label": "Title", "default": "01 · Scoop" },
+      { "type": "textarea", "id": "desc", "label": "Description", "default": "One scoop of Glacier Citrus per serving." }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Steps", "blocks": [
+    { "type": "step", "settings": { "icon": "scoop", "title": "01 · Scoop", "desc": "One scoop of Glacier Citrus per serving." } },
+    { "type": "step", "settings": { "icon": "mix", "title": "02 · Mix", "desc": "Stir into 12–16oz of cold water." } },
+    { "type": "step", "settings": { "icon": "hydrate", "title": "03 · Hydrate", "desc": "Feel replenished — every single day." } }
+  ]}]
+}
+{% endschema %}

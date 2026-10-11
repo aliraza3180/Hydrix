@@ -1,0 +1,104 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hydrix-hero",
+      "settings": {
+        "layout": "centered",
+        "full_height": false,
+        "anchor": "founders-hero",
+        "eyebrow": "FOUNDERS CLUB · $5",
+        "heading": "Become a founding member.",
+        "subheading": "A one-time $5 reserves your permanent place in the HYDRIX story — and unlocks benefits available to no one else. Fully credited toward your first order.",
+        "action_type": "buttons",
+        "button_label": "Reserve for $5",
+        "button_url": "/cart/48695142678760:1",
+        "button2_label": "Read our story",
+        "button2_url": "/pages/about",
+        "show_counter": false,
+        "show_beam": true,
+        "show_arc": true,
+        "heading_color": "#FFFFFF",
+        "padding_top": 160,
+        "padding_bottom": 72,
+        "bg": "#0a0b0f",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      }
+    },
+    "benefits": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "WHAT YOU UNLOCK",
+        "heading": "Benefits available to no one else.",
+        "center_cards": true,
+        "min_card_width": 360,
+        "padding": 80,
+        "bg": "#12151d",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14",
+        "card_bg": "#FFFFFF05"
+      },
+      "blocks": {
+        "b1": { "type": "card", "settings": { "icon": "dollar", "title": "Lifetime founder pricing", "desc": "The lowest price HYDRIX will ever offer — forever." } },
+        "b2": { "type": "card", "settings": { "icon": "clock", "title": "Early access", "desc": "Every new drop, 7 days before the public." } },
+        "b3": { "type": "card", "settings": { "icon": "star", "title": "Exclusive releases", "desc": "Founder-only flavors and limited editions." } },
+        "b4": { "type": "card", "settings": { "icon": "bolt", "title": "Priority shipping", "desc": "Skip the queue on every order." } },
+        "b5": { "type": "card", "settings": { "icon": "users", "title": "VIP community", "desc": "Private channel with the founders." } },
+        "b6": { "type": "card", "settings": { "icon": "shield", "title": "Founder's badge", "desc": "A permanent mark on your account." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"]
+    },
+    "pledge": {
+      "type": "hydrix-founders-panel",
+      "settings": {
+        "eyebrow": "FOUNDERS CLUB",
+        "heading": "Reserve your founding spot.",
+        "subheading": "Pledge $5 today and lock in perks the public will never get. Refundable any time before launch.",
+        "price": "$5",
+        "button_label": "Become a Founder — $5",
+        "pledge_variant_id": "48695142678760",
+        "note": "Fully credited toward your first order. Limited founding spots.",
+        "padding": 96,
+        "bg": "#090d17",
+        "panel_top": "#101626",
+        "panel_bottom": "#0a0b0f",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "eyebrow_color": "#8FD9FF",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "note_color": "#F5B400"
+      },
+      "blocks": {
+        "f1": { "type": "perk", "settings": { "text": "Lifetime founder pricing" } },
+        "f2": { "type": "perk", "settings": { "text": "First access at launch (before the public)" } },
+        "f3": { "type": "perk", "settings": { "text": "Exclusive founder-only flavor drop" } },
+        "f4": { "type": "perk", "settings": { "text": "Founding member badge & priority shipping" } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4"]
+    },
+    "faq": {
+      "type": "hydrix-faq",
+      "settings": {
+        "heading": "Founders FAQ",
+        "bg": "#0a0b0f",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14"
+      },
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "What is the Founders Club?", "answer": "A one-time $5 pledge that reserves your founding-member status — lifetime pricing, early access, exclusive drops, and a founder badge the public never gets." } },
+        "q2": { "type": "qa", "settings": { "question": "Is the $5 refundable?", "answer": "Yes. It's fully credited toward your first order, and you can request a refund any time before launch." } },
+        "q3": { "type": "qa", "settings": { "question": "When do you launch?", "answer": "We're finalizing production now. Founders are notified first — before the public waitlist." } },
+        "q4": { "type": "qa", "settings": { "question": "How do I claim my perks?", "answer": "After you pledge, we email your founder code and add the founder badge to your account automatically." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    }
+  },
+  "order": ["hero", "benefits", "pledge", "faq"]
+}

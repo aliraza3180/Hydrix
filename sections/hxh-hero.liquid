@@ -1,0 +1,285 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+{%- comment -%} HYDRIX — hxh-hero. Two-column hero (copy left, image right) with centered beam. {%- endcomment -%}
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hxh-hero" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-accent-hover:{{ s.accent_hover }};--hx-border:{{ s.border }};padding:{{ s.padding_top }}px 24px {{ s.padding_bottom }}px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  {%- if s.show_horizon == nil or s.show_horizon -%}
+    <div class="hxh-hero__horizon" aria-hidden="true"></div>
+  {%- endif -%}
+  {%- if s.show_fx == nil or s.show_fx -%}
+    <div class="hx-glow-arc"></div>
+    <div class="hx-beam-glow"></div>
+    <div class="hx-beam hx-beam--future"></div>
+    {% render 'hydrix-particles', count: 20 %}
+  {%- endif -%}
+
+  <div class="hx-wrap hxh-hero__inner">
+    <div class="hxh-hero__copy scroll-trigger animate--slide-in" data-cascade>
+      {%- if s.eyebrow != blank -%}<div class="hxh-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+
+      <h1 class="hxh-h1">{{ s.heading }}<span class="hxh-h1__accent">{{ s.heading_accent }}</span></h1>
+
+      {%- if s.subheading != blank -%}<p class="hxh-hero__sub">{{ s.subheading }}</p>{%- endif -%}
+
+      {%- if s.action_type == 'email' -%}
+        <div class="hxh-hero__form">
+          {% form 'customer', class: 'hxh-hero__capture' %}
+            {%- if form.posted_successfully? -%}
+              <div class="hx-success hxh-hero__success"><span class="hx-success__check">✓</span><span>{{ s.success_text }}</span></div>
+            {%- else -%}
+              <input type="hidden" name="contact[tags]" value="{{ s.email_tag }}">
+              <div class="hx-form-row hxh-hero__row">
+                <input class="hx-input hxh-hero__input" type="email" name="contact[email]" placeholder="{{ s.email_placeholder }}" required>
+                <button class="hxh-btn hxh-btn--primary" type="submit">{{ s.email_button_label }}</button>
+              </div>
+              {%- if s.microcopy != blank -%}<p class="hxh-hero__micro">{{ s.microcopy }}</p>{%- endif -%}
+            {%- endif -%}
+          {% endform %}
+        </div>
+      {%- elsif s.action_type == 'none' -%}
+      {%- else -%}
+        <div class="hxh-hero__buttons">
+          {%- if s.button_label != blank -%}
+            <a href="{{ s.button_url | default: '#' }}" class="hxh-btn hxh-btn--primary">
+              {{ s.button_label }}
+              <svg class="hxh-btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h9M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if s.button2_label != blank -%}
+            <a href="{{ s.button2_url | default: '#' }}" class="hxh-btn hxh-btn--ghost">{{ s.button2_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="hxh-hero__counter">
+        <span class="hxh-hero__dot"></span>
+        <span class="hxh-hero__count" data-hx-counter data-target="{{ s.counter_number }}" data-step="0" data-interval="0">{{ s.counter_number }}</span>
+        <span class="hxh-hero__counter-label">{{ s.counter_label }}</span>
+      </div>
+    </div>
+
+    <div class="hxh-hero__media scroll-trigger animate--fade-in {% if s.product_style == 'framed' %}hxh-hero__media--framed{% else %}hxh-hero__media--cutout{% endif %}">
+      <div class="hx-floaty hxh-hero__media-inner">
+        {%- if s.product_style == 'framed' -%}
+          <div class="hxh-hero__media-glow"></div>
+        {%- else -%}
+          <div class="hxh-hero__platform-glow" aria-hidden="true"></div>
+        {%- endif -%}
+        {%- if s.image != blank -%}
+          <img class="hxh-hero__img" src="{{ s.image | image_url: width: 880 }}" alt="{{ s.image.alt | default: s.heading }}" width="{{ s.image.width }}" height="{{ s.image.height }}" loading="lazy">
+        {%- else -%}
+          <img class="hxh-hero__img" src="{{ 'hydrix-hero-product.png' | asset_url }}" alt="{{ s.heading }}" loading="lazy">
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-hero__inner {
+    position: relative; z-index: 5;
+    display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center;
+  }
+  #shopify-section-{{ section.id }} .hxh-eyebrow {
+    font-family: var(--hx-font-sora); font-weight: 500; font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body);
+  }
+  #shopify-section-{{ section.id }} .hxh-h1 {
+    font-family: var(--hx-font-sora); font-weight: 600;
+    font-size: clamp(44px, 8vw, 96px); line-height: 1.02; letter-spacing: -.035em;
+    color: var(--hx-heading); margin: 20px 0 0; text-wrap: balance;
+  }
+  #shopify-section-{{ section.id }} .hxh-h1__accent {
+    background: linear-gradient(135deg, #7DD3F0 0%, #4F96F5 35%, var(--hx-accent) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__sub {
+    margin: 22px 0 0; max-width: 460px;
+    color: var(--hx-body); font-size: clamp(15px, 1.7vw, 18px); line-height: 1.6;
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__buttons {
+    margin-top: 34px; display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  #shopify-section-{{ section.id }} .hxh-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--hx-font-body); font-weight: 500; font-size: 15px;
+    padding: 14px 26px; border-radius: 9999px; text-decoration: none; white-space: nowrap;
+    transition: background .2s, border-color .2s, color .2s, box-shadow .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-btn--primary {
+    background: var(--hx-accent); color: #fff; border: 1px solid transparent;
+  }
+  #shopify-section-{{ section.id }} .hxh-btn--primary:hover { background: var(--hx-accent-hover); box-shadow: 0 0 36px rgba(59,130,246,.4); }
+  #shopify-section-{{ section.id }} .hxh-btn__arrow { display: block; }
+  #shopify-section-{{ section.id }} .hxh-btn--ghost {
+    background: rgba(255,255,255,.06); color: var(--hx-heading); border: 1px solid rgba(255,255,255,.38);
+  }
+  #shopify-section-{{ section.id }} .hxh-btn--ghost:hover { background: rgba(255,255,255,.12); border-color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hxh-hero__form { margin-top: 34px; max-width: 480px; }
+  #shopify-section-{{ section.id }} .hxh-hero__row { display: flex; gap: 10px; }
+  #shopify-section-{{ section.id }} .hxh-hero__row .hx-input {
+    flex: 1 1 auto; min-width: 0; padding: 14px 18px; border-radius: 9999px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--hx-border); color: var(--hx-heading);
+    font-family: var(--hx-font-body); font-size: 15px; outline: none; transition: border-color .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__row .hx-input::placeholder { color: var(--hx-body); }
+  #shopify-section-{{ section.id }} .hxh-hero__row .hx-input:focus { border-color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hxh-hero__row .hxh-btn { flex: 0 0 auto; }
+  #shopify-section-{{ section.id }} .hxh-hero__micro { margin: 14px 0 0; font-size: 12.5px; color: var(--hx-body); }
+  #shopify-section-{{ section.id }} .hxh-hero__success { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 9999px; background: rgba(33,195,111,.12); border: 1px solid rgba(33,195,111,.4); color: #fff; font-size: 15px; }
+  @media (max-width: 520px) {
+    #shopify-section-{{ section.id }} .hxh-hero__row { flex-direction: column; }
+    #shopify-section-{{ section.id }} .hxh-hero__row .hxh-btn { width: 100%; }
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__counter {
+    margin-top: 26px; display: flex; align-items: center; gap: 9px;
+    font-size: 14px; color: var(--hx-body);
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--hx-accent);
+    box-shadow: 0 0 10px 1px var(--hx-accent); flex: none;
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__count { color: var(--hx-heading); font-weight: 700; }
+  #shopify-section-{{ section.id }} .hxh-hero__media { display: flex; justify-content: center; }
+  #shopify-section-{{ section.id }} .hxh-hero__media-inner { position: relative; }
+  #shopify-section-{{ section.id }} .hxh-hero__media-glow {
+    position: absolute; inset: -8% -10%;
+    background: radial-gradient(ellipse at center, rgba(59,130,246,.34), transparent 64%);
+    filter: blur(30px); pointer-events: none; z-index: 0;
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__img {
+    position: relative; z-index: 1; display: block; height: auto;
+    width: min(460px, 84vw); border-radius: 24px;
+  }
+  /* Cutout (transparent PNG): no frame, product floats on the page */
+  #shopify-section-{{ section.id }} .hxh-hero__media--cutout .hxh-hero__img {
+    border-radius: 0;
+    width: min(500px, 88vw);
+    filter: drop-shadow(0 40px 60px rgba(0,0,0,.55));
+  }
+  /* Blue horizon arc (planet-rim) low in the hero — replaces the "earth".
+     The product's beam flows down and meets this glowing curve. */
+  #shopify-section-{{ section.id }} .hxh-hero__horizon {
+    position: absolute; left: 50%; bottom: -13%;
+    transform: translateX(-50%);
+    width: 126%; height: 470px; border-radius: 50%;
+    background: radial-gradient(60% 90% at 50% 0%, rgba(45,107,255,.18), rgba(45,107,255,0) 58%);
+    box-shadow: 0 -6px 60px 10px rgba(59,130,246,.26);
+    z-index: 1; pointer-events: none;
+  }
+  #shopify-section-{{ section.id }} .hxh-hero__horizon::before {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    border-top: 2px solid rgba(184,216,255,.92);
+    filter: drop-shadow(0 0 10px rgba(93,151,248,.95)) drop-shadow(0 0 26px rgba(59,130,246,.7));
+    -webkit-mask: linear-gradient(90deg, transparent 8%, #000 30%, #000 70%, transparent 92%);
+            mask: linear-gradient(90deg, transparent 8%, #000 30%, #000 70%, transparent 92%);
+  }
+  @media (max-width: 820px) {
+    #shopify-section-{{ section.id }} .hxh-hero__horizon { bottom: -8%; width: 150%; height: 360px; }
+  }
+  /* Blue semi-circle glow beneath the platform so the product's beam
+     blends into the page light instead of showing a hard image edge. */
+  #shopify-section-{{ section.id }} .hxh-hero__platform-glow {
+    position: absolute; left: 50%; bottom: 2%;
+    transform: translateX(-50%);
+    width: 108%; height: 62%;
+    background:
+      radial-gradient(60% 46% at 50% 42%, rgba(93,151,248,.55) 0%, rgba(37,99,235,.32) 34%, rgba(37,99,235,0) 70%),
+      radial-gradient(30% 70% at 50% 60%, rgba(59,130,246,.45) 0%, rgba(59,130,246,0) 72%);
+    filter: blur(26px);
+    z-index: 0; pointer-events: none;
+  }
+  @media (max-width: 820px) {
+    #shopify-section-{{ section.id }} .hxh-hero__inner { grid-template-columns: 1fr; gap: 40px; }
+    #shopify-section-{{ section.id }} .hxh-hero__media { order: -1; }
+    /* Keep the hero copy readable over the beam glow on mobile */
+    #shopify-section-{{ section.id }} .hxh-hero__copy { position: relative; z-index: 6; }
+    #shopify-section-{{ section.id }} .hx-glow-arc,
+    #shopify-section-{{ section.id }} .hx-beam-glow,
+    #shopify-section-{{ section.id }} .hx-beam { opacity: .4; }
+    #shopify-section-{{ section.id }} .hxh-hero__sub {
+      color: #d2d7de; text-shadow: 0 1px 16px rgba(6,7,10,.75);
+    }
+  }
+  @media (max-width: 520px) {
+    #shopify-section-{{ section.id }} .hxh-btn { flex: 1 1 auto; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HXH Hero",
+  "tag": "section",
+  "class": "hxh-hero-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "HYDRATION. REIMAGINED." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The future of " },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent (colored)", "default": "hydration." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Full-spectrum hydration engineered for energy, focus, recovery and everyday performance." },
+    { "type": "header", "content": "Action" },
+    { "type": "select", "id": "action_type", "label": "Hero action", "options": [ { "value": "buttons", "label": "Buttons" }, { "value": "email", "label": "Email capture" }, { "value": "none", "label": "None" } ], "default": "buttons" },
+    { "type": "text", "id": "email_placeholder", "label": "Email placeholder", "default": "Enter your email" },
+    { "type": "text", "id": "email_button_label", "label": "Email button label", "default": "Get Early Access" },
+    { "type": "text", "id": "email_tag", "label": "Subscriber tag", "default": "waitlist" },
+    { "type": "text", "id": "success_text", "label": "Success message", "default": "You're on the list. Watch your inbox." },
+    { "type": "text", "id": "microcopy", "label": "Microcopy under form", "default": "No spam. Unsubscribe anytime." },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "button_label", "label": "Primary button label", "default": "Join the Waitlist" },
+    { "type": "url", "id": "button_url", "label": "Primary button link" },
+    { "type": "text", "id": "button2_label", "label": "Secondary button label", "default": "Become a Founder" },
+    { "type": "url", "id": "button2_url", "label": "Secondary button link" },
+    { "type": "header", "content": "Counter" },
+    { "type": "number", "id": "counter_number", "label": "Counter number", "default": 4382 },
+    { "type": "text", "id": "counter_label", "label": "Counter label", "default": "people already joined." },
+    { "type": "header", "content": "Image" },
+    { "type": "select", "id": "product_style", "label": "Product style", "options": [ { "value": "cutout", "label": "Cutout (transparent PNG + blue glow)" }, { "value": "framed", "label": "Framed (rounded card)" } ], "default": "cutout", "info": "Use Cutout with a transparent-background product PNG so there is no black box." },
+    { "type": "image_picker", "id": "image", "label": "Product image", "info": "Leave empty to use the bundled transparent product PNG. For Cutout style always use a transparent-background PNG." },
+    { "type": "header", "content": "Animated background" },
+    { "type": "checkbox", "id": "show_horizon", "label": "Show blue horizon arc", "default": true },
+    { "type": "checkbox", "id": "show_fx", "label": "Show beam, glow & rising particles", "default": true },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 60, "max": 200, "step": 2, "unit": "px", "default": 120 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 40, "max": 160, "step": 2, "unit": "px", "default": 80 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading text", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body text", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#5B97F8" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "presets": [
+    {
+      "name": "home",
+      "settings": {
+        "eyebrow": "HYDRATION. REIMAGINED.",
+        "heading": "The future of ",
+        "heading_accent": "hydration.",
+        "subheading": "Full-spectrum hydration engineered for energy, focus, recovery and everyday performance.",
+        "button_label": "Join the Waitlist",
+        "button_url": "#waitlist",
+        "button2_label": "Become a Founder",
+        "button2_url": "/pages/founders",
+        "counter_number": 4382,
+        "counter_label": "people already joined.",
+        "padding_top": 120,
+        "padding_bottom": 80,
+        "bg": "#0A0B0F",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      }
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,68 @@
+/* HYDRIX — header nav + icon polish (overrides Dawn defaults) */
+
+/* Load the HYDRIX fonts globally — Dawn's header & cart drawer don't load hydrix.css */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+/* Point Dawn's font variables at the HYDRIX fonts so the header, cart drawer,
+   notification and all Dawn-rendered text use Sora (headings) + Inter (body). */
+:root {
+  --font-body-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-heading-family: 'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* Belt-and-suspenders for the Dawn cart drawer / notification */
+cart-drawer, cart-notification, #CartDrawer, .drawer__inner,
+cart-drawer *, cart-notification * {
+  font-family: var(--font-body-family);
+}
+cart-drawer .drawer__heading, #CartDrawer .drawer__heading,
+cart-drawer .totals__total, #CartDrawer .totals__total,
+cart-drawer .cart-item__name, #CartDrawer .cart-item__name {
+  font-family: var(--font-heading-family);
+}
+
+/* Full-strength text colour (Dawn dims nav links to 75% opacity) */
+.header__menu-item,
+.header__menu-item:hover,
+.header__active-menu-item {
+  color: rgb(var(--color-foreground));
+  text-decoration: none !important;
+}
+
+/* Sliding blue underline instead of Dawn's text-decoration underline */
+.header__menu-item span {
+  position: relative;
+  text-decoration: none !important;
+}
+.header__menu-item span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.5rem;
+  height: 2px;
+  border-radius: 2px;
+  background: #3b82f6;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.header__menu-item:hover span::after,
+details[open] > .header__menu-item span::after {
+  transform: scaleX(1);
+}
+
+/* Current page keeps the line visible */
+.header__active-menu-item::after {
+  transform: scaleX(1);
+}
+
+/* Kill Dawn's dropdown-parent underline */
+details[open] > .header__menu-item {
+  text-decoration: none !important;
+}
+
+/* Header icons: full-opacity on hover */
+.header__icons .header__icon:hover {
+  opacity: 1;
+}

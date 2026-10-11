@@ -1,0 +1,276 @@
+{%- comment -%} HYDRIX — Flexible contact / application form. Real Shopify {% form 'contact' %}. Fields are blocks. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign uid = section.id
+-%}
+
+<section class="hx-section hx-form-sec" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  --hx-card-bg: {{ s.card_bg }};
+  --hx-success: {{ s.success_color }};
+  padding: {{ s.padding_top }}px 24px {{ s.padding_bottom }}px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  {%- if s.show_beam -%}
+    <div class="hx-beam-glow"></div>
+    <div class="hx-beam hx-beam--short"></div>
+  {%- endif -%}
+  {%- if s.show_arc -%}
+    <div class="hx-arc"></div>
+    <div class="hx-arc-bloom"></div>
+  {%- endif -%}
+
+  <div class="hx-wrap hx-wrap--narrow hx-form-sec__inner">
+    {%- if s.eyebrow != blank or s.heading != blank or s.subheading != blank -%}
+      <div class="hx-section-head scroll-trigger animate--fade-in">
+        {%- if s.eyebrow != blank -%}<div class="hx-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+        {%- if s.heading != blank -%}<h2 class="hx-h2">{{ s.heading }}</h2>{%- endif -%}
+        {%- if s.subheading != blank -%}<p class="hx-lead hx-form-sec__sub">{{ s.subheading }}</p>{%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="hx-card hx-card--panel hx-form-sec__card scroll-trigger animate--slide-in">
+      {% form 'contact', class: 'hx-form' %}
+        {%- if form.posted_successfully? -%}
+          <div class="hx-form-sec__done">
+            <span class="hx-form-sec__check">✓</span>
+            {%- if s.success_heading != blank -%}<div class="hx-form-sec__done-h">{{ s.success_heading }}</div>{%- endif -%}
+            {%- if s.success_message != blank -%}<p class="hx-body hx-form-sec__done-p">{{ s.success_message }}</p>{%- endif -%}
+          </div>
+        {%- else -%}
+          {%- if form.errors -%}
+            <div class="hx-form-sec__errors">{{ form.errors | default_errors }}</div>
+          {%- endif -%}
+          <div class="hx-form-fields{% if s.two_col %} hx-form-fields--grid{% endif %}">
+            {%- for block in section.blocks -%}
+              {%- assign b = block.settings -%}
+              {%- assign key = b.field_key | default: b.label | handle | replace: '-', '_' -%}
+              {%- if block.type == 'email' -%}
+                {%- assign field_name = 'contact[email]' -%}
+              {%- else -%}
+                {%- assign field_name = 'contact[' | append: key | append: ']' -%}
+              {%- endif -%}
+
+              <div class="hx-form-field{% if b.half_width %} hx-form-field--half{% endif %}" {{ block.shopify_attributes }}>
+                {%- if b.label != blank -%}
+                  <label class="hx-field-label" for="hx-{{ uid }}-{{ key }}">{{ b.label }}{% if b.required %} <span class="hx-form-req">*</span>{% endif %}</label>
+                {%- endif -%}
+
+                {%- case block.type -%}
+                  {%- when 'textarea' -%}
+                    <textarea class="hx-textarea" id="hx-{{ uid }}-{{ key }}" name="{{ field_name }}" rows="{{ b.rows | default: 5 }}" placeholder="{{ b.placeholder | escape }}"{% if b.required %} required{% endif %}>{{ form[key] }}</textarea>
+
+                  {%- when 'select' -%}
+                    <select class="hx-select" id="hx-{{ uid }}-{{ key }}" name="{{ field_name }}"{% if b.required %} required{% endif %}>
+                      {%- if b.placeholder != blank -%}<option value="" disabled selected>{{ b.placeholder }}</option>{%- endif -%}
+                      {%- assign opts = b.options | newline_to_br | split: '<br />' -%}
+                      {%- for opt in opts -%}
+                        {%- assign o = opt | strip | strip_newlines -%}
+                        {%- if o != blank -%}<option value="{{ o | escape }}">{{ o }}</option>{%- endif -%}
+                      {%- endfor -%}
+                    </select>
+
+                  {%- when 'email' -%}
+                    <input class="hx-input hx-form-input" type="email" id="hx-{{ uid }}-{{ key }}" name="{{ field_name }}" value="{{ form.email }}" placeholder="{{ b.placeholder | escape }}"{% if b.required %} required{% endif %}>
+
+                  {%- else -%}
+                    <input class="hx-input hx-form-input" type="{% if block.type == 'tel' %}tel{% else %}text{% endif %}" id="hx-{{ uid }}-{{ key }}" name="{{ field_name }}" value="{{ form[key] }}" placeholder="{{ b.placeholder | escape }}"{% if b.required %} required{% endif %}>
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          <button class="hx-btn hx-btn--block hx-form-sec__submit" type="submit">{{ s.submit_label | default: 'Submit' }}</button>
+          {%- if s.disclaimer != blank -%}<p class="hx-form-sec__disclaimer">{{ s.disclaimer }}</p>{%- endif -%}
+        {%- endif -%}
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ uid }} .hx-form-sec__inner { position: relative; z-index: 5; }
+  #shopify-section-{{ uid }} .hx-form-sec__sub { margin: 14px auto 0; max-width: 520px; }
+  #shopify-section-{{ uid }} .hx-form-sec__card { max-width: 620px; margin: 0 auto; }
+  #shopify-section-{{ uid }} .hx-form { display: flex; flex-direction: column; gap: 16px; }
+  #shopify-section-{{ uid }} .hx-form-fields { display: flex; flex-direction: column; gap: 16px; }
+  #shopify-section-{{ uid }} .hx-form-fields--grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  #shopify-section-{{ uid }} .hx-form-field { min-width: 0; }
+  #shopify-section-{{ uid }} .hx-form-fields--grid .hx-form-field { grid-column: span 2; }
+  #shopify-section-{{ uid }} .hx-form-fields--grid .hx-form-field--half { grid-column: span 1; }
+  #shopify-section-{{ uid }} .hx-form-input { width: 100%; min-width: 0; flex: none; }
+  #shopify-section-{{ uid }} .hx-form-req { color: var(--hx-accent); }
+  #shopify-section-{{ uid }} .hx-form-sec__submit { margin-top: 6px; }
+  #shopify-section-{{ uid }} .hx-form-sec__disclaimer { margin-top: 12px; text-align: center; color: var(--hx-body); font-size: 12.5px; line-height: 1.5; }
+  #shopify-section-{{ uid }} .hx-form-sec__errors {
+    border: 1px solid var(--hx-warning); background: rgba(245,180,0,.07);
+    border-radius: 10px; padding: 12px 16px; color: var(--hx-warning); font-size: 13.5px;
+  }
+  #shopify-section-{{ uid }} .hx-form-sec__errors ul { margin: 0; padding-left: 18px; }
+  #shopify-section-{{ uid }} .hx-form-sec__done { text-align: center; padding: 20px 10px; }
+  #shopify-section-{{ uid }} .hx-form-sec__check {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 54px; height: 54px; border-radius: 50%;
+    border: 1px solid var(--hx-success); color: var(--hx-success);
+    font-size: 28px; background: rgba(33,195,111,.08);
+  }
+  #shopify-section-{{ uid }} .hx-form-sec__done-h {
+    font-family: var(--hx-font-display); font-weight: 600; font-size: 22px;
+    color: var(--hx-heading); margin-top: 16px;
+  }
+  #shopify-section-{{ uid }} .hx-form-sec__done-p { margin-top: 8px; }
+  @media (max-width: 520px) {
+    #shopify-section-{{ uid }} .hx-form-fields--grid { grid-template-columns: 1fr; }
+    #shopify-section-{{ uid }} .hx-form-fields--grid .hx-form-field,
+    #shopify-section-{{ uid }} .hx-form-fields--grid .hx-form-field--half { grid-column: span 1; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Form",
+  "tag": "section",
+  "class": "hx-form-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "HYDRIX Partners" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Apply to partner" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "We review every application within 48 hours." },
+    { "type": "text", "id": "submit_label", "label": "Submit button label", "default": "Submit Application" },
+    { "type": "textarea", "id": "disclaimer", "label": "Disclaimer / fine print below button" },
+    { "type": "header", "content": "Success state" },
+    { "type": "text", "id": "success_heading", "label": "Success heading", "default": "Application received" },
+    { "type": "textarea", "id": "success_message", "label": "Success message", "default": "We'll be in touch within 48 hours with your partner link and creative kit." },
+    { "type": "header", "content": "Layout" },
+    { "type": "checkbox", "id": "two_col", "label": "Two-column field grid", "info": "Half-width fields sit side by side when enabled.", "default": true },
+    { "type": "header", "content": "Decoration" },
+    { "type": "checkbox", "id": "show_beam", "label": "Show beam", "default": true },
+    { "type": "checkbox", "id": "show_arc", "label": "Show arc", "default": false },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 40, "max": 200, "step": 4, "unit": "px", "default": 92 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 40, "max": 200, "step": 4, "unit": "px", "default": 92 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" },
+    { "type": "color", "id": "border", "label": "Border / inputs", "default": "#20242A" },
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#0A0B0F" },
+    { "type": "color", "id": "success_color", "label": "Success", "default": "#21C36F" }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text field",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Name" },
+        { "type": "text", "id": "field_key", "label": "Field key (optional override)", "info": "Sanitized from the label if left blank. Used as contact[key]." },
+        { "type": "text", "id": "placeholder", "label": "Placeholder" },
+        { "type": "checkbox", "id": "required", "label": "Required", "default": true },
+        { "type": "checkbox", "id": "half_width", "label": "Half width (in 2-column grid)", "default": false }
+      ]
+    },
+    {
+      "type": "email",
+      "name": "Email field",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Email" },
+        { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "you@email.com" },
+        { "type": "checkbox", "id": "required", "label": "Required", "default": true },
+        { "type": "checkbox", "id": "half_width", "label": "Half width (in 2-column grid)", "default": false }
+      ]
+    },
+    {
+      "type": "tel",
+      "name": "Phone field",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Phone" },
+        { "type": "text", "id": "field_key", "label": "Field key (optional override)" },
+        { "type": "text", "id": "placeholder", "label": "Placeholder" },
+        { "type": "checkbox", "id": "required", "label": "Required", "default": false },
+        { "type": "checkbox", "id": "half_width", "label": "Half width (in 2-column grid)", "default": false }
+      ]
+    },
+    {
+      "type": "select",
+      "name": "Select field",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Channel" },
+        { "type": "text", "id": "field_key", "label": "Field key (optional override)" },
+        { "type": "textarea", "id": "options", "label": "Options (one per line)", "default": "Instagram\nTikTok\nYouTube\nBlog / Website\nOther" },
+        { "type": "text", "id": "placeholder", "label": "Placeholder option (optional)" },
+        { "type": "checkbox", "id": "required", "label": "Required", "default": false },
+        { "type": "checkbox", "id": "half_width", "label": "Half width (in 2-column grid)", "default": false }
+      ]
+    },
+    {
+      "type": "textarea",
+      "name": "Textarea field",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Message" },
+        { "type": "text", "id": "field_key", "label": "Field key (optional override)", "info": "Use 'body' to populate the email body." },
+        { "type": "text", "id": "placeholder", "label": "Placeholder" },
+        { "type": "range", "id": "rows", "label": "Rows", "min": 3, "max": 10, "step": 1, "default": 5 },
+        { "type": "checkbox", "id": "required", "label": "Required", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "HYDRIX Application Form",
+      "settings": {
+        "eyebrow": "HYDRIX Partners",
+        "heading": "Apply to partner",
+        "subheading": "We review every application within 48 hours.",
+        "submit_label": "Submit Application",
+        "success_heading": "Application received",
+        "success_message": "We'll be in touch within 48 hours with your partner link and creative kit.",
+        "two_col": true
+      },
+      "blocks": [
+        { "type": "text", "settings": { "label": "Name", "placeholder": "Your name", "required": true, "half_width": true } },
+        { "type": "email", "settings": { "label": "Email", "placeholder": "you@email.com", "required": true, "half_width": true } },
+        { "type": "text", "settings": { "label": "Platform / Website", "field_key": "platform", "placeholder": "@yourhandle or site URL", "required": true, "half_width": true } },
+        { "type": "text", "settings": { "label": "Audience size", "field_key": "audience_size", "placeholder": "e.g. 50k", "required": false, "half_width": true } },
+        { "type": "select", "settings": { "label": "Channel", "field_key": "channel", "options": "Instagram\nTikTok\nYouTube\nBlog\nOther", "placeholder": "Select a channel", "required": false } },
+        { "type": "textarea", "settings": { "label": "Why partner with HYDRIX?", "field_key": "body", "placeholder": "Tell us about your audience.", "rows": 4, "required": false } }
+      ]
+    },
+    {
+      "name": "HYDRIX Contact Form",
+      "settings": {
+        "eyebrow": "Contact",
+        "heading": "Talk to us",
+        "subheading": "Questions about a formula, an order, or a partnership? We usually reply within a day.",
+        "submit_label": "Send message",
+        "success_heading": "Message sent",
+        "success_message": "Thanks for reaching out — we'll be in touch soon.",
+        "two_col": true,
+        "show_beam": true,
+        "show_arc": false
+      },
+      "blocks": [
+        { "type": "text", "settings": { "label": "Name", "placeholder": "Your name", "required": true, "half_width": true } },
+        { "type": "email", "settings": { "label": "Email", "placeholder": "you@email.com", "required": true, "half_width": true } },
+        { "type": "select", "settings": { "label": "Topic", "field_key": "topic", "options": "Order or shipping\nProduct & Science\nPartnerships\nOther", "placeholder": "Choose a topic", "required": false } },
+        { "type": "textarea", "settings": { "label": "Message", "field_key": "body", "placeholder": "How can we help?", "rows": 5, "required": true } }
+      ]
+    }
+  ]
+}
+{% endschema %}

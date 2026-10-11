@@ -1,0 +1,107 @@
+{%- comment -%} HYDRIX — Footer {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<footer class="hx-section hx-footer scroll-trigger animate--fade-in" style="
+  --hx-bg: {{ s.bg }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  --hx-body: {{ s.link_color }};
+  border-top: 1px solid {{ s.border }};
+">
+  <div class="hx-wrap hx-footer__grid">
+    <div class="hx-footer__brand">
+      {%- if s.logo != blank -%}
+        <img src="{{ s.logo | image_url: width: 400 }}" alt="{{ shop.name }}" width="160" height="{{ s.logo_height }}" style="height:{{ s.logo_height }}px;width:auto;display:block">
+      {%- elsif s.logo_default != 'none' -%}
+        <img src="{{ s.logo_default | asset_url }}" alt="{{ shop.name }}" width="160" height="{{ s.logo_height }}" style="height:{{ s.logo_height }}px;width:auto;display:block">
+      {%- else -%}
+        <span class="hx-header__wordmark" style="font-family:var(--hx-font-display);font-weight:700;letter-spacing:.18em;font-size:20px;text-transform:uppercase">{{ s.logo_text | default: shop.name }}</span>
+      {%- endif -%}
+      {%- if s.description != blank -%}<div class="hx-footer__desc" style="color: {{ s.link_color }};margin-top:14px;font-size:14px;line-height:1.6;max-width:280px">{{ s.description }}</div>{%- endif -%}
+      <div class="hx-footer__tagline" style="color: {{ s.accent }};">{{ s.tagline }}</div>
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'column' -%}
+        <div class="hx-footer__col" {{ block.shopify_attributes }}>
+          <div class="hx-footer__col-title">{{ block.settings.title }}</div>
+          <div class="hx-footer__links">
+            {%- assign links = block.settings.links | newline_to_br | split: '<br />' -%}
+            {%- for line in links -%}
+              {%- assign parts = line | strip | split: '|' -%}
+              {%- if parts[0] != blank -%}
+                <a href="{{ parts[1] | strip | default: '#' }}" class="hx-footer__link">{{ parts[0] | strip }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  <div class="hx-wrap hx-footer__bottom">{{ s.copyright }}</div>
+</footer>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-footer { padding: 64px 0 40px; }
+  #shopify-section-{{ section.id }} .hx-footer__grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 40px;
+  }
+  #shopify-section-{{ section.id }} .hx-footer__brand { min-width: 200px; }
+  #shopify-section-{{ section.id }} .hx-footer__tagline { margin-top: 12px; font-size: 13px; }
+  #shopify-section-{{ section.id }} .hx-footer__col-title {
+    color: #fff; font-size: 13px; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  #shopify-section-{{ section.id }} .hx-footer__links { display: flex; flex-direction: column; gap: 11px; }
+  #shopify-section-{{ section.id }} .hx-footer__link {
+    color: var(--hx-body); text-decoration: none; font-size: 14px; transition: color .2s;
+  }
+  #shopify-section-{{ section.id }} .hx-footer__link:hover { color: #fff; }
+  #shopify-section-{{ section.id }} .hx-footer__bottom {
+    margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--hx-border);
+    color: var(--hx-body); font-size: 12.5px;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Footer",
+  "tag": "section",
+  "class": "hx-footer-wrap",
+  "settings": [
+    { "type": "header", "content": "Brand" },
+    { "type": "image_picker", "id": "logo", "label": "Logo image" },
+    { "type": "select", "id": "logo_default", "label": "Bundled logo (if none picked)", "options": [
+      { "value": "none", "label": "None (use text)" },
+      { "value": "hydrix-wordmark-white.png", "label": "White wordmark" },
+      { "value": "hydrix-monogram-white.png", "label": "White monogram" },
+      { "value": "hydrix-logo-white.png", "label": "White full lockup" }
+    ], "default": "hydrix-wordmark-white.png" },
+    { "type": "text", "id": "logo_text", "label": "Logo text (if no image)", "default": "HYDRIX" },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 14, "max": 40, "step": 1, "unit": "px", "default": 20 },
+    { "type": "textarea", "id": "description", "label": "Brand description", "default": "HYDRIX engineers full-spectrum hydration for high performers." },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Hydration. Reimagined." },
+    { "type": "text", "id": "copyright", "label": "Copyright line", "default": "© 2026 HYDRIX. All rights reserved." },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "accent", "label": "Accent / tagline", "default": "#2D6BFF" },
+    { "type": "color", "id": "link_color", "label": "Link", "default": "#6C7685" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "column", "name": "Link column", "settings": [
+      { "type": "text", "id": "title", "label": "Column title", "default": "Company" },
+      { "type": "textarea", "id": "links", "label": "Links (one per line: Label | /url)", "default": "About | /pages/about\nScience | /pages/science\nBlog | /blogs/news" }
+    ]}
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "HYDRIX Footer", "blocks": [
+    { "type": "column", "settings": { "title": "Shop", "links": "All products | /pages/shop\nDAILY | /pages/product-daily\nSubscribe | /pages/subscribe" } },
+    { "type": "column", "settings": { "title": "Company", "links": "About | /pages/about\nScience | /pages/science\nBlog | /blogs/news\nAffiliates | /pages/affiliates" } },
+    { "type": "column", "settings": { "title": "Support", "links": "My account | /account\nContact | /pages/contact\nFAQ | #" } },
+    { "type": "column", "settings": { "title": "Connect", "links": "Instagram | #\nTikTok | #\nX / Twitter | #" } }
+  ]}]
+}
+{% endschema %}

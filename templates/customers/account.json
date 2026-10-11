@@ -1,0 +1,47 @@
+{
+  "sections": {
+    "account": {
+      "type": "hydrix-account",
+      "blocks": {
+        "b1": {
+          "type": "order",
+          "settings": {
+            "order_id": "#HX-2048",
+            "date": "Jun 12, 2026",
+            "items": "DAILY ×1",
+            "total": "$41.65",
+            "status": "Delivered"
+          }
+        },
+        "b2": {
+          "type": "order",
+          "settings": {
+            "order_id": "#HX-1973",
+            "date": "May 13, 2026",
+            "items": "DAILY ×1",
+            "total": "$41.65",
+            "status": "Delivered"
+          }
+        },
+        "b3": {
+          "type": "order",
+          "settings": {
+            "order_id": "#HX-1820",
+            "date": "Apr 13, 2026",
+            "items": "DAILY ×1, RECOVER ×1",
+            "total": "$83.30",
+            "status": "Delivered"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ]
+    }
+  },
+  "order": [
+    "account"
+  ]
+}

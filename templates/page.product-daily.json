@@ -1,0 +1,290 @@
+{
+  "sections": {
+    "pdp": {
+      "type": "hydrix-pdp",
+      "blocks": {
+        "b1": {
+          "type": "flavor",
+          "settings": {
+            "name": "Glacier Citrus",
+            "default_active": true,
+            "disabled": false
+          }
+        },
+        "b2": {
+          "type": "flavor",
+          "settings": {
+            "name": "Coming soon",
+            "default_active": false,
+            "disabled": true
+          }
+        },
+        "b3": {
+          "type": "trust",
+          "settings": {
+            "text": "Zero sugar"
+          }
+        },
+        "b4": {
+          "type": "trust",
+          "settings": {
+            "text": "Third-party tested"
+          }
+        },
+        "b5": {
+          "type": "trust",
+          "settings": {
+            "text": "Made in USA"
+          }
+        },
+        "b6": {
+          "type": "benefit",
+          "settings": {
+            "icon": "droplet",
+            "text": "Daily hydration"
+          }
+        },
+        "b7": {
+          "type": "benefit",
+          "settings": {
+            "icon": "bolt",
+            "text": "Energy support"
+          }
+        },
+        "b8": {
+          "type": "benefit",
+          "settings": {
+            "icon": "brain",
+            "text": "Mental clarity"
+          }
+        },
+        "b9": {
+          "type": "benefit",
+          "settings": {
+            "icon": "hexagon",
+            "text": "7 electrolytes"
+          }
+        },
+        "b10": {
+          "type": "benefit",
+          "settings": {
+            "icon": "leaf",
+            "text": "Zero sugar"
+          }
+        },
+        "b11": {
+          "type": "stat",
+          "settings": {
+            "value": "12.5g",
+            "label": "per scoop"
+          }
+        },
+        "b12": {
+          "type": "stat",
+          "settings": {
+            "value": "10",
+            "label": "calories"
+          }
+        },
+        "b13": {
+          "type": "stat",
+          "settings": {
+            "value": "0g",
+            "label": "sugar"
+          }
+        },
+        "b14": {
+          "type": "fact",
+          "settings": {
+            "name": "Calories",
+            "dv": "",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b15": {
+          "type": "fact",
+          "settings": {
+            "name": "Total Carbohydrate 2 g",
+            "dv": "1%",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b16": {
+          "type": "fact",
+          "settings": {
+            "name": "Total Sugars 0 g",
+            "dv": "†",
+            "indent": true,
+            "heavy_rule": false
+          }
+        },
+        "b17": {
+          "type": "fact",
+          "settings": {
+            "name": "Sodium 500 mg",
+            "dv": "22%",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b18": {
+          "type": "fact",
+          "settings": {
+            "name": "Potassium 400 mg",
+            "dv": "9%",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b19": {
+          "type": "fact",
+          "settings": {
+            "name": "Chloride 700 mg",
+            "dv": "30%",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b20": {
+          "type": "fact",
+          "settings": {
+            "name": "Magnesium 100 mg",
+            "dv": "24%",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b21": {
+          "type": "fact",
+          "settings": {
+            "name": "Calcium 60 mg",
+            "dv": "5%",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b22": {
+          "type": "fact",
+          "settings": {
+            "name": "Zinc 2 mg",
+            "dv": "18%",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b23": {
+          "type": "fact",
+          "settings": {
+            "name": "Selenium 10 mcg",
+            "dv": "18%",
+            "indent": false,
+            "heavy_rule": true
+          }
+        },
+        "b24": {
+          "type": "fact",
+          "settings": {
+            "name": "Proprietary Hydration Blend 4.5 g",
+            "dv": "†",
+            "indent": false,
+            "heavy_rule": false
+          }
+        },
+        "b25": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "Scoop",
+            "desc": "One level scoop."
+          }
+        },
+        "b26": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "Mix",
+            "desc": "Into 12–16oz cold water."
+          }
+        },
+        "b27": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "Hydrate",
+            "desc": "Anytime, daily."
+          }
+        },
+        "b28": {
+          "type": "faq",
+          "settings": {
+            "q": "How many servings per tub?",
+            "a": "30 servings — one scoop (12.5 g) each. About a month of daily hydration.",
+            "open": false
+          }
+        },
+        "b29": {
+          "type": "faq",
+          "settings": {
+            "q": "Does it really have zero sugar?",
+            "a": "Yes. 0 g sugar, naturally flavored Glacier Citrus, no artificial junk.",
+            "open": false
+          }
+        },
+        "b30": {
+          "type": "faq",
+          "settings": {
+            "q": "Can I cancel my subscription?",
+            "a": "Anytime. Skip, swap, or cancel from your account in a couple of clicks — no fees.",
+            "open": false
+          }
+        },
+        "b31": {
+          "type": "faq",
+          "settings": {
+            "q": "Is it third-party tested?",
+            "a": "Every batch is third-party tested for purity and label accuracy. Made in the USA.",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6",
+        "b7",
+        "b8",
+        "b9",
+        "b10",
+        "b11",
+        "b12",
+        "b13",
+        "b14",
+        "b15",
+        "b16",
+        "b17",
+        "b18",
+        "b19",
+        "b20",
+        "b21",
+        "b22",
+        "b23",
+        "b24",
+        "b25",
+        "b26",
+        "b27",
+        "b28",
+        "b29",
+        "b30",
+        "b31"
+      ]
+    }
+  },
+  "order": [
+    "pdp"
+  ]
+}

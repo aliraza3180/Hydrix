@@ -1,0 +1,164 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hydrix-hero",
+      "settings": {
+        "layout": "centered",
+        "anchor": "sci-hero",
+        "eyebrow": "THE SCIENCE",
+        "heading": "The science of full-spectrum hydration.",
+        "subheading": "Seven electrolytes and cellular co-factors, precisely dosed for absorption — not marketing.",
+        "action_type": "none",
+        "show_counter": false,
+        "show_beam": true,
+        "show_arc": true,
+        "heading_color": "#FFFFFF",
+        "accent": "#8FD9FF",
+        "padding_top": 150,
+        "padding_bottom": 70,
+        "bg": "#0a0b0f",
+        "body_color": "#8E96A3",
+        "accent_hover": "#BDE8FF",
+        "border": "#FFFFFF14"
+      }
+    },
+    "electro": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "THE FORMULA",
+        "heading": "Seven essential electrolytes",
+        "subheading": "Clinically dosed per serving — what your body actually loses, restored.",
+        "accent": "#8FD9FF",
+        "min_card_width": 240,
+        "columns": "4",
+        "padding": 88,
+        "bg": "#12151d",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "border": "#FFFFFF14",
+        "card_bg": "#FFFFFF05"
+      },
+      "blocks": {
+        "b1": { "type": "card", "settings": { "icon": "droplet", "title": "Sodium", "amount": "500 mg", "desc": "Primary hydration driver." } },
+        "b2": { "type": "card", "settings": { "icon": "bolt", "title": "Potassium", "amount": "400 mg", "desc": "Cellular electrolyte balance." } },
+        "b3": { "type": "card", "settings": { "icon": "globe", "title": "Chloride", "amount": "700 mg", "desc": "Fluid balance." } },
+        "b4": { "type": "card", "settings": { "icon": "brain", "title": "Magnesium", "amount": "100 mg", "desc": "Recovery + nervous system." } },
+        "b5": { "type": "card", "settings": { "icon": "shield", "title": "Calcium", "amount": "60 mg", "desc": "Muscle contraction." } },
+        "b6": { "type": "card", "settings": { "icon": "plus", "title": "Zinc", "amount": "2 mg", "desc": "Immune & antioxidant support." } },
+        "b7": { "type": "card", "settings": { "icon": "star", "title": "Selenium", "amount": "10 mcg", "desc": "Antioxidant defense." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7"]
+    },
+    "absorb": {
+      "type": "hydrix-split",
+      "settings": {
+        "image_first": true,
+        "eyebrow": "ABSORPTION",
+        "eyebrow_color": "#A8E9FF",
+        "heading": "Hydration is about uptake, not just intake.",
+        "body": "The right sodium-to-glucose ratio and trace minerals help your cells actually absorb the water you drink — so you feel it, fast. It's why a full-spectrum formula beats water or sugar-loaded sports drinks.",
+        "art_color_1": "#BDE8FF4D",
+        "art_color_2": "#2D6BFF52",
+        "padding": 90,
+        "bg": "#090d17",
+        "accent": "#8FD9FF",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "border": "#FFFFFF14"
+      },
+      "blocks": {
+        "b1": { "type": "stat", "settings": { "value": "7", "label": "electrolytes" } },
+        "b2": { "type": "stat", "settings": { "value": "0g", "label": "sugar" } },
+        "b3": { "type": "stat", "settings": { "value": "3rd", "label": "party tested" } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    },
+    "blend": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "BEYOND ELECTROLYTES",
+        "heading": "The cellular co-factor blend",
+        "subheading": "A 4.5g proprietary blend that moves water where your body needs it.",
+        "accent": "#8FD9FF",
+        "min_card_width": 260,
+        "columns": "5",
+        "padding": 88,
+        "bg": "#0a0b0f",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "border": "#FFFFFF14",
+        "card_bg": "#FFFFFF05"
+      },
+      "blocks": {
+        "b1": { "type": "card", "settings": { "icon": "leaf", "title": "Coconut Water Powder", "desc": "Natural potassium and light electrolytes." } },
+        "b2": { "type": "card", "settings": { "icon": "plus", "title": "Taurine", "desc": "Supports cell volume and hydration." } },
+        "b3": { "type": "card", "settings": { "icon": "hexagon", "title": "Inositol", "desc": "Cellular signaling and fluid balance." } },
+        "b4": { "type": "card", "settings": { "icon": "globe", "title": "AquaMin® Sea Minerals", "desc": "72 trace minerals from red algae." } },
+        "b5": { "type": "card", "settings": { "icon": "beaker", "title": "Ioniplex®", "desc": "Full-spectrum fulvic trace minerals." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5"]
+    },
+    "standards": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "STANDARDS",
+        "heading": "Clean, tested, sourced",
+        "accent": "#8FD9FF",
+        "min_card_width": 280,
+        "padding": 88,
+        "bg": "#12151d",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "border": "#FFFFFF14",
+        "card_bg": "#FFFFFF05"
+      },
+      "blocks": {
+        "b1": { "type": "card", "settings": { "title": "Third-party tested", "desc": "Every batch verified for purity and potency.", "icon": "beaker" } },
+        "b2": { "type": "card", "settings": { "title": "Clean label", "desc": "No sugar, no artificial dyes, no junk.", "icon": "leaf" } },
+        "b3": { "type": "card", "settings": { "title": "Responsibly sourced", "desc": "Premium minerals from trusted suppliers.", "icon": "globe" } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    },
+    "faq": {
+      "type": "hydrix-faq",
+      "settings": {
+        "heading": "Science FAQ",
+        "accent": "#8FD9FF",
+        "bg": "#090d17",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "border": "#FFFFFF14"
+      },
+      "blocks": {
+        "b1": { "type": "qa", "settings": { "question": "Why electrolytes and not just water?", "answer": "Water without electrolytes can dilute your system; minerals drive absorption and cellular hydration." } },
+        "b2": { "type": "qa", "settings": { "question": "Is it third-party tested?", "answer": "Yes — every batch is independently tested for purity and label accuracy." } },
+        "b3": { "type": "qa", "settings": { "question": "What is the Proprietary Hydration Blend?", "answer": "Coconut Water Powder, Taurine, Inositol, AquaMin® Sea Minerals, and Ioniplex® for trace-mineral support." } },
+        "b4": { "type": "qa", "settings": { "question": "Will it spike my blood sugar?", "answer": "No. HYDRIX is zero sugar and won't spike blood glucose." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"]
+    },
+    "cta": {
+      "type": "hydrix-cta-beam",
+      "settings": {
+        "anchor": "sci-cta",
+        "eyebrow": "ENGINEERED TO BE FELT",
+        "heading": "Hydration, engineered.",
+        "subheading": "Start with DAILY — the full-spectrum system.",
+        "action_type": "button",
+        "button_label": "Shop DAILY",
+        "button_url": "/pages/product-daily",
+        "show_counter": false,
+        "show_beam": true,
+        "show_arc": true,
+        "padding": 120,
+        "bg": "#0a0b0f",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#2D6BFF",
+        "accent_hover": "#3B7EFF",
+        "border": "#FFFFFF14"
+      }
+    }
+  },
+  "order": ["hero", "electro", "absorb", "blend", "standards", "faq", "cta"]
+}

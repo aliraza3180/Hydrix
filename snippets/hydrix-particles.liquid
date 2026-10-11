@@ -1,0 +1,18 @@
+{%- comment -%}
+  HYDRIX — rising particle field (blue dots that drift upward), matching the
+  reference homepage hero / final CTA. Pure CSS animation (hxDrift in hydrix.css).
+  Usage: {% render 'hydrix-particles', count: 18 %}
+{%- endcomment -%}
+{%- assign n = count | default: 18 -%}
+<div class="hx-particles" aria-hidden="true">
+  {%- for i in (1..n) -%}
+    {%- assign left = i | times: 53 | modulo: 100 -%}
+    {%- assign size = i | modulo: 3 | plus: 2 -%}
+    {%- assign delay = i | times: 7 | modulo: 120 | times: 0.1 -%}
+    {%- assign dur = i | modulo: 5 | plus: 9 -%}
+    {%- assign dx = i | times: 17 | modulo: 80 | minus: 40 -%}
+    {%- assign dy = i | modulo: 4 | times: 60 | plus: 180 -%}
+    {%- assign bottom = i | times: 11 | modulo: 40 -%}
+    <span class="hx-particle" style="left:{{ left }}%;bottom:{{ bottom }}%;width:{{ size }}px;height:{{ size }}px;--dx:{{ dx }}px;--dy:-{{ dy }}px;animation-delay:{{ delay }}s;animation-duration:{{ dur }}s"></span>
+  {%- endfor -%}
+</div>

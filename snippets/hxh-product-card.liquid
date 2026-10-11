@@ -1,0 +1,68 @@
+{%- comment -%}
+  HYDRIX — premium product card.
+  Pass a real `product` to render an actual card (image, title, price, working Add-to-cart).
+  Omit `product` to render a placeholder card from manual fields (title/flavor/price + CSS bottle).
+  Params: product, block_attrs, badge, title, flavor, price, compare_price, rating,
+          accent, rim_top, image, url(button_url), button_label, atc_label
+  Styling is scoped per-section in hxh-lineup.liquid (.hxh-pl__* / .hxh-bottle).
+{%- endcomment -%}
+{%- liquid
+  assign acc = accent | default: '#3B82F6'
+  assign rim = rim_top | default: '#8FD9FF'
+  assign atc = atc_label | default: 'Add to cart'
+-%}
+<article class="hxh-pl__card" style="--p-accent:{{ acc }};--p-rim:{{ rim }}" {{ block_attrs }}>
+  {%- if product != blank and product != empty -%}
+    {%- assign variant = product.selected_or_first_available_variant -%}
+    {%- assign on_sale = false -%}
+    {%- if product.compare_at_price > product.price -%}{%- assign on_sale = true -%}{%- endif -%}
+    <a class="hxh-pl__visual" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+      {%- if on_sale -%}<span class="hxh-pl__badge">Sale</span>{%- elsif badge != blank -%}<span class="hxh-pl__badge">{{ badge }}</span>{%- endif -%}
+      <span class="hxh-pl__glow"></span>
+      {%- if product.featured_image -%}
+        <img class="hxh-pl__img" src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.title | escape }}" width="300" height="300" loading="lazy">
+      {%- else -%}
+        {%- render 'hxh-bottle', name: product.title -%}
+      {%- endif -%}
+    </a>
+    <div class="hxh-pl__body">
+      <div class="hxh-pl__top">
+        <h3 class="hxh-pl__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+        {%- if rating != blank -%}<span class="hxh-pl__rating"><b>★</b> {{ rating }}</span>{%- endif -%}
+      </div>
+      {%- if flavor != blank -%}<div class="hxh-pl__flavor">{{ flavor }}</div>{%- endif -%}
+      <div class="hxh-pl__foot">
+        <div class="hxh-pl__price">{{ product.price | money }}{%- if on_sale -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}</div>
+        {%- if variant -%}
+          <form method="post" action="{{ routes.cart_add_url }}" data-hx-atc accept-charset="UTF-8">
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="hxh-pl__btn"{% unless variant.available %} disabled{% endunless %}>{% if variant.available %}{{ atc }}{% else %}Sold out{% endif %}</button>
+          </form>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- else -%}
+    {%- assign card_url = url | default: '#' -%}
+    <a class="hxh-pl__visual" href="{{ card_url }}" aria-label="{{ title | escape }}">
+      {%- if badge != blank -%}<span class="hxh-pl__badge">{{ badge }}</span>{%- endif -%}
+      <span class="hxh-pl__glow"></span>
+      {%- if image != blank -%}
+        <img class="hxh-pl__img" src="{{ image | image_url: width: 600 }}" alt="{{ title | escape }}" width="300" height="300" loading="lazy">
+      {%- else -%}
+        {%- render 'hxh-bottle', name: title -%}
+      {%- endif -%}
+    </a>
+    <div class="hxh-pl__body">
+      <div class="hxh-pl__top">
+        <h3 class="hxh-pl__title">{{ title }}</h3>
+        {%- if rating != blank -%}<span class="hxh-pl__rating"><b>★</b> {{ rating }}</span>{%- endif -%}
+      </div>
+      {%- if flavor != blank -%}<div class="hxh-pl__flavor">{{ flavor }}</div>{%- endif -%}
+      <div class="hxh-pl__foot">
+        <div class="hxh-pl__price">{{ price }}{%- if compare_price != blank -%}<s>{{ compare_price }}</s>{%- endif -%}</div>
+        <a class="hxh-pl__btn" href="{{ card_url }}">{{ button_label | default: 'Shop' }}</a>
+      </div>
+    </div>
+  {%- endif -%}
+</article>

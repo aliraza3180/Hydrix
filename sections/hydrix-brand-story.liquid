@@ -1,0 +1,68 @@
+{%- comment -%} HYDRIX — Brand story (monogram watermark + giant tagline) {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-story" style="
+  --hx-bg: {{ s.bg }};
+  --hx-accent: {{ s.accent }};
+  --hx-body: {{ s.body_color }};
+  padding: {{ s.padding }}px 24px; text-align: center;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  {%- if s.watermark != blank -%}
+    <img src="{{ s.watermark | image_url: width: 800 }}" alt="" class="hx-monogram-watermark" style="opacity:{{ s.watermark_opacity | divided_by: 100.0 }}">
+  {%- elsif s.use_default_watermark -%}
+    <img src="{{ 'hydrix-monogram-white.png' | asset_url }}" alt="" class="hx-monogram-watermark" style="opacity:{{ s.watermark_opacity | divided_by: 100.0 }}">
+  {%- endif -%}
+  {%- if s.show_beam -%}<div class="hx-beam hx-beam--short" style="height:30%"></div>{%- endif -%}
+  <div class="hx-wrap--narrow scroll-trigger animate--slide-in">
+    {%- if s.eyebrow != blank -%}<div class="hx-eyebrow" style="margin-bottom:14px">{{ s.eyebrow }}</div>{%- endif -%}
+    <h2 class="hx-tagline hx-story__tagline" style="color:{{ s.accent }}">{{ s.tagline }}</h2>
+    {%- if s.body != blank -%}<p class="hx-story__body" style="color:{{ s.body_color }}">{{ s.body }}</p>{%- endif -%}
+    {%- if s.button_label != blank -%}
+      <a href="{{ s.button_url }}" class="hx-btn hx-btn--ghost" style="margin-top:28px">{{ s.button_label }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-wrap--narrow { position: relative; max-width: 720px; margin: 0 auto; }
+  #shopify-section-{{ section.id }} .hx-story__tagline {
+    font-family: var(--hx-font-display); font-weight: 700;
+    font-size: clamp(34px, 6vw, 68px); letter-spacing: -.01em; text-transform: lowercase;
+  }
+  #shopify-section-{{ section.id }} .hx-story__body {
+    margin-top: 26px; font-size: clamp(16px, 2vw, 19px); line-height: 1.7;
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Brand Story",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "tagline", "label": "Tagline (large)", "default": "hydration. reimagined." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "We started HYDRIX because \"drink more water\" was never the answer. Hydration is electrolytes, minerals, and absorption — engineered, tested, and made to be felt." },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_url", "label": "Button link" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 60, "max": 160, "step": 4, "unit": "px", "default": 120 },
+    { "type": "header", "content": "Watermark & beam" },
+    { "type": "image_picker", "id": "watermark", "label": "Monogram watermark" },
+    { "type": "checkbox", "id": "use_default_watermark", "label": "Use bundled HX monogram if none picked", "default": true },
+    { "type": "range", "id": "watermark_opacity", "label": "Watermark opacity", "min": 2, "max": 20, "step": 1, "unit": "%", "default": 5 },
+    { "type": "checkbox", "id": "show_beam", "label": "Show beam", "default": true },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "accent", "label": "Tagline", "default": "#2D6BFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" }
+  ],
+  "presets": [{ "name": "HYDRIX Brand Story" }]
+}
+{% endschema %}

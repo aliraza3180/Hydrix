@@ -1,0 +1,197 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'hydrix.js' | asset_url }}" defer="defer"></script>
+{%- comment -%} HYDRIX — premium review slider (scroll-snap + arrows + dots). {%- endcomment -%}
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hxh-rs" data-hx-slider {% if s.autoplay > 0 %}data-autoplay="{{ s.autoplay | times: 1000 }}"{% endif %} style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-border:{{ s.border }};padding:{{ s.padding }}px 0;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hxh-rs__head hx-wrap scroll-trigger animate--fade-in">
+    <div class="hxh-rs__head-left">
+      {%- if s.eyebrow != blank -%}<div class="hxh-rs__eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+      {%- if s.heading != blank or s.heading_accent != blank -%}
+        <h2 class="hxh-rs__h2">{{ s.heading }}<span class="hxh-rs__accent">{{ s.heading_accent }}</span></h2>
+      {%- endif -%}
+    </div>
+    <div class="hxh-rs__head-right">
+      {%- if s.rating_summary != blank -%}
+        <div class="hxh-rs__stars" aria-hidden="true">★★★★★</div>
+        <div class="hxh-rs__summary">{{ s.rating_summary }}</div>
+      {%- endif -%}
+      <div class="hxh-rs__nav">
+        <button class="hxh-rs__arrow" data-hx-prev type="button" aria-label="Previous reviews">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <button class="hxh-rs__arrow" data-hx-next type="button" aria-label="Next reviews">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hxh-rs__slider scroll-trigger animate--slide-in">
+    <div class="hxh-rs__track" data-hx-track>
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <article class="hxh-rs__card" {{ block.shopify_attributes }}>
+          <div class="hxh-rs__card-stars" aria-label="{{ b.rating | default: 5 }} out of 5">
+            {%- assign r = b.rating | default: 5 -%}
+            {%- for i in (1..5) -%}<span class="{% if i <= r %}is-on{% endif %}">★</span>{%- endfor -%}
+          </div>
+          {%- if b.quote != blank -%}<p class="hxh-rs__quote">{{ b.quote }}</p>{%- endif -%}
+          <div class="hxh-rs__author">
+            {%- if b.avatar != blank -%}
+              <img class="hxh-rs__avatar" src="{{ b.avatar | image_url: width: 96 }}" alt="{{ b.name }}" width="44" height="44" loading="lazy">
+            {%- else -%}
+              <span class="hxh-rs__avatar hxh-rs__avatar--ph" aria-hidden="true">{{ b.name | slice: 0 }}</span>
+            {%- endif -%}
+            <div class="hxh-rs__who">
+              <div class="hxh-rs__name">{{ b.name }}</div>
+              {%- if b.meta != blank -%}<div class="hxh-rs__meta">{{ b.meta }}</div>{%- endif -%}
+            </div>
+            {%- if b.verified -%}
+              <span class="hxh-rs__verified" title="Verified buyer">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </span>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="hxh-rs__dots hx-wrap" data-hx-dots aria-hidden="true"></div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-rs__head {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    margin-bottom: clamp(28px, 4vw, 44px);
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__eyebrow {
+    font-family: var(--hx-font-sora); font-weight: 500; font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body);
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__h2 {
+    font-family: var(--hx-font-sora); font-weight: 600; letter-spacing: -.025em;
+    font-size: clamp(30px, 4.2vw, 50px); line-height: 1.05; margin-top: 14px; color: var(--hx-heading);
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__accent {
+    background: linear-gradient(135deg, #7DD3F0 0%, #4F96F5 35%, var(--hx-accent) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__head-right { display: flex; align-items: center; gap: 18px; }
+  #shopify-section-{{ section.id }} .hxh-rs__stars { color: var(--hx-accent); letter-spacing: 2px; font-size: 15px; }
+  #shopify-section-{{ section.id }} .hxh-rs__summary { color: var(--hx-body); font-size: 13px; margin-top: 2px; }
+  #shopify-section-{{ section.id }} .hxh-rs__nav { display: flex; gap: 10px; }
+  #shopify-section-{{ section.id }} .hxh-rs__arrow {
+    width: 44px; height: 44px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center;
+    color: var(--hx-heading); cursor: pointer;
+    background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    border: 1px solid rgba(255,255,255,.10); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    transition: border-color .2s, background .2s, opacity .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__arrow:hover { border-color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hxh-rs__arrow:disabled { opacity: .35; cursor: default; }
+
+  #shopify-section-{{ section.id }} .hxh-rs__track {
+    display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-padding-left: max(24px, calc((100vw - var(--hx-content-max)) / 2 + 24px));
+    padding: 6px max(24px, calc((100vw - var(--hx-content-max)) / 2 + 24px));
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__track::-webkit-scrollbar { display: none; }
+  #shopify-section-{{ section.id }} .hxh-rs__card {
+    scroll-snap-align: start; flex: 0 0 clamp(280px, 30vw, 380px); box-sizing: border-box;
+    border-radius: 28px; padding: 30px;
+    background: linear-gradient(180deg, rgba(255,255,255,.045) 0%, rgba(255,255,255,.015) 100%);
+    border: 1px solid rgba(255,255,255,.08); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    display: flex; flex-direction: column;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__card:hover {
+    border-color: var(--hx-accent); box-shadow: 0 0 50px rgba(59,130,246,.14); transform: translateY(-2px);
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__card-stars { letter-spacing: 3px; font-size: 15px; }
+  #shopify-section-{{ section.id }} .hxh-rs__card-stars span { color: rgba(255,255,255,.16); }
+  #shopify-section-{{ section.id }} .hxh-rs__card-stars span.is-on { color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hxh-rs__quote {
+    margin: 16px 0 0; color: #E6EAF0; font-size: 16px; line-height: 1.6; flex: 1;
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__author { margin-top: 22px; display: flex; align-items: center; gap: 12px; }
+  #shopify-section-{{ section.id }} .hxh-rs__avatar {
+    width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; display: block;
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__avatar--ph {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--hx-font-sora); font-weight: 600; font-size: 16px; color: #fff; text-transform: uppercase;
+    background: linear-gradient(135deg, #4F96F5, var(--hx-accent)); border: 1px solid rgba(255,255,255,.12);
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__name { font-family: var(--hx-font-sora); font-weight: 600; font-size: 14.5px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hxh-rs__meta { color: var(--hx-body); font-size: 12.5px; margin-top: 1px; }
+  #shopify-section-{{ section.id }} .hxh-rs__verified {
+    margin-left: auto; width: 22px; height: 22px; border-radius: 50%; flex: none;
+    display: inline-flex; align-items: center; justify-content: center; color: #fff; background: var(--hx-accent);
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__dots { display: flex; justify-content: center; gap: 8px; margin-top: 26px; }
+  #shopify-section-{{ section.id }} .hxh-rs__dot {
+    width: 7px; height: 7px; border-radius: 50%; border: none; cursor: pointer; padding: 0;
+    background: rgba(255,255,255,.18); transition: background .2s, width .2s;
+  }
+  #shopify-section-{{ section.id }} .hxh-rs__dot.is-active { background: var(--hx-accent); width: 22px; border-radius: 7px; }
+  @media (max-width: 600px) {
+    #shopify-section-{{ section.id }} .hxh-rs__card { flex-basis: 82vw; }
+    #shopify-section-{{ section.id }} .hxh-rs__track { scroll-padding-left: 24px; padding-left: 24px; padding-right: 24px; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Review Slider",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "REVIEWS" },
+    { "type": "text", "id": "heading", "label": "Heading (plain)", "default": "Loved by " },
+    { "type": "text", "id": "heading_accent", "label": "Heading (accent)", "default": "high performers." },
+    { "type": "text", "id": "rating_summary", "label": "Rating summary", "default": "4.9 / 5 · 2,300+ reviews" },
+    { "type": "range", "id": "autoplay", "label": "Autoplay interval (0 = off)", "min": 0, "max": 10, "step": 1, "unit": "s", "default": 0 },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 120, "step": 2, "unit": "px", "default": 88 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent / stars", "default": "#3B82F6" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "blocks": [
+    { "type": "review", "name": "Review", "settings": [
+      { "type": "range", "id": "rating", "label": "Star rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+      { "type": "textarea", "id": "quote", "label": "Quote", "default": "The only electrolyte that doesn't taste like candy. Clean, crisp, and I feel it by mid-afternoon." },
+      { "type": "text", "id": "name", "label": "Name", "default": "Maya R." },
+      { "type": "text", "id": "meta", "label": "Meta / role", "default": "Marathoner" },
+      { "type": "checkbox", "id": "verified", "label": "Verified badge", "default": true },
+      { "type": "image_picker", "id": "avatar", "label": "Avatar (optional)" }
+    ]}
+  ],
+  "presets": [
+    { "name": "home", "settings": {
+        "eyebrow": "REVIEWS", "heading": "Loved by ", "heading_accent": "high performers.",
+        "rating_summary": "4.9 / 5 · 2,300+ reviews", "autoplay": 0
+      },
+      "blocks": [
+        { "type": "review", "settings": { "rating": 5, "quote": "The only electrolyte that doesn't taste like candy. Clean, crisp, and I feel it by mid-afternoon.", "name": "Maya R.", "meta": "Marathoner", "verified": true } },
+        { "type": "review", "settings": { "rating": 5, "quote": "Replaced three supplements with one scoop. The dark packaging feels as premium as the formula.", "name": "Devon K.", "meta": "CrossFit coach", "verified": true } },
+        { "type": "review", "settings": { "rating": 5, "quote": "Zero sugar, no jitters, no crash. My training recovery is noticeably better since I started.", "name": "Priya S.", "meta": "Cyclist", "verified": true } },
+        { "type": "review", "settings": { "rating": 5, "quote": "Steady energy without the spike. It's the first thing I reach for before an early session.", "name": "Marcus T.", "meta": "Powerlifter", "verified": true } },
+        { "type": "review", "settings": { "rating": 5, "quote": "Mixes clear, tastes clean, and actually keeps me hydrated on long rides in the heat.", "name": "Elena V.", "meta": "Triathlete", "verified": true } },
+        { "type": "review", "settings": { "rating": 5, "quote": "Finally a hydration brand that looks and performs like it belongs in my routine.", "name": "Jordan P.", "meta": "Verified buyer", "verified": true } }
+      ]
+    }
+  ]
+}
+{% endschema %}

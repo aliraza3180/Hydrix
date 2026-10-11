@@ -1,0 +1,184 @@
+{
+  "sections": {
+    "main": {
+      "type": "hydrix-main-product",
+      "blocks": {
+        "f1": { "type": "feature", "settings": { "title": "7 essential electrolytes", "text": "Clinically dosed for real absorption." } },
+        "f2": { "type": "feature", "settings": { "title": "Zero sugar", "text": "No junk, naturally flavored." } },
+        "f3": { "type": "feature", "settings": { "title": "Third-party tested", "text": "Every batch, for purity and potency." } }
+      },
+      "block_order": ["f1", "f2", "f3"],
+      "settings": {
+        "show_vendor": false,
+        "tagline": "Full-spectrum hydration",
+        "rating": "4.9 (2,300+ reviews)",
+        "badge": "Bestseller",
+        "atc_label": "Add to cart",
+        "show_dynamic_checkout": true,
+        "show_description": true,
+        "trust_line": "Free shipping over $50 · 30-day money-back guarantee",
+        "padding_top": 56,
+        "padding_bottom": 64,
+        "bg": "#0a0b0f",
+        "stage_bg": "#07080b",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#3b82f6",
+        "accent_hover": "#5b97f8",
+        "border": "#ffffff14"
+      }
+    },
+    "icons": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "WHAT IT DOES",
+        "heading": "Six systems. One scoop.",
+        "center_cards": true,
+        "min_card_width": 180,
+        "columns": "6",
+        "padding": 72,
+        "bg": "#12151d",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#3b82f6",
+        "border": "#ffffff14",
+        "card_bg": "#ffffff05"
+      },
+      "blocks": {
+        "i1": { "type": "card", "settings": { "icon": "droplet", "title": "Daily Hydration", "desc": "Replenish vital minerals lost daily." } },
+        "i2": { "type": "card", "settings": { "icon": "bolt", "title": "Energy Support", "desc": "Sustained focus without the crash." } },
+        "i3": { "type": "card", "settings": { "icon": "brain", "title": "Mental Clarity", "desc": "Optimize cognitive performance." } },
+        "i4": { "type": "card", "settings": { "icon": "hexagon", "title": "Electrolytes", "desc": "7 essential technical minerals." } },
+        "i5": { "type": "card", "settings": { "icon": "plus", "title": "Cellular Hydration", "desc": "Micro-target nutrient delivery." } },
+        "i6": { "type": "card", "settings": { "icon": "leaf", "title": "Zero Sugar", "desc": "Pure metabolic optimization." } }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5", "i6"]
+    },
+    "facts": {
+      "type": "hydrix-supplement-facts",
+      "settings": {
+        "heading": "Why ",
+        "heading_accent": "DAILY",
+        "heading_after": "?",
+        "body": "Most hydration products are just flavored salt water. DAILY uses a full-spectrum matrix to hydrate at a cellular level, fueling mitochondrial efficiency.",
+        "show_watermark": true,
+        "facts_title": "Supplement Facts",
+        "serving_size": "1 Scoop (12.5 g)",
+        "servings": "30",
+        "ingredients": "Coconut Water Powder, Taurine, Inositol, AquaMin® Sea Minerals, Ioniplex®",
+        "footnote": "* Percent Daily Values are based on a 2,000 calorie diet. † Daily Value not established.",
+        "padding": 80,
+        "bg": "#090d17",
+        "card_bg": "#0d1018",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#3b82f6",
+        "border": "#ffffff14",
+        "facts_bg": "#f5f7fa",
+        "facts_ink": "#0a0b0f",
+        "facts_rule": "#20242a"
+      },
+      "blocks": {
+        "c1": { "type": "fact", "settings": { "label": "Calories", "amount": "10" } },
+        "c2": { "type": "fact", "settings": { "label": "Total Carbohydrate", "amount": "2 g", "dv": "1%*" } },
+        "c3": { "type": "fact", "settings": { "label": "Total Sugars", "amount": "0 g", "dv": "†" } },
+        "c4": { "type": "fact", "settings": { "label": "Sodium (as sea salt)", "amount": "500 mg", "dv": "22%" } },
+        "c5": { "type": "fact", "settings": { "label": "Potassium", "amount": "400 mg", "dv": "9%" } },
+        "c6": { "type": "fact", "settings": { "label": "Magnesium", "amount": "100 mg", "dv": "24%" } },
+        "c7": { "type": "fact", "settings": { "label": "Calcium", "amount": "60 mg", "dv": "5%" } },
+        "c8": { "type": "fact", "settings": { "label": "Zinc", "amount": "2 mg", "dv": "18%" } },
+        "c9": { "type": "fact", "settings": { "label": "Proprietary Hydration Blend", "amount": "4.5 g", "dv": "†", "bold": true } },
+        "t1": { "type": "trust", "settings": { "icon": "beaker", "title": "Clean ingredients", "text": "No artificial dyes, fillers, or binders. Ever." } },
+        "t2": { "type": "trust", "settings": { "icon": "shield", "title": "Lab tested", "text": "Every batch is third-party tested for purity." } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "t1", "t2"]
+    },
+    "reviews": {
+      "type": "hxh-reviews-slider",
+      "settings": {
+        "eyebrow": "REVIEWS",
+        "heading": "Loved by",
+        "heading_accent": "high performers.",
+        "rating_summary": "4.9 / 5 · 2,300+ reviews",
+        "autoplay": 0,
+        "padding": 80,
+        "bg": "#0a0b0f",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#3b82f6",
+        "border": "#ffffff14"
+      },
+      "blocks": {
+        "r1": { "type": "review", "settings": { "rating": 5, "quote": "The only electrolyte that doesn't taste like candy. I feel it by mid-afternoon.", "name": "Maya R.", "meta": "Marathoner", "verified": true } },
+        "r2": { "type": "review", "settings": { "rating": 5, "quote": "Replaced three supplements with one scoop. Steady energy, no crash.", "name": "Devon K.", "meta": "CrossFit coach", "verified": true } },
+        "r3": { "type": "review", "settings": { "rating": 5, "quote": "Zero sugar, no jitters. My recovery is noticeably better.", "name": "Priya S.", "meta": "Cyclist", "verified": true } },
+        "r4": { "type": "review", "settings": { "rating": 5, "quote": "Mixes clear, tastes clean, keeps me hydrated on long rides.", "name": "Elena V.", "meta": "Triathlete", "verified": true } }
+      },
+      "block_order": ["r1", "r2", "r3", "r4"]
+    },
+    "pairs": {
+      "type": "hxh-lineup",
+      "settings": {
+        "eyebrow": "PAIRS WELL WITH",
+        "heading": "Complete the ",
+        "heading_accent": "system.",
+        "descriptor": "Built to stack. Add a formula for how you train and recover.",
+        "columns": "2",
+        "atc_label": "Quick add",
+        "button_label": "Quick add",
+        "padding": 80,
+        "bg": "#12151d",
+        "stage_bg": "#07080b",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#3b82f6",
+        "accent_hover": "#5b97f8",
+        "border": "#ffffff14"
+      },
+      "blocks": {
+        "p1": { "type": "product", "settings": { "badge": "Nootropic", "title": "FOCUS", "flavor": "Cognitive enhancement matrix for deep work.", "price": "$55", "rating": "4.8", "accent": "#22d37d", "rim_top": "#7dffc2", "button_label": "Quick add", "button_url": "#" } },
+        "p2": { "type": "product", "settings": { "badge": "Post-Metabolic", "title": "RECOVER", "flavor": "Advanced muscle protein synthesis trigger.", "price": "$65", "rating": "4.9", "accent": "#ff6b1a", "rim_top": "#ffbc66", "button_label": "Quick add", "button_url": "#" } }
+      },
+      "block_order": ["p1", "p2"]
+    },
+    "faq": {
+      "type": "hydrix-faq",
+      "settings": {
+        "heading": "Questions, answered",
+        "bg": "#090d17",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#3b82f6",
+        "border": "#ffffff14"
+      },
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "How do I use it?", "answer": "One scoop in 12–16oz of cold water, once daily — any time you need to hydrate." } },
+        "q2": { "type": "qa", "settings": { "question": "When will I feel it?", "answer": "Most people notice steadier energy and focus within the first few days of daily use." } },
+        "q3": { "type": "qa", "settings": { "question": "Is it third-party tested?", "answer": "Yes — every batch is independently tested for purity, potency, and label accuracy." } },
+        "q4": { "type": "qa", "settings": { "question": "What's your return policy?", "answer": "Love it or your money back — reach out within 30 days for a full refund." } }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"]
+    },
+    "newsletter": {
+      "type": "hydrix-newsletter-banner",
+      "settings": {
+        "eyebrow": "STAY IN THE LOOP",
+        "heading": "Get launch news first.",
+        "subheading": "New drops, the science, and early-access perks — straight to your inbox.",
+        "email_placeholder": "your@email.com",
+        "button_label": "Subscribe",
+        "email_tag": "newsletter",
+        "success_text": "You're subscribed. Watch your inbox.",
+        "microcopy": "No spam. Unsubscribe anytime.",
+        "padding": 72,
+        "bg": "#0a0b0f",
+        "heading_color": "#ffffff",
+        "body_color": "#8e96a3",
+        "accent": "#3b82f6",
+        "accent_hover": "#5b97f8",
+        "border": "#ffffff14"
+      }
+    }
+  },
+  "order": ["main", "icons", "facts", "reviews", "pairs", "faq", "newsletter"]
+}

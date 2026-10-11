@@ -1,0 +1,129 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+{%- comment -%} HYDRIX — hxh-athletes. "Worn by those who push." 3 image cards. {%- endcomment -%}
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hxh-athletes" style="--hx-bg:{{ s.bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-accent-hover:{{ s.accent_hover }};--hx-border:{{ s.border }};padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    <div class="hxh-athletes__head scroll-trigger animate--slide-in">
+      {%- if s.eyebrow != blank -%}<div class="hxh-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+      <h2 class="hxh-h2">{{ s.heading }}{%- if s.heading_accent != blank -%}<span class="hxh-h2__accent"> {{ s.heading_accent }}</span>{%- endif -%}</h2>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="hxh-athletes__grid scroll-trigger animate--slide-in">
+        {%- for block in section.blocks -%}
+          <article class="hxh-tile" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <img class="hxh-tile__img" src="{{ block.settings.image | image_url: width: 900 }}" alt="{{ block.settings.image.alt | default: block.settings.label | escape }}" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}" loading="lazy">
+            {%- endif -%}
+            <span class="hxh-tile__overlay"></span>
+            {%- if block.settings.label != blank -%}
+              <span class="hxh-tile__label">{{ block.settings.label }}</span>
+            {%- endif -%}
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-athletes__head { margin-bottom: clamp(36px, 5vw, 52px); }
+  #shopify-section-{{ section.id }} .hxh-eyebrow {
+    font-family: var(--hx-font-sora); font-weight: 500; font-size: 11px;
+    letter-spacing: .22em; text-transform: uppercase; color: var(--hx-body);
+  }
+  #shopify-section-{{ section.id }} .hxh-h2 {
+    font-family: var(--hx-font-sora); font-weight: 600;
+    font-size: clamp(32px, 4.4vw, 52px); line-height: 1.04; letter-spacing: -.025em;
+    color: var(--hx-heading); margin: 14px 0 0; max-width: 14ch;
+  }
+  #shopify-section-{{ section.id }} .hxh-h2__accent { background: linear-gradient(135deg, #7DD3F0 0%, #4F96F5 35%, var(--hx-accent) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #shopify-section-{{ section.id }} .hxh-athletes__grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+  }
+  #shopify-section-{{ section.id }} .hxh-tile {
+    position: relative; aspect-ratio: 3 / 4; border-radius: 32px; overflow: hidden;
+    background: linear-gradient(180deg, rgba(255,255,255,.04) 0%, rgba(255,255,255,.015) 100%);
+    border: 1px solid rgba(255,255,255,.08);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  #shopify-section-{{ section.id }} .hxh-tile__img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  #shopify-section-{{ section.id }} .hxh-tile__overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, var(--hx-bg) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
+  }
+  #shopify-section-{{ section.id }} .hxh-tile__label {
+    position: absolute; left: 26px; bottom: 26px; z-index: 1;
+    font-family: var(--hx-font-sora); font-weight: 600; font-size: 16px;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--hx-heading);
+  }
+  @media (max-width: 820px) {
+    #shopify-section-{{ section.id }} .hxh-athletes__grid { grid-template-columns: 1fr; }
+    #shopify-section-{{ section.id }} .hxh-tile { aspect-ratio: 16 / 11; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HXH Athletes",
+  "tag": "section",
+  "class": "hxh-athletes-section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Header" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "BUILT FOR HIGH PERFORMERS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Worn by those who push." },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent (colored, optional)", "default": "" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding", "label": "Padding (top & bottom)", "min": 40, "max": 160, "step": 2, "unit": "px", "default": 96 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading text", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body text", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#5B97F8" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "RUNNERS" },
+        { "type": "image_picker", "id": "image", "label": "Image" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "home",
+      "settings": {
+        "eyebrow": "BUILT FOR HIGH PERFORMERS",
+        "heading": "Worn by those who push.",
+        "heading_accent": "",
+        "padding": 96,
+        "bg": "#0A0B0F",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      },
+      "blocks": [
+        { "type": "card", "settings": { "label": "RUNNERS" } },
+        { "type": "card", "settings": { "label": "CYCLISTS" } },
+        { "type": "card", "settings": { "label": "BUILDERS" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

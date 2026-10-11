@@ -1,0 +1,178 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hydrix-hero",
+      "settings": {
+        "layout": "centered",
+        "anchor": "aff-hero",
+        "eyebrow": "PARTNER PROGRAM",
+        "heading": "Partner with HYDRIX.",
+        "subheading": "Earn up to 25% commission promoting a premium hydration brand people actually love.",
+        "action_type": "buttons",
+        "button_label": "Apply now",
+        "button_url": "#apply",
+        "button2_label": "See commission tiers",
+        "button2_url": "#tiers",
+        "show_counter": false,
+        "show_beam": true,
+        "show_arc": true,
+        "padding_top": 150,
+        "padding_bottom": 80,
+        "bg": "#0a0b0f",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      }
+    },
+    "why": {
+      "type": "hydrix-feature-grid",
+      "settings": {
+        "eyebrow": "WHY PARTNER",
+        "heading": "Built for creators",
+        "center_cards": false,
+        "min_card_width": 280,
+        "padding": 88,
+        "bg": "#12151d",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14",
+        "card_bg": "#FFFFFF05"
+      },
+      "blocks": {
+        "b1": { "type": "card", "settings": { "title": "Up to 25% commission", "desc": "Industry-leading payouts that scale with you.", "icon": "dollar" } },
+        "b2": { "type": "card", "settings": { "title": "A product that converts", "desc": "Premium brand, clean design, real results.", "icon": "star" } },
+        "b3": { "type": "card", "settings": { "title": "90-day cookie", "desc": "Long attribution window so you get credit.", "icon": "clock" } },
+        "b4": { "type": "card", "settings": { "title": "Creator support", "desc": "Assets, codes, and a partner manager.", "icon": "users" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"]
+    },
+    "audience": {
+      "type": "hxh-marquee",
+      "settings": {
+        "mobile_marquee": true,
+        "speed": 20,
+        "padding": 22,
+        "bg": "#090d17",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14"
+      },
+      "blocks": {
+        "a1": { "type": "item", "settings": { "label": "CREATORS" } },
+        "a2": { "type": "item", "settings": { "label": "ATHLETES" } },
+        "a3": { "type": "item", "settings": { "label": "DIETITIANS" } },
+        "a4": { "type": "item", "settings": { "label": "RUN CLUBS" } },
+        "a5": { "type": "item", "settings": { "label": "COMMUNITIES" } },
+        "a6": { "type": "item", "settings": { "label": "COACHES" } }
+      },
+      "block_order": ["a1", "a2", "a3", "a4", "a5", "a6"]
+    },
+    "tiers": {
+      "type": "hydrix-commission-tiers",
+      "settings": {
+        "bg": "#0a0b0f",
+        "accent": "#3B82F6"
+      },
+      "blocks": {
+        "b1": { "type": "tier", "settings": { "label": "Starter", "percent": "15%", "highlight": false } },
+        "b2": { "type": "tier", "settings": { "label": "Growth", "percent": "20%", "highlight": false } },
+        "b3": { "type": "tier", "settings": { "label": "Top tier", "percent": "25%", "highlight": true, "accent": "#8FD9FF" } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    },
+    "how": {
+      "type": "hydrix-steps",
+      "settings": {
+        "heading": "How it works",
+        "top_border": true,
+        "padding": 80,
+        "bg": "#12151d",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14"
+      },
+      "blocks": {
+        "b1": { "type": "step", "settings": { "icon": "scoop", "title": "01 · Apply", "desc": "Tell us about your audience and channels." } },
+        "b2": { "type": "step", "settings": { "icon": "mix", "title": "02 · Share", "desc": "Get your link, codes, and creative assets." } },
+        "b3": { "type": "step", "settings": { "icon": "hydrate", "title": "03 · Earn", "desc": "Track conversions and get paid monthly." } }
+      },
+      "block_order": ["b1", "b2", "b3"]
+    },
+    "apply": {
+      "type": "hydrix-form",
+      "settings": {
+        "eyebrow": "HYDRIX Partners",
+        "heading": "Apply to partner",
+        "subheading": "We review every application within 48 hours.",
+        "submit_label": "Submit Application",
+        "disclaimer": "By applying you agree to our partner terms. We'll only use your details to review your application.",
+        "success_heading": "Application received",
+        "success_message": "We'll be in touch within 48 hours with your partner link and creative kit.",
+        "two_col": true,
+        "show_beam": true,
+        "show_arc": false,
+        "bg": "#090d17",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14",
+        "card_bg": "#0d1018"
+      },
+      "blocks": {
+        "b1": { "type": "text", "settings": { "label": "Name", "placeholder": "Your name", "required": true, "half_width": true } },
+        "b2": { "type": "email", "settings": { "label": "Email", "placeholder": "you@email.com", "required": true, "half_width": true } },
+        "b3": { "type": "text", "settings": { "label": "Platform / Website", "field_key": "platform", "placeholder": "@yourhandle or site URL", "required": true, "half_width": true } },
+        "b4": { "type": "text", "settings": { "label": "Audience size", "field_key": "audience_size", "placeholder": "e.g. 50k", "required": false, "half_width": true } },
+        "b5": { "type": "select", "settings": { "label": "Channel", "field_key": "channel", "options": "Instagram\nTikTok\nYouTube\nBlog\nOther", "placeholder": "Select a channel", "required": false } },
+        "b6": { "type": "textarea", "settings": { "label": "Why partner with HYDRIX?", "field_key": "body", "placeholder": "Tell us about your audience.", "rows": 4, "required": false } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"]
+    },
+    "faq": {
+      "type": "hydrix-faq",
+      "settings": {
+        "heading": "Partner FAQ",
+        "bg": "#0a0b0f",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14"
+      },
+      "blocks": {
+        "b1": { "type": "qa", "settings": { "question": "Who can apply?", "answer": "Creators, athletes, dietitians, and communities aligned with clean hydration." } },
+        "b2": { "type": "qa", "settings": { "question": "When do I get paid?", "answer": "Commissions are paid monthly via your chosen payout method." } },
+        "b3": { "type": "qa", "settings": { "question": "What's the commission rate?", "answer": "Tiered from 15% up to 25% based on performance." } },
+        "b4": { "type": "qa", "settings": { "question": "How are sales tracked?", "answer": "You get a unique referral link and discount code. Sales are attributed for 90 days after a click." } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4"]
+    },
+    "cta": {
+      "type": "hydrix-cta-beam",
+      "settings": {
+        "anchor": "aff-cta",
+        "eyebrow": "READY?",
+        "heading": "Turn your audience into income.",
+        "subheading": "Join the HYDRIX partner program and earn up to 25% on every referral.",
+        "action_type": "button",
+        "button_label": "Apply now",
+        "button_url": "#apply",
+        "show_counter": false,
+        "show_beam": true,
+        "show_arc": true,
+        "padding": 120,
+        "bg": "#12151d",
+        "heading_color": "#FFFFFF",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "accent_hover": "#5B97F8",
+        "border": "#FFFFFF14"
+      }
+    }
+  },
+  "order": ["hero", "why", "audience", "tiers", "how", "apply", "faq", "cta"]
+}

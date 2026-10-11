@@ -1,0 +1,109 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+{%- comment -%} HYDRIX — hxh-marquee. Centered trust strip on desktop; seamless infinite auto-scroll on mobile. {%- endcomment -%}
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hxh-marquee scroll-trigger animate--fade-in" style="--hx-bg:{{ s.bg }};--hx-body:{{ s.body_color }};--hx-accent:{{ s.accent }};--hx-border:{{ s.border }};border-top:1px solid var(--hx-border);border-bottom:1px solid var(--hx-border);padding:{{ s.padding }}px 24px;">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hxh-marquee__viewport{% if s.mobile_marquee %} hxh-marquee--scroll{% endif %}">
+    <div class="hxh-marquee__track">
+      <div class="hxh-marquee__seq">
+        {%- for block in section.blocks -%}<span class="hxh-marquee__item" {{ block.shopify_attributes }}>{{ block.settings.label }}</span><span class="hxh-marquee__sep" aria-hidden="true">◆</span>{%- endfor -%}
+      </div>
+      <div class="hxh-marquee__seq" aria-hidden="true">
+        {%- for block in section.blocks -%}<span class="hxh-marquee__item">{{ block.settings.label }}</span><span class="hxh-marquee__sep">◆</span>{%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hxh-marquee__viewport { overflow: hidden; }
+  #shopify-section-{{ section.id }} .hxh-marquee__track { display: flex; }
+  #shopify-section-{{ section.id }} .hxh-marquee__seq { display: flex; align-items: center; gap: 0 18px; }
+  #shopify-section-{{ section.id }} .hxh-marquee__item {
+    font-family: var(--hx-font-sora); font-size: 12px; font-weight: 500;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--hx-body); white-space: nowrap;
+  }
+  #shopify-section-{{ section.id }} .hxh-marquee__sep { color: var(--hx-accent); font-size: 8px; line-height: 1; }
+
+  /* Desktop (and mobile when scroll is off): clean centered wrapping row, single set */
+  #shopify-section-{{ section.id }} .hxh-marquee__track { justify-content: center; width: 100%; }
+  #shopify-section-{{ section.id }} .hxh-marquee__seq:first-child { flex-wrap: wrap; justify-content: center; width: 100%; gap: 13px 22px; }
+  #shopify-section-{{ section.id }} .hxh-marquee__seq + .hxh-marquee__seq { display: none; }
+  #shopify-section-{{ section.id }} .hxh-marquee__seq:first-child > .hxh-marquee__sep:last-child { display: none; }
+
+  /* Mobile: seamless infinite marquee */
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .hxh-marquee--scroll .hxh-marquee__track {
+      justify-content: flex-start; width: max-content;
+      animation: hxMarqueeScroll {{ s.speed }}s linear infinite;
+    }
+    #shopify-section-{{ section.id }} .hxh-marquee--scroll .hxh-marquee__seq,
+    #shopify-section-{{ section.id }} .hxh-marquee--scroll .hxh-marquee__seq:first-child {
+      flex-wrap: nowrap; width: auto; justify-content: flex-start; padding-right: 18px; gap: 0 18px;
+    }
+    #shopify-section-{{ section.id }} .hxh-marquee--scroll .hxh-marquee__seq + .hxh-marquee__seq { display: flex; }
+    #shopify-section-{{ section.id }} .hxh-marquee--scroll .hxh-marquee__seq:first-child > .hxh-marquee__sep:last-child { display: inline; }
+    #shopify-section-{{ section.id }} .hxh-marquee--scroll:active .hxh-marquee__track { animation-play-state: paused; }
+  }
+  @keyframes hxMarqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }} .hxh-marquee--scroll .hxh-marquee__track { animation: none !important; }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HXH Marquee",
+  "tag": "section",
+  "class": "hxh-marquee-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Motion" },
+    { "type": "checkbox", "id": "mobile_marquee", "label": "Infinite auto-scroll on mobile", "default": true },
+    { "type": "range", "id": "speed", "label": "Scroll duration (mobile)", "min": 8, "max": 40, "step": 2, "unit": "s", "default": 18 },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 10, "max": 40, "step": 2, "unit": "px", "default": 22 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "body_color", "label": "Label text", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Separator accent", "default": "#3B82F6" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "NON-GMO" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "home",
+      "settings": {
+        "mobile_marquee": true,
+        "speed": 18,
+        "padding": 22,
+        "bg": "#0A0B0F",
+        "body_color": "#8E96A3",
+        "accent": "#3B82F6",
+        "border": "#FFFFFF14"
+      },
+      "blocks": [
+        { "type": "item", "settings": { "label": "NON-GMO" } },
+        { "type": "item", "settings": { "label": "GLUTEN FREE" } },
+        { "type": "item", "settings": { "label": "KETO FRIENDLY" } },
+        { "type": "item", "settings": { "label": "ZERO SUGAR" } },
+        { "type": "item", "settings": { "label": "3RD PARTY TESTED" } },
+        { "type": "item", "settings": { "label": "MADE IN USA" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,158 @@
+{%- comment -%} HYDRIX — Commission tiers (15% / 20% / 25%) with glowing top tier. Tiers are blocks. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign s = section.settings
+  assign uid = section.id
+-%}
+
+<section class="hx-section hx-tiers" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  --hx-card-bg: {{ s.card_bg }};
+  --hx-glow: {{ s.glow }};
+  padding: {{ s.padding_top }}px 24px {{ s.padding_bottom }}px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap hx-tiers__inner">
+    <div class="hx-tiers__panel scroll-trigger animate--slide-in">
+      {%- if s.eyebrow != blank or s.heading != blank -%}
+        <div class="hx-section-head">
+          {%- if s.eyebrow != blank -%}<div class="hx-eyebrow">{{ s.eyebrow }}</div>{%- endif -%}
+          {%- if s.heading != blank -%}<h2 class="hx-h2">{{ s.heading }}</h2>{%- endif -%}
+          {%- if s.subheading != blank -%}<p class="hx-lead hx-tiers__sub">{{ s.subheading }}</p>{%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="hx-tiers__grid">
+        {%- for block in section.blocks -%}
+          {%- assign b = block.settings -%}
+          {%- assign tier_accent = b.accent | default: s.accent -%}
+          <div class="hx-card hx-tiers__card{% if b.highlight %} hx-tiers__card--top{% endif %}"
+               style="--hx-tier-accent:{{ tier_accent }};"
+               {{ block.shopify_attributes }}>
+            {%- if b.label != blank -%}
+              <div class="hx-tiers__label">{{ b.label }}</div>
+            {%- endif -%}
+            {%- if b.percent != blank -%}
+              <div class="hx-tiers__percent">{{ b.percent }}</div>
+            {%- endif -%}
+            {%- if b.title != blank -%}
+              <div class="hx-tiers__title hx-h3">{{ b.title }}</div>
+            {%- endif -%}
+            {%- if b.requirement != blank -%}
+              <p class="hx-body hx-tiers__req">{{ b.requirement }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if s.footnote != blank -%}
+        <div class="hx-tiers__footnote">
+          {%- assign notes = s.footnote | newline_to_br | split: '<br />' -%}
+          {%- for note in notes -%}
+            {%- assign n = note | strip | strip_newlines -%}
+            {%- if n != blank -%}<div class="hx-tiers__note"><span class="hx-accent-text">◆</span> {{ n }}</div>{%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ uid }} .hx-tiers__inner { position: relative; z-index: 5; }
+  #shopify-section-{{ uid }} .hx-tiers__panel {
+    max-width: 920px; margin: 0 auto; border-radius: 20px;
+    padding: clamp(30px, 5vw, 52px);
+    background: linear-gradient(180deg, #16181F, var(--hx-card-bg));
+    border: 1px solid var(--hx-border);
+  }
+  #shopify-section-{{ uid }} .hx-tiers__sub { margin: 12px auto 0; max-width: 540px; }
+  #shopify-section-{{ uid }} .hx-tiers__grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px;
+  }
+  #shopify-section-{{ uid }} .hx-tiers__card {
+    text-align: center; border-radius: 14px; padding: 28px;
+    background: var(--hx-card-bg);
+  }
+  #shopify-section-{{ uid }} .hx-tiers__card--top {
+    border-color: var(--hx-tier-accent);
+    box-shadow: 0 0 40px rgba(45, 107, 255, .22);
+    background: linear-gradient(180deg, rgba(45, 107, 255, .08), transparent);
+  }
+  #shopify-section-{{ uid }} .hx-tiers__card--top:hover {
+    border-color: var(--hx-tier-accent);
+    box-shadow: 0 0 56px rgba(45, 107, 255, .3);
+  }
+  #shopify-section-{{ uid }} .hx-tiers__label { color: var(--hx-body); font-size: 13px; }
+  #shopify-section-{{ uid }} .hx-tiers__card--top .hx-tiers__label { color: var(--hx-glow); }
+  #shopify-section-{{ uid }} .hx-tiers__percent {
+    font-family: var(--hx-font-display); font-weight: 800; font-size: 48px; line-height: 1;
+    color: var(--hx-tier-accent); margin-top: 6px;
+  }
+  #shopify-section-{{ uid }} .hx-tiers__title { margin-top: 12px; }
+  #shopify-section-{{ uid }} .hx-tiers__req { margin-top: 7px; font-size: 14px; }
+  #shopify-section-{{ uid }} .hx-tiers__footnote {
+    margin-top: 28px; display: flex; gap: 28px; justify-content: center; flex-wrap: wrap;
+  }
+  #shopify-section-{{ uid }} .hx-tiers__note { color: var(--hx-body); font-size: 14px; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Commission Tiers",
+  "tag": "section",
+  "class": "hx-tiers-section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Earnings" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Commission that scales with you" },
+    { "type": "textarea", "id": "subheading", "label": "Subheading" },
+    { "type": "textarea", "id": "footnote", "label": "Footnote line(s)", "info": "One per line. Renders with a ◆ marker.", "default": "30-day cookie window\nMonthly payouts via PayPal / Stripe" },
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 40, "max": 200, "step": 4, "unit": "px", "default": 92 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 40, "max": 200, "step": 4, "unit": "px", "default": 92 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "glow", "label": "Top-tier glow text", "default": "#8FD9FF" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" },
+    { "type": "color", "id": "card_bg", "label": "Card / panel background", "default": "#101218" }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Tier",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Starter" },
+        { "type": "text", "id": "percent", "label": "Percent", "default": "15%" },
+        { "type": "text", "id": "title", "label": "Title (optional)" },
+        { "type": "textarea", "id": "requirement", "label": "Requirement text (optional)" },
+        { "type": "checkbox", "id": "highlight", "label": "Highlight (glowing top tier)", "default": false },
+        { "type": "color", "id": "accent", "label": "Tier accent (defaults to section accent)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "HYDRIX Commission Tiers",
+      "blocks": [
+        { "type": "tier", "settings": { "label": "Starter", "percent": "15%", "highlight": false } },
+        { "type": "tier", "settings": { "label": "Growth", "percent": "20%", "highlight": false } },
+        { "type": "tier", "settings": { "label": "Top tier", "percent": "25%", "highlight": true, "accent": "#8FD9FF" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

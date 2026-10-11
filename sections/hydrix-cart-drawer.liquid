@@ -1,0 +1,156 @@
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+{%- comment -%} HYDRIX — custom slide-in cart drawer. JS: initCartDrawer in hydrix.js. {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign threshold = s.free_ship_threshold | times: 100
+-%}
+
+<div class="hx-cd" data-hx-cart-drawer aria-hidden="true"
+  style="--hx-accent:{{ s.accent }};--hx-accent-hover:{{ s.accent_hover }};--hx-panel:{{ s.panel_bg }};--hx-heading:{{ s.heading_color }};--hx-body:{{ s.body_color }};--hx-border:{{ s.border }};">
+  <div class="hx-cd__overlay" data-hx-cd-close></div>
+  <aside class="hx-cd__panel" role="dialog" aria-modal="true" aria-label="Cart">
+    <header class="hx-cd__head">
+      <span class="hx-cd__title">{{ s.title | default: 'Your cart' }}</span>
+      <button type="button" class="hx-cd__close" data-hx-cd-close aria-label="Close cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </header>
+
+    <div class="hx-cd__content" data-hx-cd-content>
+      {%- if threshold > 0 -%}
+        {%- assign remaining = threshold | minus: cart.total_price -%}
+        <div class="hx-cd__ship">
+          {%- if remaining > 0 -%}
+            <div class="hx-cd__ship-text">You're <b>{{ remaining | money }}</b> away from free shipping</div>
+            {%- assign pct = cart.total_price | times: 100 | divided_by: threshold -%}
+          {%- else -%}
+            <div class="hx-cd__ship-text hx-cd__ship-text--win">✓ You've unlocked <b>free shipping</b></div>
+            {%- assign pct = 100 -%}
+          {%- endif -%}
+          <div class="hx-cd__ship-bar"><span style="width:{{ pct }}%"></span></div>
+        </div>
+      {%- endif -%}
+
+      {%- if cart.item_count == 0 -%}
+        <div class="hx-cd__empty">
+          <div class="hx-cd__empty-icon" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h2.2l2.3 12.3a1.5 1.5 0 0 0 1.5 1.2h8.7a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg>
+          </div>
+          <div class="hx-cd__empty-t">Your cart is empty</div>
+          <a href="{{ routes.all_products_collection_url }}" class="hx-cd__shop" data-hx-cd-close>Start shopping</a>
+        </div>
+      {%- else -%}
+        <div class="hx-cd__items">
+          {%- for item in cart.items -%}
+            <div class="hx-cd__item" data-key="{{ item.key }}">
+              <a href="{{ item.url }}" class="hx-cd__thumb">
+                {%- if item.image -%}
+                  <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.title | escape }}" width="64" height="64" loading="lazy">
+                {%- endif -%}
+              </a>
+              <div class="hx-cd__meta">
+                <a href="{{ item.url }}" class="hx-cd__name">{{ item.product.title }}</a>
+                {%- unless item.product.has_only_default_variant -%}<div class="hx-cd__variant">{{ item.variant.title }}</div>{%- endunless -%}
+                <div class="hx-cd__line-foot">
+                  <div class="hx-cd__qty">
+                    <button type="button" data-hx-cd-dec data-key="{{ item.key }}" aria-label="Decrease quantity">−</button>
+                    <span class="hx-cd__qnum" data-hx-cd-qnum>{{ item.quantity }}</span>
+                    <button type="button" data-hx-cd-inc data-key="{{ item.key }}" aria-label="Increase quantity">+</button>
+                  </div>
+                  <div class="hx-cd__price">{{ item.final_line_price | money }}</div>
+                </div>
+              </div>
+              <button type="button" class="hx-cd__remove" data-hx-cd-remove data-key="{{ item.key }}" aria-label="Remove item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <footer class="hx-cd__foot">
+          <div class="hx-cd__subtotal"><span>Subtotal</span><b>{{ cart.total_price | money }}</b></div>
+          <div class="hx-cd__note">Shipping &amp; taxes calculated at checkout.</div>
+          <div class="hx-cd__actions">
+            <a href="{{ routes.cart_url }}" class="hx-cd__view">View cart</a>
+            <a href="{{ routes.cart_url }}/checkout" class="hx-cd__checkout">Checkout</a>
+          </div>
+        </footer>
+      {%- endif -%}
+    </div>
+  </aside>
+</div>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-cd { position: fixed; inset: 0; z-index: 100; visibility: hidden; pointer-events: none; }
+  #shopify-section-{{ section.id }} .hx-cd.is-open { visibility: visible; pointer-events: auto; }
+  body.hx-cd-lock { overflow: hidden; }
+  #shopify-section-{{ section.id }} .hx-cd__overlay { position: absolute; inset: 0; background: rgba(3,4,7,.6); opacity: 0; transition: opacity .3s; -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+  #shopify-section-{{ section.id }} .hx-cd.is-open .hx-cd__overlay { opacity: 1; }
+  #shopify-section-{{ section.id }} .hx-cd__panel {
+    position: absolute; top: 0; right: 0; height: 100%; width: min(420px, 100%);
+    display: flex; flex-direction: column;
+    background: var(--hx-panel, #0c0e13); border-left: 1px solid var(--hx-border);
+    transform: translateX(100%); transition: transform .32s cubic-bezier(.4,0,.2,1);
+    box-shadow: -20px 0 60px rgba(0,0,0,.5);
+  }
+  #shopify-section-{{ section.id }} .hx-cd.is-open .hx-cd__panel { transform: translateX(0); }
+  #shopify-section-{{ section.id }} .hx-cd__head { display: flex; align-items: center; justify-content: space-between; padding: 22px 22px 18px; border-bottom: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hx-cd__title { font-family: var(--hx-font-sora); font-weight: 600; font-size: 18px; color: var(--hx-heading); letter-spacing: -.01em; }
+  #shopify-section-{{ section.id }} .hx-cd__close { background: transparent; border: 0; color: var(--hx-body); cursor: pointer; padding: 4px; display: inline-flex; transition: color .2s; }
+  #shopify-section-{{ section.id }} .hx-cd__close:hover { color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-cd__content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+  #shopify-section-{{ section.id }} .hx-cd__ship { padding: 16px 22px; border-bottom: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hx-cd__ship-text { font-size: 13px; color: var(--hx-body); }
+  #shopify-section-{{ section.id }} .hx-cd__ship-text b { color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-cd__ship-text--win b { color: var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-cd__ship-bar { margin-top: 10px; height: 5px; border-radius: 9999px; background: rgba(255,255,255,.08); overflow: hidden; }
+  #shopify-section-{{ section.id }} .hx-cd__ship-bar span { display: block; height: 100%; border-radius: 9999px; background: linear-gradient(90deg, #8FD9FF, var(--hx-accent)); transition: width .4s; }
+
+  #shopify-section-{{ section.id }} .hx-cd__items { padding: 4px 22px; }
+  #shopify-section-{{ section.id }} .hx-cd__item { position: relative; display: flex; gap: 14px; padding: 18px 26px 18px 0; border-bottom: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hx-cd__thumb { flex: 0 0 64px; width: 64px; height: 64px; border-radius: 12px; overflow: hidden; background: #07080b; border: 1px solid var(--hx-border); display: block; }
+  #shopify-section-{{ section.id }} .hx-cd__thumb img { width: 100%; height: 100%; object-fit: contain; }
+  #shopify-section-{{ section.id }} .hx-cd__meta { flex: 1; min-width: 0; }
+  #shopify-section-{{ section.id }} .hx-cd__name { display: block; color: var(--hx-heading); font-weight: 600; font-size: 14.5px; text-decoration: none; line-height: 1.3; }
+  #shopify-section-{{ section.id }} .hx-cd__variant { color: var(--hx-body); font-size: 12.5px; margin-top: 3px; }
+  #shopify-section-{{ section.id }} .hx-cd__line-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; }
+  #shopify-section-{{ section.id }} .hx-cd__qty { display: inline-flex; align-items: center; border: 1px solid var(--hx-border); border-radius: 9999px; }
+  #shopify-section-{{ section.id }} .hx-cd__qty button { width: 30px; height: 30px; background: transparent; border: 0; color: var(--hx-heading); font-size: 15px; cursor: pointer; line-height: 1; }
+  #shopify-section-{{ section.id }} .hx-cd__qnum { min-width: 22px; text-align: center; font-size: 13.5px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-cd__price { color: var(--hx-heading); font-weight: 600; font-size: 14px; white-space: nowrap; }
+  #shopify-section-{{ section.id }} .hx-cd__remove { position: absolute; top: 18px; right: 0; background: transparent; border: 0; color: var(--hx-body); cursor: pointer; padding: 2px; line-height: 0; transition: color .2s; }
+  #shopify-section-{{ section.id }} .hx-cd__remove:hover { color: #fff; }
+
+  #shopify-section-{{ section.id }} .hx-cd__empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 60px 22px; text-align: center; }
+  #shopify-section-{{ section.id }} .hx-cd__empty-icon { color: var(--hx-body); opacity: .6; }
+  #shopify-section-{{ section.id }} .hx-cd__empty-t { color: var(--hx-heading); font-family: var(--hx-font-sora); font-weight: 600; font-size: 17px; }
+  #shopify-section-{{ section.id }} .hx-cd__shop { color: var(--hx-accent); text-decoration: none; font-size: 14px; font-weight: 600; }
+
+  #shopify-section-{{ section.id }} .hx-cd__foot { margin-top: auto; padding: 20px 22px calc(20px + env(safe-area-inset-bottom)); border-top: 1px solid var(--hx-border); background: var(--hx-panel, #0c0e13); position: sticky; bottom: 0; }
+  #shopify-section-{{ section.id }} .hx-cd__subtotal { display: flex; align-items: baseline; justify-content: space-between; }
+  #shopify-section-{{ section.id }} .hx-cd__subtotal span { color: var(--hx-body); font-size: 14px; }
+  #shopify-section-{{ section.id }} .hx-cd__subtotal b { font-family: var(--hx-font-sora); font-weight: 600; font-size: 20px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-cd__note { color: var(--hx-body); font-size: 12px; margin-top: 4px; }
+  #shopify-section-{{ section.id }} .hx-cd__actions { display: flex; gap: 10px; margin-top: 16px; }
+  #shopify-section-{{ section.id }} .hx-cd__view { flex: 0 0 auto; padding: 13px 18px; border-radius: 9999px; border: 1px solid var(--hx-border); color: var(--hx-heading); text-decoration: none; font-size: 14px; font-weight: 500; }
+  #shopify-section-{{ section.id }} .hx-cd__checkout { flex: 1; text-align: center; padding: 13px 18px; border-radius: 9999px; background: var(--hx-accent); color: #fff; text-decoration: none; font-weight: 600; font-size: 14.5px; transition: filter .2s, box-shadow .2s; }
+  #shopify-section-{{ section.id }} .hx-cd__checkout:hover { filter: brightness(1.06); box-shadow: 0 0 28px -4px var(--hx-accent); }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Cart Drawer",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Your cart" },
+    { "type": "range", "id": "free_ship_threshold", "label": "Free shipping threshold", "min": 0, "max": 200, "step": 5, "unit": "$", "default": 50, "info": "Set to 0 to hide the free-shipping bar." },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "panel_bg", "label": "Panel background", "default": "#0C0E13" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body / secondary", "default": "#8E96A3" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#3B82F6" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#5B97F8" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#FFFFFF14" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,121 @@
+{%- comment -%} HYDRIX — Editorial split (copy + image/art). Problem, science teaser, absorption explainer. {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-split{% if s.boxed %} hx-split--boxed{% endif %}" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-border: {{ s.border }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap hx-split__inner{% if s.image_first %} hx-split__inner--rev{% endif %}">
+    <div class="hx-split__copy scroll-trigger animate--slide-in">
+      {%- if s.eyebrow != blank -%}<div class="hx-eyebrow" style="color:{{ s.eyebrow_color | default: s.accent }}">{{ s.eyebrow }}</div>{%- endif -%}
+      <h2 class="hx-h2" style="margin-top:14px">{{ s.heading }}</h2>
+      {%- if s.body != blank -%}<p class="hx-split__body">{{ s.body }}</p>{%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="hx-split__stats">
+          {%- for block in section.blocks -%}
+            <div class="hx-split__stat" {{ block.shopify_attributes }}>
+              <div class="hx-split__stat-num">{{ block.settings.value }}</div>
+              <div class="hx-split__stat-label" style="color:{{ s.body_color }}">{{ block.settings.label }}</div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if s.button_label != blank -%}
+        <a href="{{ s.button_url }}" class="hx-btn hx-btn--ghost" style="margin-top:24px">{{ s.button_label }}</a>
+      {%- endif -%}
+    </div>
+
+    <div class="hx-split__media scroll-trigger animate--fade-in">
+      {%- if s.image != blank -%}
+        <img src="{{ s.image | image_url: width: 900 }}" alt="{{ s.image.alt | default: s.heading }}" class="hx-split__img" width="{{ s.image.width }}" height="{{ s.image.height }}">
+      {%- else -%}
+        <div class="hx-split__art"><div class="hx-glow-radial"></div></div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-split__inner {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 56px; align-items: center;
+  }
+  #shopify-section-{{ section.id }} .hx-split--boxed .hx-split__inner {
+    gap: 0; border: 1px solid var(--hx-border); border-radius: 20px; overflow: hidden;
+  }
+  #shopify-section-{{ section.id }} .hx-split--boxed .hx-split__copy { padding: clamp(30px,5vw,56px); }
+  #shopify-section-{{ section.id }} .hx-split--boxed .hx-split__media { min-height: 240px; height: 100%; }
+  @media (min-width: 760px) {
+    #shopify-section-{{ section.id }} .hx-split__inner--rev .hx-split__copy { order: 2; }
+    #shopify-section-{{ section.id }} .hx-split__inner--rev .hx-split__media { order: 1; }
+  }
+  #shopify-section-{{ section.id }} .hx-split__body { margin-top: 22px; color: var(--hx-body); font-size: 17px; line-height: 1.65; max-width: 480px; }
+  #shopify-section-{{ section.id }} .hx-split__stats { margin-top: 36px; display: flex; flex-wrap: wrap; border-top: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hx-split__stat { padding: 22px 28px 0 0; flex: 1; min-width: 110px; }
+  #shopify-section-{{ section.id }} .hx-split__stat + .hx-split__stat { padding-left: 28px; border-left: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hx-split__stat-num { font-family: var(--hx-font-display); font-weight: 700; font-size: 30px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-split__stat-label { font-size: 13px; margin-top: 4px; }
+  #shopify-section-{{ section.id }} .hx-split__media { position: relative; }
+  #shopify-section-{{ section.id }} .hx-split__img { width: 100%; border-radius: 16px; display: block; border: 1px solid var(--hx-border); }
+  #shopify-section-{{ section.id }} .hx-split__art {
+    position: relative; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; border: 1px solid var(--hx-border);
+    background:
+      radial-gradient(circle at 60% 35%, {{ s.art_color_1 }}, transparent 45%),
+      radial-gradient(circle at 35% 70%, {{ s.art_color_2 }}, transparent 50%),
+      #070809;
+  }
+  #shopify-section-{{ section.id }} .hx-split--boxed .hx-split__art { aspect-ratio: auto; border: none; border-radius: 0; height: 100%; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Split",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "checkbox", "id": "boxed", "label": "Boxed (bordered card)", "default": false },
+    { "type": "checkbox", "id": "image_first", "label": "Image on left", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Most people are mildly dehydrated and never know it." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Water alone doesn't cut it. Your body loses electrolytes, minerals, and trace nutrients all day — and runs on empty without them." },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_url", "label": "Button link" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 40, "max": 130, "step": 2, "unit": "px", "default": 100 },
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Image (else gradient art)" },
+    { "type": "color", "id": "art_color_1", "label": "Art glow 1", "default": "#8FD9FF59" },
+    { "type": "color", "id": "art_color_2", "label": "Art glow 2", "default": "#2D6BFF66" },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "accent", "label": "Accent", "default": "#2D6BFF" },
+    { "type": "color", "id": "eyebrow_color", "label": "Eyebrow (optional)" },
+    { "type": "color", "id": "border", "label": "Border", "default": "#20242A" }
+  ],
+  "blocks": [
+    { "type": "stat", "name": "Stat", "settings": [
+      { "type": "text", "id": "value", "label": "Value", "default": "7" },
+      { "type": "text", "id": "label", "label": "Label", "default": "essential electrolytes" }
+    ]}
+  ],
+  "max_blocks": 4,
+  "presets": [{ "name": "HYDRIX Split", "blocks": [
+    { "type": "stat", "settings": { "value": "7", "label": "essential electrolytes" } },
+    { "type": "stat", "settings": { "value": "0g", "label": "sugar" } },
+    { "type": "stat", "settings": { "value": "USA", "label": "made & tested" } }
+  ]}]
+}
+{% endschema %}

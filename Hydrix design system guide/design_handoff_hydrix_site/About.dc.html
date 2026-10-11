@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0A0B0F;color:#fff;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:#2D6BFF;color:#fff}
+  a{color:inherit}
+  @keyframes beamPulse{0%,100%{opacity:.85}50%{opacity:1}}
+  .desk{display:flex}.mobtog{display:none}
+  @media(max-width:860px){.desk{display:none!important}.mobtog{display:inline-flex!important}}
+</style>
+</helmet>
+
+<div style="background:#0A0B0F;min-height:100vh;overflow-x:hidden;position:relative">
+  <header style="position:sticky;top:0;z-index:40;background:rgba(10,11,15,.82);backdrop-filter:blur(14px);border-bottom:1px solid #20242A">
+    <nav style="display:flex;align-items:center;justify-content:space-between;max-width:1240px;margin:0 auto;padding:16px 28px">
+      <a href="Home.dc.html" style="text-decoration:none"><img src="assets/hydrix-wordmark-white.png" alt="HYDRIX" style="height:21px;display:block"></a>
+      <div class="desk" style="align-items:center;gap:28px">
+        <a href="Shop.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Shop</a>
+        <a href="Science.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Science</a>
+        <a href="About.dc.html" style="color:#2D6BFF;text-decoration:none;font-size:14px;font-weight:500">About</a>
+        <a href="Subscribe.dc.html" style="color:#E6EAF0;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s" style-hover="color:#2D6BFF">Subscribe</a>
+        <a href="Home.dc.html" style="color:#fff;display:flex"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6h15l-1.5 9h-12L5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></a>
+      </div>
+      <button class="mobtog" onClick="{{ toggleMenu }}" style="display:none;background:transparent;border:1px solid #20242A;border-radius:8px;width:42px;height:42px;cursor:pointer;color:#fff;font-size:18px">≡</button>
+    </nav>
+  </header>
+  <sc-if value="{{ menuOpen }}"><div style="position:fixed;inset:0;z-index:60;background:rgba(10,11,15,.97);backdrop-filter:blur(8px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px"><button onClick="{{ toggleMenu }}" style="position:absolute;top:30px;right:28px;background:transparent;border:none;color:#fff;font-size:30px;cursor:pointer">×</button><a href="Shop.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Shop</a><a href="Science.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Science</a><a href="About.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">About</a><a href="Subscribe.dc.html" style="color:#fff;text-decoration:none;font-size:22px;font-family:Saira">Subscribe</a></div></sc-if>
+
+  <!-- HERO -->
+  <section style="position:relative;overflow:hidden;padding:clamp(80px,11vw,150px) 24px clamp(50px,6vw,90px);text-align:center">
+    <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:2px;height:40%;background:linear-gradient(180deg,#BDE8FF,#2D6BFF 50%,transparent);animation:beamPulse 4.5s ease-in-out infinite"></div>
+    <div style="position:relative;max-width:760px;margin:0 auto">
+      <h1 style="font-family:'Saira';font-weight:700;font-size:clamp(40px,7vw,84px);color:#2D6BFF;letter-spacing:-.01em">hydration. reimagined.</h1>
+      <p style="margin-top:24px;color:#9AA5B3;font-size:clamp(17px,2.2vw,22px);line-height:1.6">We started HYDRIX because "drink more water" was never the answer.</p>
+    </div>
+  </section>
+
+  <!-- FOUNDER STORY -->
+  <section style="padding:clamp(40px,6vw,80px) 24px">
+    <div style="max-width:760px;margin:0 auto">
+      <p style="color:#E6EAF0;font-size:clamp(17px,2.2vw,21px);line-height:1.75">Hydration is electrolytes, minerals, and absorption — not a bottle of water and good intentions. Most "hydration" products are sugar bombs dressed up as wellness. We wanted the opposite: a clinical, full-spectrum system that's engineered, tested, and made to be felt.</p>
+      <p style="margin-top:24px;color:#6C7685;font-size:16px;line-height:1.75">So we built one. Seven essential electrolytes in a ratio dosed for uptake. Trace minerals from the sea. Zero sugar, zero junk. A dark, honest brand for people who read the label. That's HYDRIX — and DAILY is just the beginning.</p>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section style="padding:clamp(40px,6vw,80px) 24px;border-top:1px solid #20242A">
+    <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px">
+      <div style="border:1px solid #20242A;border-radius:16px;padding:30px"><div style="font-family:'Saira';font-weight:800;font-size:34px;color:#2D6BFF">01</div><h3 style="font-family:'Saira';font-weight:600;font-size:19px;margin-top:12px">Engineered, not marketed</h3><p style="color:#6C7685;font-size:14.5px;line-height:1.6;margin-top:8px">Every dose is chosen for how the body absorbs it — formula first.</p></div>
+      <div style="border:1px solid #20242A;border-radius:16px;padding:30px"><div style="font-family:'Saira';font-weight:800;font-size:34px;color:#2D6BFF">02</div><h3 style="font-family:'Saira';font-weight:600;font-size:19px;margin-top:12px">Radically transparent</h3><p style="color:#6C7685;font-size:14.5px;line-height:1.6;margin-top:8px">Full label, third-party tested, nothing hidden behind "proprietary."</p></div>
+      <div style="border:1px solid #20242A;border-radius:16px;padding:30px"><div style="font-family:'Saira';font-weight:800;font-size:34px;color:#2D6BFF">03</div><h3 style="font-family:'Saira';font-weight:600;font-size:19px;margin-top:12px">Built to be felt</h3><p style="color:#6C7685;font-size:14.5px;line-height:1.6;margin-top:8px">If you can't feel the difference, we haven't done our job.</p></div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section style="position:relative;overflow:hidden;padding:clamp(72px,10vw,140px) 24px;text-align:center">
+    <img src="assets/hydrix-monogram-white.png" alt="" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(540px,80vw);opacity:.05;pointer-events:none">
+    <div style="position:relative;max-width:720px;margin:0 auto">
+      <h2 style="font-family:'Saira';font-weight:700;font-size:clamp(28px,4.6vw,52px);line-height:1.12">Water keeps you alive. <span style="color:#2D6BFF">Hydration keeps you sharp.</span></h2>
+      <p style="margin-top:22px;color:#6C7685;font-size:17px;line-height:1.65">We're here for the difference between the two.</p>
+    </div>
+  </section>
+
+  <!-- PRESS -->
+  <section style="padding:40px 24px;border-top:1px solid #20242A;border-bottom:1px solid #20242A"><div style="max-width:980px;margin:0 auto;text-align:center"><div style="color:#6C7685;font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:22px">As seen in</div><div style="display:flex;flex-wrap:wrap;gap:18px 44px;justify-content:center;align-items:center;color:#4D5665;font-family:'Saira';font-weight:700;font-size:clamp(16px,2.4vw,24px);opacity:.8"><span>MEN'S&nbsp;HEALTH</span><span>GQ</span><span>OUTSIDE</span><span>FORBES</span><span>WIRED</span></div></div></section>
+
+  <!-- CTA -->
+  <section style="padding:clamp(56px,8vw,100px) 24px;text-align:center"><div style="max-width:520px;margin:0 auto"><h2 style="font-family:'Saira';font-weight:700;font-size:clamp(28px,4.4vw,46px)">Hydrate on purpose.</h2><a href="Shop.dc.html" style="display:inline-block;margin-top:26px;text-decoration:none;background:#2D6BFF;color:#fff;font-weight:600;font-size:15px;padding:16px 30px;border-radius:10px;box-shadow:0 0 28px rgba(143,217,255,.26);transition:all .2s" style-hover="background:#3B7EFF">Shop the system</a></div></section>
+
+  <footer style="border-top:1px solid #20242A;padding:48px 24px 36px"><div style="max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap"><div><img src="assets/hydrix-wordmark-white.png" alt="HYDRIX" style="height:20px;display:block"><div style="margin-top:10px;color:#2D6BFF;font-size:13px">hydration. reimagined.</div></div><div style="display:flex;gap:24px;flex-wrap:wrap"><a href="Home.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Home</a><a href="Shop.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Shop</a><a href="Science.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Science</a><a href="Contact.dc.html" style="color:#6C7685;text-decoration:none;font-size:14px" style-hover="color:#fff">Contact</a></div></div><div style="max-width:1180px;margin:32px auto 0;padding-top:20px;border-top:1px solid #20242A;color:#6C7685;font-size:12.5px">© 2026 HYDRIX. All rights reserved.</div></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { menuOpen: false };
+  renderVals() {
+    return {
+      menuOpen: this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+    };
+  }
+}
+</script>
+</body>
+</html>

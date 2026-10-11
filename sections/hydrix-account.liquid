@@ -1,0 +1,261 @@
+{%- comment -%} HYDRIX — Member account dashboard (static, fully customizable). {%- endcomment -%}
+{{ 'hydrix.css' | asset_url | stylesheet_tag }}
+
+{%- liquid assign s = section.settings -%}
+
+<section class="hx-section hx-acct" style="
+  --hx-bg: {{ s.bg }};
+  --hx-heading: {{ s.heading_color }};
+  --hx-body: {{ s.body_color }};
+  --hx-accent: {{ s.accent }};
+  --hx-accent-hover: {{ s.accent_hover }};
+  --hx-border: {{ s.border }};
+  --hx-glow: {{ s.glow_color }};
+  --hx-success: {{ s.success_color }};
+  --hx-silver: {{ s.silver_color }};
+  --hx-gunmetal: {{ s.gunmetal_color }};
+  --hx-slate: {{ s.slate_color }};
+  padding: {{ s.padding }}px 24px;
+">
+  {% render 'hydrix-bg', settings: section.settings %}
+  <div class="hx-wrap">
+    <!-- HEADER -->
+    <div class="hx-acct__head scroll-trigger animate--fade-in">
+      <div>
+        <div class="hx-acct__welcome">{{ s.welcome_label }}</div>
+        <h1 class="hx-h1 hx-acct__name">{{ s.member_name }}</h1>
+      </div>
+      {%- if s.badge_text != blank -%}
+        <div class="hx-acct__badge">
+          <span class="hx-acct__badge-dot"></span>
+          <span class="hx-acct__badge-text">{{ s.badge_text }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- TOP CARDS -->
+    <div class="hx-acct__top scroll-trigger animate--slide-in">
+      <!-- NEXT DELIVERY -->
+      <div class="hx-acct__card hx-acct__card--next">
+        <div class="hx-acct__kicker hx-acct__kicker--glow">{{ s.next_label }}</div>
+        <div class="hx-acct__next-row">
+          {%- if s.next_image != blank -%}
+            <img class="hx-acct__tub-img" src="{{ s.next_image | image_url: width: 160 }}" alt="{{ s.next_product | escape }}" loading="lazy" width="54" height="70">
+          {%- else -%}
+            <span class="hx-acct__tub"></span>
+          {%- endif -%}
+          <div>
+            <div class="hx-acct__next-product">{{ s.next_product }}</div>
+            <div class="hx-acct__next-meta">{{ s.next_meta }}</div>
+          </div>
+        </div>
+        <div class="hx-acct__next-actions">
+          <a href="{{ s.manage_url }}" class="hx-btn hx-btn--sm">{{ s.manage_label }}</a>
+          <a href="{{ s.skip_url }}" class="hx-btn hx-btn--ghost hx-btn--sm">{{ s.skip_label }}</a>
+        </div>
+      </div>
+
+      <!-- MEMBER SAVINGS -->
+      <div class="hx-acct__card">
+        <div class="hx-acct__kicker">{{ s.savings_label }}</div>
+        <div class="hx-acct__savings-figure">{{ s.savings_amount }}</div>
+        <div class="hx-acct__savings-sub">{{ s.savings_caption }}</div>
+        <div class="hx-divider hx-acct__sav-divider"></div>
+        <div class="hx-acct__sav-row">
+          <span>{{ s.discount_label }}</span>
+          <span class="hx-acct__sav-val">{{ s.discount_value }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER HISTORY -->
+    <div class="hx-acct__history scroll-trigger animate--slide-in">
+      <h2 class="hx-acct__h2">{{ s.history_heading }}</h2>
+      <div class="hx-light-card hx-acct__table-wrap">
+        <table class="hx-acct__table">
+          <thead>
+            <tr>
+              <th>{{ s.col_order }}</th>
+              <th>{{ s.col_date }}</th>
+              <th>{{ s.col_items }}</th>
+              <th>{{ s.col_total }}</th>
+              <th>{{ s.col_status }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'order' -%}
+                {%- assign bs = block.settings -%}
+                <tr {{ block.shopify_attributes }}>
+                  <td class="hx-acct__td-strong">{{ bs.order_id }}</td>
+                  <td class="hx-acct__td-muted">{{ bs.date }}</td>
+                  <td class="hx-acct__td-muted">{{ bs.items }}</td>
+                  <td class="hx-acct__td-strong">{{ bs.total }}</td>
+                  <td><span class="hx-acct__status">{{ bs.status }}</span></td>
+                </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADDRESS + PAYMENT -->
+    <div class="hx-acct__info scroll-trigger animate--slide-in">
+      <div class="hx-acct__card hx-acct__card--info">
+        <div class="hx-acct__info-head">
+          <h3 class="hx-h3">{{ s.ship_heading }}</h3>
+          <a href="{{ s.ship_edit_url }}" class="hx-acct__edit">{{ s.edit_label }}</a>
+        </div>
+        <p class="hx-acct__info-body">{{ s.ship_body }}</p>
+      </div>
+      <div class="hx-acct__card hx-acct__card--info">
+        <div class="hx-acct__info-head">
+          <h3 class="hx-h3">{{ s.pay_heading }}</h3>
+          <a href="{{ s.pay_edit_url }}" class="hx-acct__edit">{{ s.edit_label }}</a>
+        </div>
+        <p class="hx-acct__info-body">{{ s.pay_body }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+  #shopify-section-{{ section.id }} .hx-acct__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  #shopify-section-{{ section.id }} .hx-acct__welcome { color: var(--hx-body); font-size: 14px; }
+  #shopify-section-{{ section.id }} .hx-acct__name { font-size: clamp(30px,4.4vw,46px); margin-top: 4px; }
+  #shopify-section-{{ section.id }} .hx-acct__badge {
+    display: flex; align-items: center; gap: 10px; border: 1px solid var(--hx-gunmetal);
+    border-radius: 100px; padding: 8px 16px;
+    background: linear-gradient(120deg, rgba(216,220,227,.10), rgba(45,107,255,.10));
+  }
+  #shopify-section-{{ section.id }} .hx-acct__badge-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--hx-glow); box-shadow: 0 0 10px var(--hx-accent); }
+  #shopify-section-{{ section.id }} .hx-acct__badge-text {
+    font-size: 13px; font-weight: 600;
+    background: linear-gradient(90deg, var(--hx-silver), var(--hx-glow));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #shopify-section-{{ section.id }} .hx-acct__top {
+    margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px;
+  }
+  #shopify-section-{{ section.id }} .hx-acct__card { border: 1px solid var(--hx-border); border-radius: 18px; padding: 28px; }
+  #shopify-section-{{ section.id }} .hx-acct__card--next {
+    border-color: var(--hx-accent);
+    background: linear-gradient(180deg, rgba(45,107,255,.07), transparent);
+    box-shadow: 0 0 44px rgba(45,107,255,.12);
+  }
+  #shopify-section-{{ section.id }} .hx-acct__kicker { color: var(--hx-body); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  #shopify-section-{{ section.id }} .hx-acct__kicker--glow { color: var(--hx-glow); }
+  #shopify-section-{{ section.id }} .hx-acct__next-row { margin-top: 12px; display: flex; align-items: center; gap: 16px; }
+  #shopify-section-{{ section.id }} .hx-acct__tub {
+    position: relative; width: 54px; height: 70px; border-radius: 9px 9px 7px 7px; flex: 0 0 auto;
+    background: linear-gradient(160deg,#1a1d24,#0c0d11); box-shadow: 0 0 22px rgba(45,107,255,.45);
+  }
+  #shopify-section-{{ section.id }} .hx-acct__tub::after {
+    content: ''; position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 60%; background: linear-gradient(180deg,#8FD9FF,#2D6BFF);
+  }
+  #shopify-section-{{ section.id }} .hx-acct__tub-img { width: 54px; height: 70px; object-fit: contain; flex: 0 0 auto; }
+  #shopify-section-{{ section.id }} .hx-acct__next-product { font-family: var(--hx-font-display); font-weight: 700; font-size: 20px; color: var(--hx-heading); }
+  #shopify-section-{{ section.id }} .hx-acct__next-meta { color: var(--hx-body); font-size: 13.5px; margin-top: 3px; }
+  #shopify-section-{{ section.id }} .hx-acct__next-actions { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+  #shopify-section-{{ section.id }} .hx-acct__savings-figure { font-family: var(--hx-font-display); font-weight: 800; font-size: 46px; color: var(--hx-success); margin-top: 10px; }
+  #shopify-section-{{ section.id }} .hx-acct__savings-sub { color: var(--hx-body); font-size: 13.5px; }
+  #shopify-section-{{ section.id }} .hx-acct__sav-divider { margin-top: 18px; }
+  #shopify-section-{{ section.id }} .hx-acct__sav-row { margin-top: 18px; display: flex; justify-content: space-between; font-size: 14px; color: var(--hx-slate); }
+  #shopify-section-{{ section.id }} .hx-acct__sav-val { color: var(--hx-glow); font-weight: 600; }
+  #shopify-section-{{ section.id }} .hx-acct__history { margin-top: 28px; }
+  #shopify-section-{{ section.id }} .hx-acct__h2 { font-family: var(--hx-font-display); font-weight: 600; font-size: 20px; color: var(--hx-heading); margin-bottom: 16px; }
+  #shopify-section-{{ section.id }} .hx-acct__table-wrap { padding: 8px 6px; overflow-x: auto; }
+  #shopify-section-{{ section.id }} .hx-acct__table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 480px; }
+  #shopify-section-{{ section.id }} .hx-acct__table th { padding: 14px 16px; font-weight: 600; text-align: left; color: var(--hx-gunmetal); }
+  #shopify-section-{{ section.id }} .hx-acct__table td { padding: 14px 16px; }
+  #shopify-section-{{ section.id }} .hx-acct__table tbody tr { border-top: 1px solid #E6EAF0; }
+  #shopify-section-{{ section.id }} .hx-acct__td-strong { font-weight: 600; color: #0A0B0F; }
+  #shopify-section-{{ section.id }} .hx-acct__td-muted { color: var(--hx-gunmetal); }
+  #shopify-section-{{ section.id }} .hx-acct__status {
+    background: rgba(33,195,111,.14); color: #178a4e; font-size: 12px; font-weight: 600;
+    padding: 4px 10px; border-radius: 100px; white-space: nowrap;
+  }
+  #shopify-section-{{ section.id }} .hx-acct__info { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 20px; }
+  #shopify-section-{{ section.id }} .hx-acct__card--info { border-radius: 16px; padding: 24px; }
+  #shopify-section-{{ section.id }} .hx-acct__info-head { display: flex; justify-content: space-between; align-items: center; }
+  #shopify-section-{{ section.id }} .hx-acct__edit { background: transparent; border: none; color: var(--hx-glow); font-size: 13px; cursor: pointer; text-decoration: none; }
+  #shopify-section-{{ section.id }} .hx-acct__info-body { color: var(--hx-slate); font-size: 14px; line-height: 1.6; margin-top: 10px; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "HYDRIX Account",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+    { "type": "select", "id": "bg_position", "label": "Background position", "options": [ { "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" } ], "default": "center" },
+    { "type": "color", "id": "bg_overlay", "label": "Overlay color", "default": "#0A0B0F" },
+    { "type": "range", "id": "bg_overlay_opacity", "label": "Overlay opacity", "min": 0, "max": 100, "step": 2, "unit": "%", "default": 70 },
+    { "type": "header", "content": "Header" },
+    { "type": "text", "id": "welcome_label", "label": "Welcome label", "default": "Welcome back" },
+    { "type": "text", "id": "member_name", "label": "Member name", "default": "Alex Rivera" },
+    { "type": "text", "id": "badge_text", "label": "Founding member badge", "default": "Founding Member #0142" },
+    { "type": "header", "content": "Next delivery" },
+    { "type": "text", "id": "next_label", "label": "Kicker", "default": "Next delivery" },
+    { "type": "image_picker", "id": "next_image", "label": "Product image (optional)" },
+    { "type": "text", "id": "next_product", "label": "Product", "default": "DAILY — Glacier Citrus" },
+    { "type": "text", "id": "next_meta", "label": "Meta line", "default": "Arrives July 12 · every 30 days" },
+    { "type": "text", "id": "manage_label", "label": "Manage button label", "default": "Manage subscription" },
+    { "type": "url", "id": "manage_url", "label": "Manage button link" },
+    { "type": "text", "id": "skip_label", "label": "Skip button label", "default": "Skip next" },
+    { "type": "url", "id": "skip_url", "label": "Skip button link" },
+    { "type": "header", "content": "Member savings" },
+    { "type": "text", "id": "savings_label", "label": "Kicker", "default": "Member savings" },
+    { "type": "text", "id": "savings_amount", "label": "Savings amount", "default": "$148.20" },
+    { "type": "text", "id": "savings_caption", "label": "Caption", "default": "saved with founder pricing & subscription" },
+    { "type": "text", "id": "discount_label", "label": "Discount label", "default": "Lifetime discount" },
+    { "type": "text", "id": "discount_value", "label": "Discount value", "default": "Active · 20%" },
+    { "type": "header", "content": "Order history" },
+    { "type": "text", "id": "history_heading", "label": "Heading", "default": "Order history" },
+    { "type": "text", "id": "col_order", "label": "Column: Order", "default": "Order" },
+    { "type": "text", "id": "col_date", "label": "Column: Date", "default": "Date" },
+    { "type": "text", "id": "col_items", "label": "Column: Items", "default": "Items" },
+    { "type": "text", "id": "col_total", "label": "Column: Total", "default": "Total" },
+    { "type": "text", "id": "col_status", "label": "Column: Status", "default": "Status" },
+    { "type": "header", "content": "Shipping & payment" },
+    { "type": "text", "id": "edit_label", "label": "Edit link label", "default": "Edit" },
+    { "type": "text", "id": "ship_heading", "label": "Shipping heading", "default": "Shipping address" },
+    { "type": "url", "id": "ship_edit_url", "label": "Shipping edit link" },
+    { "type": "richtext", "id": "ship_body", "label": "Shipping address", "default": "<p>Alex Rivera<br>248 Beacon St, Apt 5<br>Boston, MA 02116</p>" },
+    { "type": "text", "id": "pay_heading", "label": "Payment heading", "default": "Payment" },
+    { "type": "url", "id": "pay_edit_url", "label": "Payment edit link" },
+    { "type": "richtext", "id": "pay_body", "label": "Payment details", "default": "<p>Visa ending 4242<br>Expires 08/28</p>" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "padding", "label": "Vertical padding", "min": 30, "max": 100, "step": 2, "unit": "px", "default": 52 },
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#0A0B0F" },
+    { "type": "color", "id": "heading_color", "label": "Heading", "default": "#FFFFFF" },
+    { "type": "color", "id": "body_color", "label": "Body", "default": "#6C7685" },
+    { "type": "color", "id": "slate_color", "label": "Slate text", "default": "#9AA5B3" },
+    { "type": "color", "id": "accent", "label": "Accent / blue", "default": "#2D6BFF" },
+    { "type": "color", "id": "accent_hover", "label": "Accent hover", "default": "#3B7EFF" },
+    { "type": "color", "id": "border", "label": "Card border", "default": "#20242A" },
+    { "type": "color", "id": "glow_color", "label": "Glow / link", "default": "#8FD9FF" },
+    { "type": "color", "id": "success_color", "label": "Savings (green)", "default": "#21C36F" },
+    { "type": "color", "id": "silver_color", "label": "Badge silver", "default": "#D8DCE3" },
+    { "type": "color", "id": "gunmetal_color", "label": "Badge border / table head", "default": "#4D5665" }
+  ],
+  "blocks": [
+    { "type": "order", "name": "Order row", "settings": [
+      { "type": "text", "id": "order_id", "label": "Order #", "default": "#HX-2048" },
+      { "type": "text", "id": "date", "label": "Date", "default": "Jun 12, 2026" },
+      { "type": "text", "id": "items", "label": "Items", "default": "DAILY ×1" },
+      { "type": "text", "id": "total", "label": "Total", "default": "$41.65" },
+      { "type": "text", "id": "status", "label": "Status", "default": "Delivered" }
+    ]}
+  ],
+  "presets": [{ "name": "HYDRIX Account", "blocks": [
+    { "type": "order", "settings": { "order_id": "#HX-2048", "date": "Jun 12, 2026", "items": "DAILY ×1", "total": "$41.65", "status": "Delivered" } },
+    { "type": "order", "settings": { "order_id": "#HX-1973", "date": "May 13, 2026", "items": "DAILY ×1", "total": "$41.65", "status": "Delivered" } },
+    { "type": "order", "settings": { "order_id": "#HX-1820", "date": "Apr 13, 2026", "items": "DAILY ×1, RECOVER ×1", "total": "$83.30", "status": "Delivered" } }
+  ]}]
+}
+{% endschema %}
